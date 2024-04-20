@@ -1,0 +1,118 @@
+import {View, ViewStyle} from 'react-native';
+import React, {ReactNode} from 'react';
+import {appColors} from '../assets/colors/appColors';
+interface BoxProps {
+  children: ReactNode;
+  flex?: number;
+  alignItems?: 'flex-start' | 'flex-end' | 'center' | 'stretch' | 'baseline';
+  backgroundColor?: string;
+  opacity?: number;
+  alignSelf?:
+    | 'auto'
+    | 'flex-start'
+    | 'flex-end'
+    | 'center'
+    | 'stretch'
+    | 'baseline';
+  justifyContent?:
+    | 'flex-start'
+    | 'flex-end'
+    | 'center'
+    | 'space-between'
+    | 'space-around'
+    | 'space-evenly';
+  flexWrap?: 'wrap' | 'nowrap' | 'wrap-reverse';
+  reverse?: boolean;
+  row?: boolean;
+  center?: boolean;
+  paddingBottom?: number;
+  paddingLeft?: number;
+  paddingRight?: number;
+  paddingTop?: number;
+  padding?: number;
+  paddingHorizontal?: number;
+  paddingVertical?: number;
+  marginBottom?: number;
+  marginLeft?: number;
+  marginRight?: number;
+  marginTop?: number;
+  margin?: number;
+  marginHorizontal?: number;
+  marginVertical?: number;
+  height?: number | string;
+  width?: number | string;
+  size?: number;
+  maxHeight?: number | string;
+  minHeight?: number | string;
+  maxWidth?: number | string;
+  minWidth?: number | string;
+  radius?: number;
+  topLeftRadius?: number;
+  topRightRadius?: number;
+  bottomLeftRadius?: number;
+  bottomRightRadius?: number;
+  overflow?: 'visible' | 'hidden' | 'scroll';
+  borderTopWidth?: number;
+  borderBottomWidth?: number;
+  borderLeftWidth?: number;
+  borderRightWidth?: number;
+  borderTopColor?: string;
+  borderBottomColor?: string;
+  borderLeftColor?: string;
+  borderRightColor?: string;
+  borderWidth?: number;
+  borderColor?: string;
+  style?: ViewStyle;
+}
+const Box = (props: BoxProps) => {
+  const {
+    children,
+    flex,
+    alignItems,
+    backgroundColor,
+    opacity,
+    style,
+    margin,
+    marginBottom,
+    marginTop,
+    marginLeft,
+    marginRight,
+    padding,
+    paddingBottom,
+    paddingTop,
+    paddingLeft,
+    paddingRight,
+    paddingHorizontal,
+    paddingVertical,
+    radius,
+  } = props;
+  return (
+    <View
+      style={[
+        style,
+        {
+          flex: flex ?? 0,
+          alignItems: alignItems ?? 'center',
+          backgroundColor: backgroundColor ?? appColors.white,
+          opacity: opacity ?? 1,
+          margin: margin ?? null,
+          marginBottom: marginBottom ?? null,
+          marginTop: marginTop ?? null,
+          marginLeft: marginLeft ?? null,
+          marginRight: marginRight ?? null,
+          padding: padding ?? null,
+          paddingBottom: paddingBottom ?? null,
+          paddingTop: paddingTop ?? null,
+          paddingLeft: paddingLeft ?? null,
+          paddingRight: paddingRight ?? null,
+          paddingHorizontal: paddingHorizontal ?? null,
+          paddingVertical: paddingVertical ?? null,
+          borderRadius: radius ?? 0,
+        },
+      ]}>
+      {children}
+    </View>
+  );
+};
+
+export default Box;

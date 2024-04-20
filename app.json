@@ -1,4 +1,5 @@
 {
   "name": "Vstagram",
-  "displayName": "Vstagram"
+  "displayName": "Vstagram",
+  "icon":"./src/assets/icon-app.png"
 }

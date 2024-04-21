@@ -1,5 +1,5 @@
 import {View, Text} from 'react-native';
-import React from 'react';
+import React, {memo} from 'react';
 import {globalStyle} from '../styles/globalStyle';
 import {appColors} from '../assets/colors/appColors';
 
@@ -44,4 +44,4 @@ const TextComponent = (props: TextProps) => {
   );
 };
 
-export default TextComponent;
+export default memo(TextComponent);

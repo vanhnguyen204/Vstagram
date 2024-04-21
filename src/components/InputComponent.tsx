@@ -1,13 +1,10 @@
-import {View, Text, TextInput} from 'react-native';
-import React from 'react';
+import {View, TextInput, TextInputProps, ViewStyle} from 'react-native';
+import React, {memo} from 'react';
 import {appColors} from '../assets/colors/appColors';
-interface InputProps {
+interface InputProps extends TextInputProps {
   value: string;
-  onChangeText: () => void;
-  label: string;
-  labelColor?: string;
-  borderColor?: string;
-  borderWidth?: number;
+  onChangeText: (value: string) => void;
+  flex?: number;
   placeholder: string;
   placeholderTextColor?: string;
   borderRadius?: number;
@@ -19,53 +16,29 @@ interface InputProps {
   marginRight?: number;
   marginTop?: number;
   marginBottom?: number;
+  textColor: string;
+  style?: ViewStyle;
 }
 const InputComponent = (props: InputProps) => {
   const {
     value,
     onChangeText,
-    label,
-    labelColor,
-    borderColor,
     placeholder,
     placeholderTextColor,
-    borderWidth,
-    borderRadius,
-    padding,
-    margin,
-    marginVertical,
-    marginHorizontal,
-    marginLeft,
-    marginRight,
-    marginTop,
-    marginBottom,
+    textColor,
+    style,
+    flex,
+    ...resProps
   } = props;
   return (
-    <View>
-      <Text style={{color: labelColor ?? appColors.white}}>{label}</Text>
-      <View
-        style={{
-          borderRadius: borderRadius ?? 15,
-          borderWidth: borderWidth ?? 1,
-          padding: padding ?? 5,
-          borderColor: borderColor ?? appColors.white,
-          marginTop: marginTop ?? 0,
-          marginVertical: marginVertical ?? 0,
-          margin: margin ?? 0,
-          marginHorizontal: marginHorizontal ?? 0,
-          marginLeft: marginLeft ?? 0,
-          marginRight: marginRight ?? 0,
-          marginBottom: marginBottom ?? 0,
-        }}>
-        <TextInput
-          value={value}
-          placeholder={placeholder}
-          placeholderTextColor={placeholderTextColor}
-          onChangeText={onChangeText}
-        />
-      </View>
-    </View>
+    <TextInput
+      {...resProps}
+      style={[{color: textColor ?? appColors.white, flex: flex}, style]}
+      value={value}
+      placeholder={placeholder}
+      placeholderTextColor={placeholderTextColor}
+      onChangeText={onChangeText}
+    />
   );
 };
-
-export default InputComponent;
+export default memo(InputComponent);

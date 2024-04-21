@@ -10,4 +10,9 @@ export const globalStyle = StyleSheet.create({
     fontSize: 14,
     color: '#fff',
   },
+  buttonStyle: {
+    padding: 10,
+    alignItems: 'center',
+    borderRadius: 20,
+  },
 });

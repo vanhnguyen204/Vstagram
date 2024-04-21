@@ -1,9 +1,15 @@
 import {View, ViewStyle} from 'react-native';
-import React, {ReactNode} from 'react';
+import React, {memo, ReactNode} from 'react';
 import {appColors} from '../assets/colors/appColors';
 interface BoxProps {
   children: ReactNode;
   flex?: number;
+  flexDirection?:
+    | 'row'
+    | 'column'
+    | 'row-reverse'
+    | 'column-reverse'
+    | undefined;
   alignItems?: 'flex-start' | 'flex-end' | 'center' | 'stretch' | 'baseline';
   backgroundColor?: string;
   opacity?: number;
@@ -85,6 +91,11 @@ const Box = (props: BoxProps) => {
     paddingHorizontal,
     paddingVertical,
     radius,
+    flexDirection,
+    borderWidth,
+    borderColor,
+    marginVertical,
+    marginHorizontal,
   } = props;
   return (
     <View
@@ -92,8 +103,9 @@ const Box = (props: BoxProps) => {
         style,
         {
           flex: flex ?? 0,
-          alignItems: alignItems ?? 'center',
-          backgroundColor: backgroundColor ?? appColors.white,
+          flexDirection: flexDirection ?? 'column',
+          alignItems: alignItems ?? 'flex-start',
+          backgroundColor: backgroundColor ?? undefined,
           opacity: opacity ?? 1,
           margin: margin ?? null,
           marginBottom: marginBottom ?? null,
@@ -108,6 +120,10 @@ const Box = (props: BoxProps) => {
           paddingHorizontal: paddingHorizontal ?? null,
           paddingVertical: paddingVertical ?? null,
           borderRadius: radius ?? 0,
+          borderWidth: borderWidth ?? 0,
+          borderColor: borderColor ?? appColors.white,
+          marginHorizontal: marginHorizontal ?? 0,
+          marginVertical: marginVertical ?? 0,
         },
       ]}>
       {children}
@@ -115,4 +131,4 @@ const Box = (props: BoxProps) => {
   );
 };
 
-export default Box;
+export default memo(Box);

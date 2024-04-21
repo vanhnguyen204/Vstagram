@@ -29,8 +29,8 @@ const WelcomeScreen = (props: WelcomeScreenProps) => {
         width={100}
         height={100}
       />
-      <ActivityIndicator color={appColors.white} size={'large'} />
-      <Box flex={0} backgroundColor={appColors.black}>
+      <ActivityIndicator color={appColors.white} size={'small'} />
+      <Box flex={0} backgroundColor={appColors.black} alignItems="center">
         <TextComponent value="from" />
         <TextComponent fontSize={20} value="Vanh" />
       </Box>

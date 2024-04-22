@@ -4,6 +4,7 @@ import Register from '../screens/Auth/Register.tsx';
 import WelcomeScreen from '../screens/WelcomeScreen/index.tsx';
 import {PageName} from '../config/PageName.ts';
 import {screenOptions} from '../utils/NavigationUtils.ts';
+import VerifyRegister from "../screens/Auth/VerifyRegister.tsx";
 
 const Stack = createNativeStackNavigator();
 const Navigation = () => {
@@ -11,6 +12,7 @@ const Navigation = () => {
     <Stack.Navigator screenOptions={screenOptions}>
       <Stack.Screen name={PageName.WelcomeScreen} component={WelcomeScreen} />
       <Stack.Screen name={PageName.Register} component={Register} />
+      <Stack.Screen name={PageName.VerifyRegister} component={VerifyRegister} />
     </Stack.Navigator>
   );
 };

@@ -1,10 +1,12 @@
-import { ProdConfig } from "../config/AxiosConfig.ts";
+import {ProdConfig} from '../config/AxiosConfig.ts';
 
-export default  () => {
-  const baseURL = ProdConfig.BASE_URL
+export default () => {
+  const baseURL = ProdConfig.BASE_URL;
   return {
     baseURL: baseURL,
     register: `${baseURL}/api/auth/register`,
-    verifyCode: `${baseURL}/api/auth/verify`
-  }
-}
+    verifyCode: `${baseURL}/api/auth/verify`,
+    confirmRegisterAccount: `${baseURL}/api/auth/create-account`,
+    login: `${baseURL}/api/auth/login`,
+  };
+};

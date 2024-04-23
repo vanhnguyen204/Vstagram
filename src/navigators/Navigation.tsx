@@ -4,15 +4,22 @@ import Register from '../screens/Auth/Register.tsx';
 import WelcomeScreen from '../screens/WelcomeScreen/index.tsx';
 import {PageName} from '../config/PageName.ts';
 import {screenOptions} from '../utils/NavigationUtils.ts';
-import VerifyRegister from "../screens/Auth/VerifyRegister.tsx";
+import VerifyRegister from '../screens/Auth/VerifyRegister.tsx';
+import CreatePasswordScreen from '../screens/Auth/CreatePasswordScreen.tsx';
+import Login from '../screens/Auth/Login.tsx';
 
 const Stack = createNativeStackNavigator();
 const Navigation = () => {
   return (
     <Stack.Navigator screenOptions={screenOptions}>
       <Stack.Screen name={PageName.WelcomeScreen} component={WelcomeScreen} />
+      <Stack.Screen name={PageName.Login} component={Login} />
       <Stack.Screen name={PageName.Register} component={Register} />
       <Stack.Screen name={PageName.VerifyRegister} component={VerifyRegister} />
+      <Stack.Screen
+        name={PageName.CreatePasswordScreen}
+        component={CreatePasswordScreen}
+      />
     </Stack.Navigator>
   );
 };

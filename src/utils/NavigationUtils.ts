@@ -1,7 +1,16 @@
-import {StackActions, useNavigation} from '@react-navigation/native';
+import {
+  createNavigationContainerRef,
+  StackActions,
+  NavigationContainerRef,
+  CommonActions,
+} from '@react-navigation/native';
 import {NativeStackNavigationOptions} from '@react-navigation/native-stack';
 
-const navigationStack = useNavigation();
+// Tạo tham chiếu navigation container
+const navigationRef = createNavigationContainerRef();
+
+// Export tham chiếu navigation container để sử dụng ở các file khác
+export {navigationRef};
 
 export const screenOptions: NativeStackNavigationOptions = {
   headerShown: false,
@@ -13,20 +22,38 @@ interface NavigationParams {
 }
 
 export const navigate = (name: string, params?: NavigationParams) => {
-  // @ts-ignore
-  navigationStack.navigate(name, params);
+  if (navigationRef.isReady()) {
+    navigationRef.navigate(name, params);
+  }
 };
 
-export const navigatePush = (name: string, params: NavigationParams) => {
-  navigationStack.dispatch(StackActions.push(name, params));
+export const navigatePush = (name: string, params?: NavigationParams) => {
+  if (navigationRef.isReady()) {
+    navigationRef.dispatch(StackActions.push(name, params));
+  }
 };
 
-export const navigateAndReset = (routes: string[], index: number = 0) => {};
+export const navigateAndReset = (routes: string[], index: number = 0) => {
+  if (navigationRef.isReady()) {
+    navigationRef.dispatch(
+      CommonActions.reset({
+        index,
+        routes: routes.map(route => ({name: route})),
+      }),
+    );
+  }
+};
 
 export function navigateReplace(name: string, param: NavigationParams) {
-  navigationStack.dispatch(StackActions.replace(name, param));
+  if (navigationRef.isReady()) {
+    navigationRef.dispatch(
+      StackActions.replace(name, {
+        param,
+      }),
+    );
+  }
 }
 
-export const goBack = () => {
-  navigationStack.goBack();
+export const goBackNavigation = () => {
+  navigationRef.goBack();
 };

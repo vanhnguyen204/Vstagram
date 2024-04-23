@@ -1,5 +1,5 @@
 import {View, TextInput, TextInputProps, ViewStyle} from 'react-native';
-import React, { memo, Ref } from "react";
+import React, {memo, Ref} from 'react';
 import {appColors} from '../assets/colors/appColors';
 interface InputProps extends TextInputProps {
   value: string;
@@ -19,7 +19,7 @@ interface InputProps extends TextInputProps {
   textColor?: string;
   style?: ViewStyle;
   autoCapitalize?: 'none' | 'sentences' | 'words' | 'characters' | undefined;
-  ref?: Ref<TextInput>
+  ref?: Ref<TextInput>;
 }
 const InputComponent = (props: InputProps) => {
   const {

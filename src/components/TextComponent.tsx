@@ -2,8 +2,9 @@ import {View, Text} from 'react-native';
 import React, {memo} from 'react';
 import {globalStyle} from '../styles/globalStyle';
 import {appColors} from '../assets/colors/appColors';
+import {FlexBoxProp} from '../constants/FlexBoxProp';
 
-interface TextProps {
+interface TextProps extends FlexBoxProp {
   value: string;
   color?: string;
   fontSize?: number;
@@ -13,6 +14,19 @@ interface TextProps {
   marginBottom?: number;
   marginLeft?: number;
   marginRight?: number;
+  fontWeight?:
+    | 'normal'
+    | 'bold'
+    | '100'
+    | '200'
+    | '300'
+    | '400'
+    | '500'
+    | '600'
+    | '700'
+    | '800'
+    | '900'
+    | undefined;
 }
 const TextComponent = (props: TextProps) => {
   const {
@@ -24,6 +38,11 @@ const TextComponent = (props: TextProps) => {
     marginBottom,
     marginLeft,
     marginRight,
+    alignSelf,
+    marginVertical,
+    marginHorizontal,
+    margin,
+    fontWeight,
   } = props;
   return (
     <Text
@@ -37,6 +56,11 @@ const TextComponent = (props: TextProps) => {
           marginBottom: marginBottom ?? null,
           marginLeft: marginLeft ?? null,
           marginRight: marginRight ?? null,
+          alignSelf: alignSelf ?? 'center',
+          marginVertical: marginVertical ?? 0,
+          marginHorizontal: marginHorizontal ?? 0,
+          margin: margin ?? 0,
+          fontWeight: fontWeight,
         },
       ]}>
       {value}

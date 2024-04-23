@@ -21,24 +21,23 @@ axiosClient.interceptors.response.use(
     if (res.data) {
       return res.data;
     }
-
     throw Error('Error response from axios');
   },
   error => {
-    console.log(`Error api ${JSON.stringify(error)}`);
-    throw new Error(error.response);
+    throw new Error(JSON.stringify(error.response));
   },
 );
 export const request = async (url: string, method: string, data: any) => {
   try {
-    const response =  await axiosClient.request({
+    const response = await axiosClient.request({
       url,
       method,
       data,
     });
     return response;
-  } catch (error) {
-    handleLogError(error);
+  } catch (error: any) {
+    handleLogError(error, url, method);
+    throw error;
   }
 };
 export const uploadRequest = async (url: string, data: object) => {
@@ -50,11 +49,11 @@ export const uploadRequest = async (url: string, data: object) => {
     });
     return response.data;
   } catch (e) {
-    handleLogError(e);
+    handleLogError(e, url, 'POST');
   }
 };
-const handleLogError = (error: any): void => {
-  console.log(error);
+const handleLogError = (error: any, url: string, method: string): void => {
+  console.log(`Error in API call ${method} ${url}`);
 };
 export const Method = {
   GET: 'GET',

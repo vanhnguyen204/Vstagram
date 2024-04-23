@@ -15,7 +15,7 @@ const WelcomeScreen = (props: WelcomeScreenProps) => {
   const {navigation} = props;
   useEffect(() => {
     const timeOut = setTimeout(() => {
-      navigation.navigate(PageName.Register);
+      navigation.navigate(PageName.Login);
     }, 1000);
     return () => {
       clearTimeout(timeOut);

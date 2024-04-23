@@ -96,6 +96,8 @@ const Box = (props: BoxProps) => {
     borderColor,
     marginVertical,
     marginHorizontal,
+    alignSelf,
+    justifyContent,
   } = props;
   return (
     <View
@@ -124,6 +126,8 @@ const Box = (props: BoxProps) => {
           borderColor: borderColor ?? appColors.white,
           marginHorizontal: marginHorizontal ?? 0,
           marginVertical: marginVertical ?? 0,
+          alignSelf: alignSelf ?? 'center',
+          justifyContent: justifyContent ?? 'flex-start',
         },
       ]}>
       {children}

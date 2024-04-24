@@ -23,7 +23,7 @@ import {User} from '../../models/UserModel';
 
 const Login = () => {
   const loginStore = useLoginStore();
-  const {information, setInforMation} = userInforStore();
+  const {setInforMation} = userInforStore();
   const [isLoading, setIsLoading] = useState(false);
   const goToRegister = useCallback(() => {
     navigatePush(PageName.Register);
@@ -50,12 +50,18 @@ const Login = () => {
     setIsLoading(true);
     login(data)
       .then(response => {
-        const userInforResponse = response;
         setIsLoading(false);
         console.log('Login success', response);
 
         setInforMation(response);
-        AsyncStorage.setItem(ACCESS_TOKEN, userInforResponse.token);
+        // @ts-ignore
+        AsyncStorage.setItem(ACCESS_TOKEN, response.token)
+          .then(() => {
+            navigateReplace(PageName.BottomTab);
+          })
+          .catch(e => {
+            console.log(e);
+          });
       })
       .catch(e => {
         console.log(e);

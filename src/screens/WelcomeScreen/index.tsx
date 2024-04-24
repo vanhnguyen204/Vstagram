@@ -8,6 +8,9 @@ import ImageComponent from '../../components/ImageComponent';
 import Box from '../../components/Box';
 import {NavigationProp} from '@react-navigation/native';
 import {PageName} from '../../config/PageName';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {ACCESS_TOKEN} from '../../constants/AsyncStorage';
+import {navigateReplace} from '../../utils/NavigationUtils';
 interface WelcomeScreenProps {
   navigation: NavigationProp<any>; // Thay any bằng kiểu dữ liệu cụ thể của màn hình tiếp theo
 }
@@ -15,7 +18,12 @@ const WelcomeScreen = (props: WelcomeScreenProps) => {
   const {navigation} = props;
   useEffect(() => {
     const timeOut = setTimeout(() => {
-      navigation.navigate(PageName.Login);
+      const value = AsyncStorage.getItem(ACCESS_TOKEN);
+      if (value !== null) {
+        navigateReplace(PageName.BottomTab);
+      } else {
+        navigateReplace(PageName.Login);
+      }
     }, 1000);
     return () => {
       clearTimeout(timeOut);

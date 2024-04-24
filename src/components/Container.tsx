@@ -44,7 +44,7 @@ const Container = (props: ContainerProps) => {
         {
           backgroundColor: backgroundColor || appColors.backgroundApp,
           flexDirection: flexDirection ?? 'column',
-          alignItems: alignItems ?? undefined,
+          alignItems: alignItems ?? 'flex-start',
           justifyContent: justifyContent ?? 'center',
         },
       ]}>

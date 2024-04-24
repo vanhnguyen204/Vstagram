@@ -44,7 +44,7 @@ export const navigateAndReset = (routes: string[], index: number = 0) => {
   }
 };
 
-export function navigateReplace(name: string, param: NavigationParams) {
+export function navigateReplace(name: string, param?: NavigationParams) {
   if (navigationRef.isReady()) {
     navigationRef.dispatch(
       StackActions.replace(name, {

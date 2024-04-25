@@ -8,7 +8,8 @@ import VerifyRegister from '../screens/Auth/VerifyRegister.tsx';
 import CreatePasswordScreen from '../screens/Auth/CreatePasswordScreen.tsx';
 import Login from '../screens/Auth/Login.tsx';
 import HomeScreen from '../screens/HomeScreen/index.tsx';
-import BottomTab from "./BottomTab.tsx";
+import BottomTab from './BottomTab.tsx';
+import PostEditorScreen from '../screens/PostEditorScreen';
 
 const Stack = createNativeStackNavigator();
 const Navigation = () => {
@@ -23,6 +24,10 @@ const Navigation = () => {
         component={CreatePasswordScreen}
       />
       <Stack.Screen name={PageName.BottomTab} component={BottomTab} />
+      <Stack.Screen
+        name={PageName.PostEditorScreen}
+        component={PostEditorScreen}
+      />
     </Stack.Navigator>
   );
 };

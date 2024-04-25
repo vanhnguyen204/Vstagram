@@ -10,4 +10,5 @@ export const PageName = {
   SettingScreen: 'SettingScreen',
   CreatePostScreen: 'CreatePostScreen',
   BottomTab: 'BottomTab',
+  PostEditorScreen: 'PostEditorScreen',
 };

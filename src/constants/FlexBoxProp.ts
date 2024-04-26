@@ -67,4 +67,5 @@ export interface FlexBoxProp {
   borderWidth?: number;
   borderColor?: string;
   style?: ViewStyle;
+  position?: '';
 }

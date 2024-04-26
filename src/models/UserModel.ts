@@ -5,4 +5,6 @@ export interface User {
   avatar: string;
   token: string;
   codeRegister: string;
+  story: [];
+  post: [];
 }

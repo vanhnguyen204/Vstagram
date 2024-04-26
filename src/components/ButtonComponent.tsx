@@ -6,7 +6,7 @@ import TextComponent from './TextComponent';
 import {appColors} from '../assets/colors/appColors';
 
 interface ButtonProps extends FlexBoxProp {
-  name: string;
+  name?: string;
   onPress: () => void;
   style?: ViewStyle;
   backgroundColor?: string;
@@ -51,7 +51,11 @@ const ButtonComponent = (props: ButtonProps) => {
           borderWidth: borderWidth ?? 0,
         },
       ]}>
-      {children ? children : <TextComponent color={nameColor} value={name} />}
+      {children ? (
+        children
+      ) : (
+        <TextComponent color={nameColor} value={name ?? ''} />
+      )}
     </TouchableOpacity>
   );
 };

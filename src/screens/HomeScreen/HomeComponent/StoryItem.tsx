@@ -1,40 +1,49 @@
-import React, { memo } from "react";
+import React, {memo} from 'react';
 import LinearGradient from 'react-native-linear-gradient';
-import {View} from 'react-native';
+import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import {appColors} from '../../../assets/colors/appColors.ts';
 import ImageComponent from '../../../components/ImageComponent.tsx';
 interface StoryItemProps {
   item?: object;
   marginHorizontal?: number;
+  onStoryPress?: () => void;
 }
 const StoryItem = (props: StoryItemProps) => {
-  const {item, marginHorizontal} = props;
+  const {item, marginHorizontal, onStoryPress} = props;
   return (
     <LinearGradient
-      style={{
-        borderWidth: 1, // Đặt độ dày cho border
-        borderRadius: 999,
-        padding: 2,
-        marginHorizontal: marginHorizontal ?? 2,
-      }}
+      style={[
+        {
+          marginHorizontal: marginHorizontal ?? 2,
+        },
+        styles.borderStoryGradient,
+      ]}
       colors={['#FD1D1D', '#E1306C', '#F77737', '#FCAF45']}
       start={{x: 0, y: 0}}
       end={{x: 1, y: 0}}>
-      <View
-        style={{
-          borderWidth: 2,
-          borderColor: appColors.backgroundApp,
-          borderRadius: 999,
-        }}>
+      <TouchableOpacity
+        onPress={onStoryPress}
+        style={[styles.borderStoryChild]}>
         <ImageComponent
           margin={2}
-          width={50}
-          height={50}
+          width={70}
+          height={70}
           src={require('../../../assets/icons/user-avatar.png')}
         />
-      </View>
+      </TouchableOpacity>
     </LinearGradient>
   );
 };
-
+const styles = StyleSheet.create({
+  borderStoryGradient: {
+    borderWidth: 1,
+    borderRadius: 999,
+    padding: 2,
+  },
+  borderStoryChild: {
+    borderWidth: 2,
+    borderColor: appColors.backgroundApp,
+    borderRadius: 999,
+  },
+});
 export default memo(StoryItem);

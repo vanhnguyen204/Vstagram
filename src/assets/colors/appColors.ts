@@ -1,9 +1,20 @@
 export const appColors = {
   black: '#000',
+  black900: '#212121',
   white: '#fff',
   backgroundApp: '#000',
   gray: 'rgba(255,255,255,0.5)',
   red: '#D32F2F',
   blue500: '#2196F3',
   transparent: 'transparent',
+  grays: {
+    gray100: '#F5F5F5',
+    gray200: '#EEEEEE',
+    gray300: '#E0E0E0',
+    gray400: '#BDBDBD',
+    gray500: '#9E9E9E',
+    gray600: '#757575',
+    gray700: '#616161',
+    gray800: '#424242',
+  },
 };

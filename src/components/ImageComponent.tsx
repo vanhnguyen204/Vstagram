@@ -3,14 +3,16 @@ import {
   Image,
   ImageResizeMode,
   FlexAlignType,
+  ViewStyle,
 } from 'react-native';
 import React, {memo} from 'react';
 import {appColors} from '../assets/colors/appColors';
+import {globalStyle} from '../styles/globalStyle';
 interface ImageProps {
   src: ImageSourcePropType;
   width: number;
-  height: number;
-  tinColor?: string;
+  height: number | undefined;
+  tintColor?: string;
   resizeMode?: ImageResizeMode;
   alignSelf?: FlexAlignType;
   margin?: number;
@@ -20,40 +22,49 @@ interface ImageProps {
   marginRight?: number;
   marginTop?: number;
   marginBottom?: number;
+  flex?: number;
+  style?: ViewStyle;
+  
 }
 const ImageComponent = (props: ImageProps) => {
   const {
     src,
     height,
     width,
-    tinColor,
-    resizeMode,
-    alignSelf,
-    margin,
-    marginBottom,
-    marginHorizontal,
-    marginLeft,
-    marginRight,
-    marginTop,
-    marginVertical,
+    tintColor = undefined,
+    resizeMode = 'contain',
+    alignSelf = 'flex-start',
+    margin = 0,
+    marginBottom = 0,
+    marginHorizontal = 0,
+    marginLeft = 0,
+    marginRight = 0,
+    marginTop = 0,
+    marginVertical = 0,
+    flex,
+    style,
   } = props;
   return (
     <Image
       source={src}
-      style={{
-        height: height,
-        width: width,
-        tintColor: tinColor ?? undefined,
-        resizeMode: resizeMode ?? 'contain',
-        alignSelf: alignSelf ?? 'center',
-        margin: margin ?? 0,
-        marginBottom: marginBottom ?? 0,
-        marginHorizontal: marginHorizontal ?? 0,
-        marginLeft: marginLeft ?? 0,
-        marginRight: marginRight ?? 0,
-        marginTop: marginTop ?? 0,
-        marginVertical: marginVertical ?? 0,
-      }}
+      style={[
+        {
+          height: height,
+          width: width,
+          tintColor: tintColor,
+          resizeMode: resizeMode,
+          alignSelf: alignSelf,
+          margin: margin,
+          marginBottom: marginBottom,
+          marginHorizontal: marginHorizontal,
+          marginLeft: marginLeft,
+          marginRight: marginRight,
+          marginTop: marginTop,
+          marginVertical: marginVertical,
+          flex: flex ?? 0,
+        },
+        style,
+      ]}
     />
   );
 };

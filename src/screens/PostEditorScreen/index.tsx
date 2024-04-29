@@ -2,16 +2,15 @@ import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import Container from '../../components/Container.tsx';
 import {
   Animated,
+  Image,
   ImageBackground,
-  ImageProps,
   PanResponder,
   StyleSheet,
-  Text,
   View,
 } from 'react-native';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {launchImageLibrary} from 'react-native-image-picker';
-import {goBackNavigation} from '../../utils/NavigationUtils.ts';
+import {goBackNavigation, navigatePush} from '../../utils/NavigationUtils.ts';
 import {AppInfor} from '../../constants/AppInfor.ts';
 import ButtonComponent from '../../components/ButtonComponent.tsx';
 import ImageComponent from '../../components/ImageComponent.tsx';
@@ -22,12 +21,28 @@ import Video, {VideoRef} from 'react-native-video';
 import TextComponent from '../../components/TextComponent.tsx';
 import ModalSticker from './components/ModalSticker.tsx';
 import {useStoryStore} from '../../hooks/useStoryEditor.ts';
-
+import StickerSelected from './components/StickerSelected.tsx';
+import AnimatedReanimated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from 'react-native-reanimated';
+import ViewShot, {ViewShotProperties} from 'react-native-view-shot';
+import {PageName} from '../../config/PageName.ts';
+import ModalMusic from './components/ModalMusic.tsx';
+import {musicStore} from '../../hooks/useMusic.ts';
+import TrackPlayer from 'react-native-track-player';
 const PostEditorScreen = () => {
-  const {setSticker, stickers, clearStickerStory} = useStoryStore();
-
+  const {setMusicPlaying, setUrlMusicPlaying} = musicStore();
+  const {stickers, clearStickerStory, toggleModalSticker, toggleModalMusic} =
+    useStoryStore();
+  const [topEdgePosition, setTopEdgePosition] = useState(0);
+  const [bottomEdgePosition, setBottomEdgePosition] = useState(0);
+  const binOffset = useSharedValue<number>(200);
   const videoRef = useRef<VideoRef>(null);
+  const viewShotRef = useRef();
   const pan = useRef(new Animated.ValueXY()).current;
+
   const [videoDuration, setVideoDuration] = useState(0);
   const panResponder = useRef(
     PanResponder.create({
@@ -50,15 +65,15 @@ const PostEditorScreen = () => {
 
   const navigation = useNavigation<NavigationProp<any>>();
   const [mediaSelected, setMediaSelected] = useState<any>();
-  const chooseMedia = useCallback(() => {
+  const chooseMedia = useCallback(async () => {
     launchImageLibrary({
       mediaType: 'mixed',
       maxHeight: AppInfor.height / 2,
     })
       .then(res => {
-        console.log(res);
         if (res.didCancel) {
-          return goBackNavigation();
+          goBackNavigation();
+          clearStickerStory();
         } else {
           res.assets && setMediaSelected(res.assets[0]);
         }
@@ -66,7 +81,7 @@ const PostEditorScreen = () => {
       .catch(e => {
         console.log('error library', e);
       });
-  }, []);
+  }, [clearStickerStory]);
   React.useEffect(() => {
     return navigation.addListener('focus', () => {
       chooseMedia();
@@ -77,88 +92,70 @@ const PostEditorScreen = () => {
     let type = mediaSelected?.type.substring(0, index);
     return type;
   }, [mediaSelected?.type]);
-  const [isVisibleModalSticker, setIsVisibleModalSticker] = useState(false);
-  const toggleModalSticker = () => {
-    setIsVisibleModalSticker(!isVisibleModalSticker);
-  };
+  const binAnimatedStyles = useAnimatedStyle(() => ({
+    transform: [{translateY: binOffset.value}],
+  }));
+  const showBinRemoveSticker = useCallback(() => {
+    binOffset.value = withTiming(-100, {duration: 200});
+  }, [binOffset]);
+  const hideBinRemoveSticker = useCallback(() => {
+    binOffset.value = withTiming(100, {duration: 200});
+  }, [binOffset]);
   useEffect(() => {
-    console.log(stickers.length);
-  }, [stickers.length]);
+    const onPlaybackStateChange = async data => {
+      console.log('Playback state changed', data);
+      if (data.state === 'ended') {
+        setMusicPlaying('');
+      }
+    };
+    TrackPlayer.addEventListener('playback-state', onPlaybackStateChange);
+  }, [setMusicPlaying]);
+
+  const getImageEdges = useCallback(() => {
+    if (mediaSelected) {
+      Image.getSize(mediaSelected?.uri, (width, height) => {
+        const top = AppInfor.height / 2 - height / 2;
+        const bottom = AppInfor.height / 2 + height / 2;
+        setTopEdgePosition(top);
+        setBottomEdgePosition(bottom);
+        console.log('Image position');
+        console.log('Top: ', top);
+        console.log('Bottom: ', bottom);
+      });
+    }
+  }, [mediaSelected]);
+  useEffect(() => {
+    getImageEdges();
+  }, [getImageEdges, mediaSelected]);
+
+  const onCapture = useCallback(() => {
+    viewShotRef.current &&
+      viewShotRef.current.capture().then(uri => {
+        console.log('Image saved to', uri);
+        navigatePush(PageName.CompleteStoryScreen, {
+          uriCapture: uri,
+          uriOriginal: mediaSelected.uri,
+        });
+        // Thực hiện các thao tác khác như lưu ảnh vào thư viện ảnh của thiết bị
+      });
+  }, [mediaSelected?.uri]);
+  const onCloseStoryEditor = useCallback(() => {
+    goBackNavigation();
+    clearStickerStory();
+    setMusicPlaying('');
+    setUrlMusicPlaying('');
+    TrackPlayer.reset();
+    TrackPlayer.pause();
+  }, [clearStickerStory, setMusicPlaying, setUrlMusicPlaying]);
   return (
     <Container justifyContent={'flex-start'}>
       <ImageBackground
+        style={[styles.imageBackgroundContainer]}
         blurRadius={20}
-        style={{flex: 1}}
         source={{uri: mediaSelected?.uri}}
         resizeMode={'cover'}>
-        <ModalSticker
-          isVisible={isVisibleModalSticker}
-          onClose={toggleModalSticker}
-        />
-        <Box
-          padding={2}
-          alignSelf={'stretch'}
-          flexDirection={'row'}
-          justifyContent={'space-between'}>
-          <ButtonComponent
-            backgroundColor={appColors.black900}
-            padding={3}
-            alignSelf={'center'}
-            marginHorizontal={5}
-            name={'Close'}
-            onPress={() => {
-              goBackNavigation();
-              clearStickerStory();
-            }}>
-            <ImageComponent
-              resizeMode={'contain'}
-              tinColor={appColors.white}
-              src={require('../../assets/icons/close.png')}
-              width={30}
-              height={30}
-            />
-          </ButtonComponent>
-
-          <Box flexDirection={'row'}>
-            <ButtonComponent
-              backgroundColor={appColors.black900}
-              padding={6}
-              alignSelf={'center'}
-              name={'Select sticker'}
-              onPress={() => {}}>
-              <TextComponent value={'Aa'} fontSize={20} />
-            </ButtonComponent>
-            <ButtonComponent
-              backgroundColor={appColors.black900}
-              padding={6}
-              alignSelf={'center'}
-              marginHorizontal={10}
-              name={'Select sticker'}
-              onPress={() => {
-                toggleModalSticker();
-              }}>
-              <ImageComponent
-                tinColor={appColors.white}
-                src={require('../../assets/icons/sticker.png')}
-                width={25}
-                height={25}
-              />
-            </ButtonComponent>
-            <ButtonComponent
-              backgroundColor={appColors.black900}
-              padding={6}
-              alignSelf={'center'}
-              name={'Close'}
-              onPress={() => {}}>
-              <ImageComponent
-                tinColor={appColors.white}
-                src={require('../../assets/icons/musical-note.png')}
-                width={25}
-                height={25}
-              />
-            </ButtonComponent>
-          </Box>
-        </Box>
+        <ModalSticker />
+        <ModalMusic />
         {subType === 'video' ? (
           <Box>
             <Video
@@ -181,13 +178,121 @@ const PostEditorScreen = () => {
             </Animated.View>
           </Box>
         ) : (
-          <ImageComponent
-            resizeMode={'contain'}
-            width={AppInfor.width}
-            height={500}
-            src={{uri: mediaSelected?.uri}}
-          />
+          <ViewShot ref={viewShotRef} style={[styles.containerImageAndSticker]}>
+            <ImageComponent
+              resizeMode={'contain'}
+              width={AppInfor.width}
+              height={undefined}
+              flex={1}
+              src={{uri: mediaSelected?.uri}}
+            />
+
+            {stickers.map((item, index) => {
+              return (
+                <StickerSelected
+                  topEdgePosition={topEdgePosition}
+                  bottomEdgePosition={bottomEdgePosition}
+                  key={index}
+                  showTrash={showBinRemoveSticker}
+                  index={index}
+                  item={item}
+                  hideTrash={hideBinRemoveSticker}
+                />
+              );
+            })}
+          </ViewShot>
         )}
+        <Box
+          position="absolute"
+          top={10}
+          right={0}
+          left={0}
+          padding={2}
+          flexDirection={'row'}
+          justifyContent={'space-between'}>
+          <ButtonComponent
+            backgroundColor={appColors.black900}
+            padding={3}
+            alignSelf={'center'}
+            marginHorizontal={5}
+            name={'Close'}
+            onPress={() => {
+              onCloseStoryEditor();
+            }}>
+            <ImageComponent
+              resizeMode={'contain'}
+              tintColor={appColors.white}
+              src={require('../../assets/icons/close.png')}
+              width={30}
+              height={30}
+            />
+          </ButtonComponent>
+
+          <Box flexDirection={'row'}>
+            <ButtonComponent
+              backgroundColor={appColors.black900}
+              padding={6}
+              alignSelf={'center'}
+              name={'Select sticker'}
+              onPress={() => {}}>
+              <TextComponent value={'Aa'} fontSize={20} />
+            </ButtonComponent>
+            <ButtonComponent
+              backgroundColor={appColors.black900}
+              padding={6}
+              alignSelf={'center'}
+              marginHorizontal={10}
+              name={'Select sticker'}
+              onPress={() => {
+                toggleModalSticker(true);
+              }}>
+              <ImageComponent
+                tintColor={appColors.white}
+                src={require('../../assets/icons/sticker.png')}
+                width={25}
+                height={25}
+              />
+            </ButtonComponent>
+            <ButtonComponent
+              backgroundColor={appColors.black900}
+              padding={6}
+              alignSelf={'center'}
+              name={'Close'}
+              onPress={() => {
+                toggleModalMusic(true);
+              }}>
+              <ImageComponent
+                tintColor={appColors.white}
+                src={require('../../assets/icons/musical-note.png')}
+                width={25}
+                height={25}
+              />
+            </ButtonComponent>
+            <ButtonComponent
+              backgroundColor={appColors.black900}
+              padding={6}
+              marginHorizontal={10}
+              alignSelf={'center'}
+              name={'Close'}
+              onPress={() => {
+                onCapture();
+              }}>
+              <TextComponent value="Tiếp" />
+            </ButtonComponent>
+          </Box>
+        </Box>
+        <AnimatedReanimated.View
+          style={[
+            binAnimatedStyles,
+            {alignSelf: 'center', position: 'absolute', bottom: 0},
+          ]}>
+          <ImageComponent
+            width={30}
+            tintColor={appColors.white}
+            height={30}
+            src={require('../../assets/icons/trash-bin.png')}
+          />
+        </AnimatedReanimated.View>
       </ImageBackground>
     </Container>
   );
@@ -203,6 +308,19 @@ const styles = StyleSheet.create({
     height: 40,
     borderRadius: 20,
     backgroundColor: appColors.white,
+  },
+  renderStickerStyle: {
+    position: 'absolute',
+    bottom: 0,
+  },
+  containerImageAndSticker: {
+    overflow: 'hidden',
+    flex: 1,
+  },
+  imageBackgroundContainer: {
+    alignSelf: 'center',
+    borderRadius: 20,
+    overflow: 'hidden',
   },
 });
 export default PostEditorScreen;

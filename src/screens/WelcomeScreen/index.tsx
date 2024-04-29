@@ -11,12 +11,22 @@ import {PageName} from '../../config/PageName';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {ACCESS_TOKEN} from '../../constants/AsyncStorage';
 import {navigateReplace} from '../../utils/NavigationUtils';
+import {getListMusic} from '../../services/apis/musicService';
+import {musicStore} from '../../hooks/useMusic';
 interface WelcomeScreenProps {
   navigation: NavigationProp<any>; // Thay any bằng kiểu dữ liệu cụ thể của màn hình tiếp theo
 }
 const WelcomeScreen = (props: WelcomeScreenProps) => {
   const {navigation} = props;
+  const {setListMusic} = musicStore();
   useEffect(() => {
+    getListMusic()
+      .then(response => {
+        setListMusic(response);
+      })
+      .catch(e => {
+        console.log(e);
+      });
     const timeOut = setTimeout(() => {
       const value = AsyncStorage.getItem(ACCESS_TOKEN);
       if (value !== null) {
@@ -28,7 +38,7 @@ const WelcomeScreen = (props: WelcomeScreenProps) => {
     return () => {
       clearTimeout(timeOut);
     };
-  }, [navigation]);
+  }, []);
 
   return (
     <Container justifyContent="space-around">

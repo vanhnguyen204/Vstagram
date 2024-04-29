@@ -27,7 +27,7 @@ axiosClient.interceptors.response.use(
     throw new Error(JSON.stringify(error.response));
   },
 );
-export const request = async (url: string, method: string, data: any) => {
+export const request = async (url: string, method: string, data?: any) => {
   try {
     const response = await axiosClient.request({
       url,

@@ -31,6 +31,7 @@ interface BoxProps {
   reverse?: boolean;
   row?: boolean;
   center?: boolean;
+  position?: 'absolute' | 'relative' | undefined;
   paddingBottom?: number;
   paddingLeft?: number;
   paddingRight?: number;
@@ -68,6 +69,10 @@ interface BoxProps {
   borderRightColor?: string;
   borderWidth?: number;
   borderColor?: string;
+  top?: number;
+  right?: number;
+  bottom?: number;
+  left?: number;
   style?: ViewStyle;
 }
 const Box = (props: BoxProps) => {
@@ -98,6 +103,11 @@ const Box = (props: BoxProps) => {
     marginHorizontal,
     alignSelf,
     justifyContent,
+    position = undefined,
+    top = null,
+    right = null,
+    bottom = null,
+    left = null,
   } = props;
   return (
     <View
@@ -128,6 +138,11 @@ const Box = (props: BoxProps) => {
           marginVertical: marginVertical ?? 0,
           alignSelf: alignSelf ?? 'center',
           justifyContent: justifyContent ?? 'flex-start',
+          position: position,
+          top,
+          right,
+          left,
+          bottom,
         },
       ]}>
       {children}

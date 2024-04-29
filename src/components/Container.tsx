@@ -2,7 +2,8 @@ import {SafeAreaView, StyleProp, ViewStyle} from 'react-native';
 import React, {ReactNode, memo} from 'react';
 import {globalStyle} from '../styles/globalStyle';
 import {appColors} from '../assets/colors/appColors';
-interface ContainerProps {
+import {FlexBoxProp} from '../constants/FlexBoxProp';
+interface ContainerProps extends FlexBoxProp {
   children: ReactNode;
   containerStyle?: StyleProp<ViewStyle>;
   backgroundColor?: string;
@@ -36,6 +37,7 @@ const Container = (props: ContainerProps) => {
     flexDirection,
     alignItems,
     justifyContent,
+    padding = 0,
   } = props;
   return (
     <SafeAreaView
@@ -46,6 +48,7 @@ const Container = (props: ContainerProps) => {
           flexDirection: flexDirection ?? 'column',
           alignItems: alignItems ?? 'flex-start',
           justifyContent: justifyContent ?? 'center',
+          padding,
         },
       ]}>
       {children}

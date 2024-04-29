@@ -10,6 +10,7 @@ import Login from '../screens/Auth/Login.tsx';
 import HomeScreen from '../screens/HomeScreen/index.tsx';
 import BottomTab from './BottomTab.tsx';
 import PostEditorScreen from '../screens/PostEditorScreen';
+import CompleteStoryScreen from '../screens/CompleteStoryScreen/index.tsx';
 
 const Stack = createNativeStackNavigator();
 const Navigation = () => {
@@ -27,6 +28,10 @@ const Navigation = () => {
       <Stack.Screen
         name={PageName.PostEditorScreen}
         component={PostEditorScreen}
+      />
+      <Stack.Screen
+        name={PageName.CompleteStoryScreen}
+        component={CompleteStoryScreen}
       />
     </Stack.Navigator>
   );

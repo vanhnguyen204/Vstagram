@@ -15,4 +15,8 @@ export const globalStyle = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 20,
   },
+  imageStyle: {
+    width: 20,
+    height: 20,
+  },
 });

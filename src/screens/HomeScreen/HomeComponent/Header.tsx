@@ -17,12 +17,12 @@ const Header = () => {
         height={50}
         resizeMode={'contain'}
         src={AppInfor.textApp}
-        tinColor={appColors.white}
+        tintColor={appColors.white}
       />
       <Box flexDirection={'row'}>
         <ButtonComponent name={''} onPress={() => {}}>
           <ImageComponent
-            tinColor={appColors.white}
+            tintColor={appColors.white}
             width={28}
             height={28}
             src={require('../../../assets/icons/bell.png')}
@@ -30,7 +30,7 @@ const Header = () => {
         </ButtonComponent>
         <ButtonComponent name={''} onPress={() => {}}>
           <ImageComponent
-            tinColor={appColors.white}
+            tintColor={appColors.white}
             width={28}
             height={28}
             src={require('../../../assets/icons/chat.png')}

@@ -20,24 +20,19 @@ const WelcomeScreen = (props: WelcomeScreenProps) => {
   const {navigation} = props;
   const {setListMusic} = musicStore();
   useEffect(() => {
+    const value = AsyncStorage.getItem(ACCESS_TOKEN);
     getListMusic()
       .then(response => {
         setListMusic(response);
+        if (value !== null) {
+          navigateReplace(PageName.BottomTab);
+        } else {
+          navigateReplace(PageName.Login);
+        }
       })
       .catch(e => {
         console.log(e);
       });
-    const timeOut = setTimeout(() => {
-      const value = AsyncStorage.getItem(ACCESS_TOKEN);
-      if (value !== null) {
-        navigateReplace(PageName.BottomTab);
-      } else {
-        navigateReplace(PageName.Login);
-      }
-    }, 1000);
-    return () => {
-      clearTimeout(timeOut);
-    };
   }, []);
 
   return (
@@ -48,9 +43,9 @@ const WelcomeScreen = (props: WelcomeScreenProps) => {
         height={100}
       />
       <ActivityIndicator color={appColors.white} size={'small'} />
-      <Box flex={0} backgroundColor={appColors.black} alignItems="center">
-        <TextComponent value="from" />
-        <TextComponent fontSize={20} value="Vanh" />
+      <Box flex={0} alignItems="center">
+        <TextComponent color={appColors.white} value="from" />
+        <TextComponent color={appColors.white} fontSize={20} value="Vanh" />
       </Box>
     </Container>
   );

@@ -11,6 +11,7 @@ import VideoPlayer from 'react-native-video-player';
 import MyStory from './HomeComponent/MyStory.tsx';
 import {navigate} from '../../utils/NavigationUtils.ts';
 import {PageName} from '../../config/PageName.ts';
+import TextComponent from '../../components/TextComponent.tsx';
 const HomeScreen = () => {
   const navigateToCreatePost = useCallback(() => {
     navigate(PageName.PostEditorScreen);
@@ -24,19 +25,10 @@ const HomeScreen = () => {
         justifyContent="flex-start">
         <MyStory onIconAddPress={navigateToCreatePost} />
       </Box>
-      <TouchableOpacity
-        onPress={async () => {
-          await TrackPlayer.play();
-        }}>
-        <Text style={{color: appColors.white}}>Play</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        onPress={async () => {
-          await TrackPlayer.reset();
-          await TrackPlayer.pause();
-        }}>
-        <Text style={{color: appColors.white}}>pause</Text>
-      </TouchableOpacity>
+
+      <TextComponent value="Hello ae" fontFamily="Dancing Script" />
+      <TextComponent value="Hello ae" fontFamily="Briem Hand" />
+      <TextComponent value="Hello ae" fontFamily="Dancing Script" />
     </Container>
   );
 };

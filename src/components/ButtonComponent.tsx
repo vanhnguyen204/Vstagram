@@ -12,6 +12,7 @@ interface ButtonProps extends FlexBoxProp {
   backgroundColor?: string;
   nameColor?: string;
   children?: ReactNode | undefined;
+  fontSize?: number;
 }
 const ButtonComponent = (props: ButtonProps) => {
   const {
@@ -31,6 +32,7 @@ const ButtonComponent = (props: ButtonProps) => {
     marginVertical,
     borderColor,
     borderWidth,
+    fontSize,
   } = props;
   return (
     <TouchableOpacity
@@ -53,8 +55,14 @@ const ButtonComponent = (props: ButtonProps) => {
       ]}>
       {children ? (
         children
+      ) : name ? (
+        <TextComponent
+          color={nameColor}
+          fontSize={fontSize}
+          value={name ?? ''}
+        />
       ) : (
-        <TextComponent color={nameColor} value={name ?? ''} />
+        <></>
       )}
     </TouchableOpacity>
   );

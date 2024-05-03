@@ -15,30 +15,20 @@ interface MusicProps {
 }
 const MusicItem = (props: MusicProps) => {
   const {item, index} = props;
-  const [indexMusicPlaying, setindexMusicPlaying] = useState<any>(null);
   const {musicPlaying = '', setMusicPlaying, setUrlMusicPlaying} = musicStore();
-  const playMusic = useCallback(async () => {
+  const playMusic = useCallback(async (music: string) => {
     await TrackPlayer.reset();
     setMusicPlaying(item._id);
     setUrlMusicPlaying(item.urlMedia);
     await TrackPlayer.add({
-      id: indexMusicPlaying,
+      id: music,
       url: item.urlMedia,
       artwork: item.image,
       title: item.title,
       artist: item.artist,
     });
     await TrackPlayer.play();
-  }, [
-    indexMusicPlaying,
-    item._id,
-    item.artist,
-    item.image,
-    item.title,
-    item.urlMedia,
-    setMusicPlaying,
-    setUrlMusicPlaying,
-  ]);
+  }, []);
   const stopMusic = useCallback(async () => {
     try {
       await TrackPlayer.reset();
@@ -46,7 +36,7 @@ const MusicItem = (props: MusicProps) => {
     } catch (error) {
       console.error('Error stopping music:', error);
     }
-  }, [setMusicPlaying]);
+  }, []);
 
   return (
     <Box
@@ -59,7 +49,7 @@ const MusicItem = (props: MusicProps) => {
         width={50}
         height={50}
         resizeMode="cover"
-        style={{borderRadius: 999}}
+        style={{borderRadius: 90}}
         src={{uri: item.image}}
       />
       <Box marginHorizontal={10} alignSelf="stretch" flexDirection="row">
@@ -86,8 +76,7 @@ const MusicItem = (props: MusicProps) => {
           if (musicPlaying === item._id) {
             stopMusic();
           } else {
-            playMusic();
-            setindexMusicPlaying(index);
+            playMusic(item.urlMedia);
           }
         }}>
         <ImageComponent

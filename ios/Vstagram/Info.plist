@@ -2,10 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-<key>UIAppFonts</key>
-<array>
-	<string>MaterialIcons.ttf</string>
-</array>
+	<key/>
+	<string/>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
@@ -38,7 +36,7 @@
 	<key>NSCameraUsageDescription</key>
 	<string>Vstagram muốn truy cập vào camera để sử dụng chức năng này</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string/>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Vstagram muốn truy cập đầy đủ ảnh, video để sử dụng tính năng này</string>
 	<key>UIAppFonts</key>
@@ -62,6 +60,9 @@
 		<string>Octicons.ttf</string>
 		<string>SimpleLineIcons.ttf</string>
 		<string>Zocial.ttf</string>
+		<string>BriemHand.ttf</string>
+		<string>DancingScript.ttf</string>
+		<string>Jaco.ttf</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen.storyboard</string>
@@ -69,6 +70,8 @@
 	<array>
 		<string>armv7</string>
 	</array>
+	<key>UIStatusBarStyle</key>
+	<string>UIStatusBarStyleLightContent</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>

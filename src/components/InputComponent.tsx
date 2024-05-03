@@ -31,10 +31,12 @@ const InputComponent = (props: InputProps) => {
     style,
     flex,
     autoCapitalize,
+    ref,
     ...resProps
   } = props;
   return (
     <TextInput
+      ref={ref}
       {...resProps}
       style={[{color: textColor ?? appColors.white, flex: flex}, style]}
       value={value}

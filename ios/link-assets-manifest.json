@@ -6,6 +6,14 @@
       "sha1": "4e77868439280fb434d4697c7b911271406c81f3"
     },
     {
+      "path": "src/assets/fonts/BriemHand.ttf",
+      "sha1": "06fe9ba0f47be6fa25265201edcdb3ea68bb975d"
+    },
+    {
+      "path": "src/assets/fonts/DancingScript.ttf",
+      "sha1": "80f13e7575ec59a51b7fdc42bb0b9d7a34439123"
+    },
+    {
       "path": "src/assets/fonts/Entypo.ttf",
       "sha1": "12b5670eb178138f77285d5f2c246d3cc5fa67d6"
     },
@@ -56,6 +64,10 @@
     {
       "path": "src/assets/fonts/Ionicons.ttf",
       "sha1": "86e07c3d974eb09099e6e5a9b3b8310303cf0feb"
+    },
+    {
+      "path": "src/assets/fonts/Jaco.ttf",
+      "sha1": "128c26a20c78e9607c9d6b748910604cc27aef46"
     },
     {
       "path": "src/assets/fonts/MaterialCommunityIcons.ttf",

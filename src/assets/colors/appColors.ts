@@ -17,4 +17,26 @@ export const appColors = {
     gray700: '#616161',
     gray800: '#424242',
   },
+  colorsStoryTextEditor: [
+    [
+      '#B388FF',
+      '#00B0FF',
+      '#66BB6A',
+      '#EEFF41',
+      '#FFB300',
+      '#B0BEC5',
+      '#ffffff',
+      '#000000',
+    ],
+    [
+      '#80CBC4',
+      '#00B0FF',
+      '#66BB6A',
+      '#EEFF41',
+      '#FFB300',
+      '#B0BEC5',
+      '#ffffff',
+      '#000000',
+    ],
+  ],
 };

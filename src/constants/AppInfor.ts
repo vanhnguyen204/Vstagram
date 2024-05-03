@@ -1,4 +1,4 @@
-import {Dimensions} from 'react-native';
+import {Dimensions, Platform} from 'react-native';
 
 export const AppInfor = {
   width: Dimensions.get('window').width,

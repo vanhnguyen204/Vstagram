@@ -1,18 +1,24 @@
-import React, {memo, useCallback, useEffect, useRef, useState} from 'react';
+import React, {memo, useState} from 'react';
 import Modal from 'react-native-modal';
-import {FlatList, StyleSheet, Text, View} from 'react-native';
+import {FlatList, StyleSheet, View} from 'react-native';
 import {appColors} from '../../../assets/colors/appColors.ts';
 import Box from '../../../components/Box.tsx';
 import {AppInfor} from '../../../constants/AppInfor.ts';
-import {Stickers} from '../../../models/Stickers.ts';
-import StickerItem from './StickerItem.tsx';
+
 import {useStoryStore} from '../../../hooks/useStoryEditor.ts';
 import {musicStore} from '../../../hooks/useMusic.ts';
 import MusicItem from './MusicItem.tsx';
+import ButtonComponent from '../../../components/ButtonComponent.tsx';
 
 const ModalMusic = () => {
   const {isModalMusicShow, toggleModalMusic} = useStoryStore();
+  const [scrollOffset, setScrollOffset] = useState<number | null>(null);
+
   const {listMusic} = musicStore();
+  const handleOnScroll = (event: any) => {
+    setScrollOffset(event.nativeEvent.contentOffset.y);
+  };
+
   return (
     <Modal
       isVisible={isModalMusicShow}
@@ -22,6 +28,8 @@ const ModalMusic = () => {
       animationOut={'fadeOut'}
       avoidKeyboard={true}
       scrollHorizontal={true}
+      scrollOffset={scrollOffset}
+      scrollOffsetMax={400 - 300}
       propagateSwipe={true}
       backdropTransitionOutTiming={0}
       swipeThreshold={250}>
@@ -34,13 +42,24 @@ const ModalMusic = () => {
         // alignItems={'center'}
         backgroundColor={'rgba(0,0,0, 0.5)'}>
         <Box
-          style={{width: 40, height: 5, borderRadius: 20, overflow: 'visible'}}
+          style={styles.viewHorizontalTop}
           marginVertical={10}
           radius={20}
           backgroundColor={appColors.gray}>
           <View />
         </Box>
+        <ButtonComponent
+          nameColor={appColors.blue500}
+          style={{position: 'absolute', top: 0, right: 10}}
+          name="Huỷ"
+          onPress={() => {
+            toggleModalMusic(false);
+          }}
+        />
         <FlatList
+          showsVerticalScrollIndicator={true}
+          onScroll={handleOnScroll}
+          scrollEventThrottle={16}
           style={{width: AppInfor.width}}
           data={listMusic}
           keyExtractor={item => item._id.toString()}
@@ -59,6 +78,12 @@ const styles = StyleSheet.create({
     bottom: 0,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
+  },
+  viewHorizontalTop: {
+    width: 40,
+    height: 5,
+    borderRadius: 20,
+    overflow: 'visible',
   },
 });
 export default memo(ModalMusic);

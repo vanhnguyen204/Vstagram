@@ -4,10 +4,10 @@ interface UserInforType {
 }
 
 interface UserInforActions extends UserInforType {
-  setInforMation: (data: object) => void;
+  setInformation: (data: object) => void;
 }
 
 export const userInforStore = create<UserInforActions>(set => ({
   information: {},
-  setInforMation: (information: object): void => set({information}),
+  setInformation: (information: object): void => set({information}),
 }));

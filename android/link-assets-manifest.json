@@ -6,11 +6,15 @@
       "sha1": "4e77868439280fb434d4697c7b911271406c81f3"
     },
     {
-      "path": "src/assets/fonts/BriemHand.ttf",
+      "path": "src/assets/fonts/Bradley Hand.ttf",
+      "sha1": "1090deb825bd068fe59c5654dd7302b513758bd2"
+    },
+    {
+      "path": "src/assets/fonts/Briem Hand.ttf",
       "sha1": "06fe9ba0f47be6fa25265201edcdb3ea68bb975d"
     },
     {
-      "path": "src/assets/fonts/DancingScript.ttf",
+      "path": "src/assets/fonts/Dancing Script.ttf",
       "sha1": "80f13e7575ec59a51b7fdc42bb0b9d7a34439123"
     },
     {
@@ -66,7 +70,7 @@
       "sha1": "86e07c3d974eb09099e6e5a9b3b8310303cf0feb"
     },
     {
-      "path": "src/assets/fonts/Jaco.ttf",
+      "path": "src/assets/fonts/Jaro.ttf",
       "sha1": "128c26a20c78e9607c9d6b748910604cc27aef46"
     },
     {
@@ -88,6 +92,10 @@
     {
       "path": "src/assets/fonts/Zocial.ttf",
       "sha1": "6a48a962b06cc3acbdfd61df0d9a34744eea5e8d"
+    },
+    {
+      "path": "src/assets/fonts/index.ts",
+      "sha1": "90accb0595f1c277f2f082f3b70b22991b5336f6"
     }
   ]
 }

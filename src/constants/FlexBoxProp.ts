@@ -55,7 +55,7 @@ export interface FlexBoxProp {
   topRightRadius?: number;
   bottomLeftRadius?: number;
   bottomRightRadius?: number;
-  overflow?: 'visible' | 'hidden' | 'scroll';
+  overflow?: 'visible' | 'hidden' | 'scroll' | undefined;
   borderTopWidth?: number;
   borderBottomWidth?: number;
   borderLeftWidth?: number;
@@ -67,5 +67,5 @@ export interface FlexBoxProp {
   borderWidth?: number;
   borderColor?: string;
   style?: ViewStyle;
-  position?: '';
+  position?: 'absolute' | 'relative' | undefined;
 }

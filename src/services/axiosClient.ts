@@ -1,19 +1,22 @@
 import axios from 'axios';
 import {ProdConfig} from '../config/AxiosConfig.ts';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {ACCESS_TOKEN} from '../constants/AsyncStorage.ts';
 
 const axiosClient = axios.create({
   baseURL: ProdConfig.BASE_URL,
   timeout: 10000,
 });
 
-axiosClient.interceptors.request.use(async (config: any) => {
+axiosClient.interceptors.request.use(async config => {
+  const token = (await AsyncStorage.getItem(ACCESS_TOKEN)) || '';
+  // @ts-ignore
   config.headers = {
-    Authorization: '',
+    Authorization: `Bearer ${token}`,
     Accept: 'application/json',
+    'Content-Type': 'application/json',
     ...config.headers,
   };
-
-  config.data;
   return config;
 });
 axiosClient.interceptors.response.use(
@@ -29,22 +32,26 @@ axiosClient.interceptors.response.use(
 );
 export const request = async (url: string, method: string, data?: any) => {
   try {
-    const response = await axiosClient.request({
+    return await axiosClient.request({
       url,
       method,
       data,
     });
-    return response;
   } catch (error: any) {
     handleLogError(error, url, method);
     throw error;
   }
 };
-export const uploadRequest = async (url: string, data: object) => {
+export const uploadRequest = async (
+  url: string,
+  data: object,
+  authToken: any,
+) => {
   try {
     const response = await axiosClient.post(url, data, {
       headers: {
         'Content-Type': 'multipart/form-data',
+        Authorization: `Bearer ${authToken}`,
       },
     });
     return response.data;

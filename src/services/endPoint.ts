@@ -9,5 +9,6 @@ export default () => {
     confirmRegisterAccount: `${baseURL}/api/auth/create-account`,
     login: `${baseURL}/api/auth/login`,
     getListMusic: `${baseURL}/api/music`,
+    createStory: `${baseURL}/api/media/story`,
   };
 };

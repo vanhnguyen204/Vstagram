@@ -60,9 +60,10 @@
 		<string>Octicons.ttf</string>
 		<string>SimpleLineIcons.ttf</string>
 		<string>Zocial.ttf</string>
-		<string>BriemHand.ttf</string>
-		<string>DancingScript.ttf</string>
-		<string>Jaco.ttf</string>
+		<string>Bradley Hand.ttf</string>
+		<string>Briem Hand.ttf</string>
+		<string>Dancing Script.ttf</string>
+		<string>Jaro.ttf</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen.storyboard</string>

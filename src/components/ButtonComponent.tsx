@@ -33,6 +33,7 @@ const ButtonComponent = (props: ButtonProps) => {
     borderColor,
     borderWidth,
     fontSize,
+    overflow,
   } = props;
   return (
     <TouchableOpacity
@@ -51,6 +52,7 @@ const ButtonComponent = (props: ButtonProps) => {
           marginVertical: marginVertical ?? 0,
           borderColor: borderColor ?? appColors.white,
           borderWidth: borderWidth ?? 0,
+          overflow: overflow,
         },
       ]}>
       {children ? (

@@ -1,6 +1,6 @@
 import React, {memo} from 'react';
 import {FlatList, Keyboard, StyleSheet} from 'react-native';
-import Carousel from 'react-native-snap-carousel';
+import Carousel from "react-native-snap-carousel";
 import {AppInfor} from '../../../constants/AppInfor';
 import {appColors} from '../../../assets/colors/appColors';
 

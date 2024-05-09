@@ -17,6 +17,7 @@ interface StickerSelectedProps {
   hideTrash: () => void;
   topEdgePosition: number;
   bottomEdgePosition: number;
+  opacity?: number;
 }
 
 const StickerSelected = (props: StickerSelectedProps) => {
@@ -27,6 +28,7 @@ const StickerSelected = (props: StickerSelectedProps) => {
     hideTrash,
     topEdgePosition,
     bottomEdgePosition,
+    opacity = 1,
   } = props;
   const panSticker = useRef(new Animated.ValueXY()).current;
   const panResponderSticker = useRef(
@@ -37,14 +39,13 @@ const StickerSelected = (props: StickerSelectedProps) => {
         panSticker.setValue({x: gestureState.dx, y: gestureState.dy});
         const currentX = panSticker.x._value;
         const currentY = panSticker.y._value;
-
+        showTrash();
         if (currentY < AppInfor.height - bottomEdgePosition) {
-          showTrash();
+
         }
       },
       onPanResponderRelease: (event, gestureState) => {
         panSticker.extractOffset(); // reset value of useRef of panresponder
-
         hideTrash();
       },
     }),
@@ -56,6 +57,7 @@ const StickerSelected = (props: StickerSelectedProps) => {
           transform: [{translateX: panSticker.x}, {translateY: panSticker.y}],
         },
         styles.renderStickerStyle,
+        {opacity: opacity},
       ]}
       {...panResponderSticker.panHandlers}>
       <TouchableOpacity>

@@ -35,7 +35,7 @@ const BottomTab = () => {
                 src={iconBottomTab.homeIcon}
                 width={size}
                 height={size}
-                tinColor={color}
+                tintColor={color}
               />
             );
           },
@@ -51,7 +51,7 @@ const BottomTab = () => {
                 src={iconBottomTab.searchIcon}
                 width={size}
                 height={size}
-                tinColor={color}
+                tintColor={color}
               />
             );
           },
@@ -67,7 +67,7 @@ const BottomTab = () => {
                 src={iconBottomTab.createPostIcon}
                 width={size}
                 height={size}
-                tinColor={color}
+                tintColor={color}
               />
             );
           },
@@ -83,7 +83,7 @@ const BottomTab = () => {
                 src={iconBottomTab.reelsIcon}
                 width={size}
                 height={size}
-                tinColor={color}
+                tintColor={color}
               />
             );
           },
@@ -99,7 +99,7 @@ const BottomTab = () => {
                 src={iconBottomTab.settingIcon}
                 width={size}
                 height={size}
-                tinColor={color}
+                tintColor={color}
               />
             );
           },

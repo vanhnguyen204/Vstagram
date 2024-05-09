@@ -11,18 +11,18 @@ import {PageName} from '../../config/PageName';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {ACCESS_TOKEN} from '../../constants/AsyncStorage';
 import {navigateReplace} from '../../utils/NavigationUtils';
-import {getListMusic} from '../../services/apis/musicService';
+import {getListMusic} from '../../services/apis/musicServices.ts';
 import {musicStore} from '../../hooks/useMusic';
 interface WelcomeScreenProps {
   navigation: NavigationProp<any>; // Thay any bằng kiểu dữ liệu cụ thể của màn hình tiếp theo
 }
 const WelcomeScreen = (props: WelcomeScreenProps) => {
-  const {navigation} = props;
   const {setListMusic} = musicStore();
   useEffect(() => {
     const value = AsyncStorage.getItem(ACCESS_TOKEN);
     getListMusic()
       .then(response => {
+        // @ts-ignore
         setListMusic(response);
         if (value !== null) {
           navigateReplace(PageName.BottomTab);

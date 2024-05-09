@@ -11,6 +11,7 @@ interface StoryBarEditorProps {
   toggleModalSticker: (isVisible: boolean) => void;
   toggleModalMusic: (isVisible: boolean) => void;
   onCapture: () => void;
+  opacity?: number;
 }
 
 const StoryBarEditor = (props: StoryBarEditorProps) => {
@@ -21,9 +22,11 @@ const StoryBarEditor = (props: StoryBarEditorProps) => {
     toggleModalSticker,
     toggleModalMusic,
     onCapture,
+    opacity = 1,
   } = props;
   return (
     <Box
+      opacity={opacity}
       position="absolute"
       top={10}
       right={0}

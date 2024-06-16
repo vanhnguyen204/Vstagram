@@ -18,7 +18,7 @@ const StickerItem = (props: StickerProps) => {
     <ButtonComponent
       onPress={() => {
         handleSelected();
-        toggleModalSticker(false)
+        toggleModalSticker(false);
       }}
       name={'click'}
       style={{

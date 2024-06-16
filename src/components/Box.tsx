@@ -1,4 +1,4 @@
-import { FlexStyle, View, ViewStyle } from "react-native";
+import {FlexStyle, View, ViewStyle} from 'react-native';
 import React, {memo, ReactNode} from 'react';
 import {appColors} from '../assets/colors/appColors';
 interface BoxProps {
@@ -110,7 +110,7 @@ const Box = (props: BoxProps) => {
     bottom = null,
     left = null,
     zIndex,
-    overflow
+    overflow,
   } = props;
   return (
     <View
@@ -119,7 +119,7 @@ const Box = (props: BoxProps) => {
         {
           flex: flex ?? 0,
           flexDirection: flexDirection ?? 'column',
-          alignItems: alignItems ?? 'flex-start',
+          alignItems: alignItems ?? undefined,
           backgroundColor: backgroundColor ?? undefined,
           opacity: opacity ?? 1,
           margin: margin ?? null,
@@ -139,15 +139,15 @@ const Box = (props: BoxProps) => {
           borderColor: borderColor ?? appColors.white,
           marginHorizontal: marginHorizontal ?? 0,
           marginVertical: marginVertical ?? 0,
-          alignSelf: alignSelf ?? 'center',
-          justifyContent: justifyContent ?? 'flex-start',
+          alignSelf: alignSelf ?? undefined,
+          justifyContent: justifyContent ?? undefined,
           position: position,
           top,
           right,
           left,
           bottom,
           zIndex: zIndex ?? 0,
-          overflow: overflow ?? undefined
+          overflow: overflow ?? undefined,
         },
       ]}>
       {children}

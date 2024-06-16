@@ -1,7 +1,7 @@
-import axios from "axios";
-import { ProdConfig } from "../config/AxiosConfig.ts";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { ACCESS_TOKEN } from "../constants/AsyncStorage.ts";
+import axios from 'axios';
+import {ProdConfig} from '../config/AxiosConfig.ts';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {ACCESS_TOKEN} from '../constants/AsyncStorage.ts';
 
 const axiosClient = axios.create({
   baseURL: ProdConfig.BASE_URL,
@@ -41,6 +41,7 @@ axiosClient.interceptors.response.use(
 export const request = async <T>(
   url: string,
   method: string,
+  params?: {},
   data?: any,
 ): Promise<T> => {
   try {
@@ -49,6 +50,7 @@ export const request = async <T>(
       url,
       method,
       data,
+      params: params,
       headers: {
         Authorization: `Bear ${token}`,
       },

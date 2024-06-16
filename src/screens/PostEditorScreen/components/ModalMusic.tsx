@@ -14,22 +14,34 @@ const ModalMusic = () => {
   const {isModalMusicShow, toggleModalMusic} = useStoryStore();
   const [scrollOffset, setScrollOffset] = useState<number | null>(null);
 
-  const {listMusic} = musicStore();
+  const {musics} = musicStore();
   const handleOnScroll = (event: any) => {
     setScrollOffset(event.nativeEvent.contentOffset.y);
   };
-
+  const clonedArrayWithMap = Array.from({length: 10}).map(() => ({
+    ...musics[0],
+  }));
   return (
     <Modal
       isVisible={isModalMusicShow}
       onSwipeComplete={() => toggleModalMusic(false)}
+      // swipeDirection={['down']}
+      // animationIn={'slideInUp'}
+      // animationOut={'fadeOut'}
+      // avoidKeyboard={true}
+      // scrollHorizontal={true}
+      // // @ts-ignore
+      // scrollOffset={scrollOffset}
+      // scrollOffsetMax={400 - 300}
+      // propagateSwipe={true}
+      // backdropTransitionOutTiming={0}
+      // swipeThreshold={250}>
       swipeDirection={['down']}
       animationIn={'slideInUp'}
       animationOut={'fadeOut'}
       avoidKeyboard={true}
-      scrollHorizontal={true}
-      scrollOffset={scrollOffset}
-      scrollOffsetMax={400 - 300}
+      scrollHorizontal={false}
+      style={{margin: 0}}
       propagateSwipe={true}
       backdropTransitionOutTiming={0}
       swipeThreshold={250}>
@@ -49,6 +61,7 @@ const ModalMusic = () => {
           <View />
         </Box>
         <ButtonComponent
+          margin={5}
           nameColor={appColors.blue500}
           style={{position: 'absolute', top: 0, right: 10}}
           name="Huỷ"
@@ -57,12 +70,14 @@ const ModalMusic = () => {
           }}
         />
         <FlatList
+          onEndReachedThreshold={0.5}
+          onEndReached={() => {}}
           showsVerticalScrollIndicator={true}
           onScroll={handleOnScroll}
           scrollEventThrottle={16}
           style={{width: AppInfor.width}}
-          data={listMusic}
-          keyExtractor={item => item._id.toString()}
+          data={clonedArrayWithMap}
+          keyExtractor={(item, index) => index.toString()}
           renderItem={({item, index}) => (
             <MusicItem index={index} item={item} />
           )}

@@ -13,6 +13,7 @@ import {getUserInformation} from '../../services/apis';
 import {ROUTES} from '../../navigators';
 import {useUserInformation} from '../../hooks';
 import {User} from '../../models/User.ts';
+import {getMusics} from '../../services/apis/musicServices.ts';
 
 const WelcomeScreen = () => {
   const {setListMusic} = musicStore();
@@ -25,16 +26,17 @@ const WelcomeScreen = () => {
       console.log(e);
     }
   }, [setInformation]);
-
+  const getMusicsAxios = async () => {
+    try {
+      const musics = await getMusics();
+      setListMusic(musics.data);
+      console.log(musics);
+    } catch (e) {
+      console.log(e);
+    }
+  };
   useEffect(() => {
-    // getListMusic()
-    //   .then(response => {
-    //     // @ts-ignore
-    //     setListMusic(response);
-    //   })
-    //   .catch(e => {
-    //     console.log(e);
-    //   });
+    Promise.allSettled([getMusicsAxios()]);
     AsyncStorage.getItem(ACCESS_TOKEN)
       .then(res => {
         if (res) {

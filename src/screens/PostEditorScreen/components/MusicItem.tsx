@@ -44,33 +44,36 @@ const MusicItem = (props: MusicProps) => {
       marginHorizontal={10}
       width={AppInfor.width}
       marginVertical={5}
+      justifyContent={'space-between'}
+      alignItems={'center'}
       alignSelf="stretch">
-      <ImageComponent
-        width={50}
-        height={50}
-        resizeMode="cover"
-        style={{borderRadius: 90}}
-        src={{uri: item.image}}
-      />
-      <Box marginHorizontal={10} alignSelf="stretch" flexDirection="row">
-        <Box alignItems="flex-start" justifyContent="flex-start">
-          <TextComponent
-            alignSelf="flex-start"
-            value={item.title}
-            style={{position: 'absolute', left: 0}}
-            fontSize={14}
-          />
-          <TextComponent
-            alignSelf="flex-start"
-            value={item.artist}
-            style={{position: 'absolute', left: 0}}
-            fontSize={12}
-            color={appColors.gray}
-          />
+      <Box flexDirection={'row'}>
+        <ImageComponent
+          width={50}
+          height={50}
+          resizeMode="cover"
+          style={{borderRadius: 90}}
+          src={{uri: item.image}}
+        />
+        <Box marginHorizontal={10}>
+          <Box alignItems="flex-start" justifyContent="flex-start">
+            <TextComponent
+              alignSelf="flex-start"
+              value={item.title}
+              style={{position: 'absolute', left: 0}}
+              fontSize={14}
+            />
+            <TextComponent
+              alignSelf="flex-start"
+              value={item.artist}
+              style={{position: 'absolute', left: 0}}
+              fontSize={12}
+              color={appColors.gray}
+            />
+          </Box>
         </Box>
       </Box>
       <ButtonComponent
-        style={{position: 'absolute', right: 0}}
         name="play music"
         onPress={() => {
           if (musicPlaying === item._id) {

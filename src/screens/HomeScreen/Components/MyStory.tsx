@@ -9,7 +9,7 @@ interface MyStoryProps {
   item?: object;
   marginHorizontal?: number;
   onStoryPress?: () => void;
-  onIconAddPress?: () => void;
+  onIconAddPress: () => void;
 }
 const MyStory = (props: MyStoryProps) => {
   const {item, marginHorizontal, onStoryPress, onIconAddPress} = props;
@@ -39,6 +39,7 @@ const MyStory = (props: MyStoryProps) => {
         </TouchableOpacity>
       </LinearGradient>
       <ButtonComponent
+        radius={50}
         onPress={onIconAddPress}
         backgroundColor={appColors.blue500}
         borderWidth={2}

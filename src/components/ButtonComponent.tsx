@@ -1,11 +1,10 @@
-import {Text, TouchableOpacity, ViewStyle} from 'react-native';
+import {TouchableOpacity, ViewStyle} from 'react-native';
 import React, {memo, ReactNode} from 'react';
 import {FlexBoxProp} from '../constants/FlexBoxProp';
-import {globalStyle} from '../styles/globalStyle';
 import TextComponent from './TextComponent';
 import {appColors} from '../assets/colors/appColors';
 
-interface ButtonProps extends FlexBoxProp {
+interface ButtonComponentProps extends FlexBoxProp {
   name?: string;
   onPress: () => void;
   style?: ViewStyle;
@@ -13,11 +12,14 @@ interface ButtonProps extends FlexBoxProp {
   nameColor?: string;
   children?: ReactNode | undefined;
   fontSize?: number;
+  disabled?: boolean;
 }
-const ButtonComponent = (props: ButtonProps) => {
+
+const ButtonComponent = (props: ButtonComponentProps) => {
   const {
     name,
     onPress,
+    disabled,
     style,
     backgroundColor,
     nameColor,
@@ -34,27 +36,50 @@ const ButtonComponent = (props: ButtonProps) => {
     borderWidth,
     fontSize,
     overflow,
+    margin,
+    marginTop,
+    marginBottom,
+    marginLeft,
+    marginRight,
+    paddingHorizontal,
+    paddingBottom,
+    paddingTop,
+    paddingVertical,
+    paddingLeft,
+    paddingRight,
   } = props;
+
+  const buttonStyle: ViewStyle = {
+    backgroundColor: backgroundColor || appColors.transparent,
+    borderRadius: radius,
+    padding,
+    alignItems: alignItems || 'center',
+    alignSelf: alignSelf || 'stretch',
+    flexDirection: flexDirection || 'column',
+    justifyContent: justifyContent || 'center',
+    borderColor: borderColor || appColors.white,
+    borderWidth,
+    overflow,
+    margin,
+    marginHorizontal: marginHorizontal ?? 0,
+    marginVertical,
+    marginTop,
+    marginBottom,
+    marginLeft,
+    marginRight,
+    paddingHorizontal,
+    paddingBottom,
+    paddingTop,
+    paddingVertical,
+    paddingLeft,
+    paddingRight,
+  };
+
   return (
     <TouchableOpacity
+      disabled={disabled}
       onPress={onPress}
-      style={[
-        style,
-        {
-          backgroundColor: backgroundColor,
-          borderRadius: radius ?? 20,
-          padding: padding ?? 10,
-          alignItems: alignItems ?? 'center',
-          alignSelf: alignSelf ?? 'stretch',
-          marginHorizontal: marginHorizontal ?? 0,
-          flexDirection: flexDirection ?? 'column',
-          justifyContent: justifyContent ?? 'center',
-          marginVertical: marginVertical ?? 0,
-          borderColor: borderColor ?? appColors.white,
-          borderWidth: borderWidth ?? 0,
-          overflow: overflow,
-        },
-      ]}>
+      style={[buttonStyle, style]}>
       {children ? (
         children
       ) : name ? (

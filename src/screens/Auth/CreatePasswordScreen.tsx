@@ -11,6 +11,7 @@ import {useRegisterStore} from '../../hooks/useRegister';
 import {validateConfirmPass, validatePass} from '../../utils/ValidateAuth';
 import {createAccount} from '../../services/apis/auth';
 import {Alert} from 'react-native';
+import {ROUTES} from '../../navigators';
 
 const CreatePasswordScreen = () => {
   const {
@@ -39,13 +40,19 @@ const CreatePasswordScreen = () => {
     },
     [setConfirmPassword, setErrorConfirmPassword],
   );
-  const clearFormRegister = () => {
+  const clearFormRegister = useCallback(() => {
     setPassword('');
     setConfirmPassword('');
     setErrorPassword('');
     setErrorConfirmPassword('');
     setEmail('');
-  };
+  }, [
+    setConfirmPassword,
+    setEmail,
+    setErrorConfirmPassword,
+    setErrorPassword,
+    setPassword,
+  ]);
   const goBack = useCallback(() => {
     goBackNavigation();
     setPassword('');
@@ -74,7 +81,7 @@ const CreatePasswordScreen = () => {
               text: 'Quay lại',
 
               onPress: () => {
-                navigateAndReset(['Login']);
+                navigateAndReset([{name: ROUTES.Login}]);
                 clearFormRegister();
               },
             },
@@ -84,7 +91,7 @@ const CreatePasswordScreen = () => {
       .catch(e => {
         console.log(e);
       });
-  }, [email, passWord]);
+  }, [clearFormRegister, email, passWord]);
   return (
     <Container justifyContent={'flex-start'}>
       <ButtonComponent

@@ -3,22 +3,20 @@ import Container from '../../components/Container';
 import Header from './Components/Header.tsx';
 import Box from '../../components/Box.tsx';
 import MyStory from './Components/MyStory.tsx';
-import { navigate, navigateReplace } from "../../utils/NavigationUtils.ts";
-import {PageName} from '../../config/PageName.ts';
+import {navigateAndReset, navigatePush} from '../../utils/NavigationUtils.ts';
 import TextComponent from '../../components/TextComponent.tsx';
-import Slider from '@react-native-community/slider';
-import {AppInfor} from '../../constants/AppInfor.ts';
-import {FlatList, Text, TouchableOpacity, View} from 'react-native';
-import {appColors} from '../../assets/colors/appColors.ts';
-import {Modalize} from 'react-native-modalize';
-import {GestureHandlerRootView} from 'react-native-gesture-handler';
-import ModalBottomSheet from '../../components/ModalBottomSheet.tsx';
+import {TouchableOpacity, View} from 'react-native';
 import ButtonComponent from '../../components/ButtonComponent.tsx';
-import ModalScrollable from '../../components/ModalScrollable.tsx';
 import ModalStory from './Components/ModalStory.tsx';
+import {ROUTES} from '../../navigators';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {ACCESS_TOKEN} from '../../constants/AsyncStorage.ts';
+import {useUserInformation} from '../../hooks';
+
 const HomeScreen = () => {
+  const {information} = useUserInformation();
   const navigateToCreatePost = useCallback(() => {
-    navigate(PageName.PostEditorScreen);
+    navigatePush(ROUTES.PostEditorScreen);
   }, []);
   const [isVisible, setIsVisible] = useState(false);
   const toggle = () => {
@@ -28,7 +26,13 @@ const HomeScreen = () => {
 
   return (
     <Container justifyContent={'flex-start'}>
-      <Header />
+      <Header
+        onChatPress={() => {}}
+        onLogoPress={() => {}}
+        onNotificationPress={() => {
+
+        }}
+      />
       <Box
         alignSelf="stretch"
         flexDirection={'row'}
@@ -50,9 +54,12 @@ const HomeScreen = () => {
       {/*    </View>*/}
       {/*  ))}*/}
       {/*</ModalScrollable>*/}
-      <TouchableOpacity onPress={() => {
-
-      }}>
+      <TouchableOpacity
+        onPress={() => {
+          AsyncStorage.setItem(ACCESS_TOKEN, '').then(r =>
+            navigateAndReset([{name: ROUTES.Login}]),
+          );
+        }}>
         <TextComponent value={'Log out'} />
       </TouchableOpacity>
       <ModalStory

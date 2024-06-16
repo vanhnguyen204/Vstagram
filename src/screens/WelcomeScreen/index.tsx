@@ -1,41 +1,53 @@
-import {View, Text, ActivityIndicator} from 'react-native';
-import React, {useEffect} from 'react';
-import {globalStyle} from '../../styles/globalStyle';
+import {ActivityIndicator} from 'react-native';
+import React, {useCallback, useEffect} from 'react';
 import {appColors} from '../../assets/colors/appColors';
 import Container from '../../components/Container';
 import TextComponent from '../../components/TextComponent';
 import ImageComponent from '../../components/ImageComponent';
 import Box from '../../components/Box';
-import {NavigationProp} from '@react-navigation/native';
-import {PageName} from '../../config/PageName';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {ACCESS_TOKEN} from '../../constants/AsyncStorage';
 import {navigateReplace} from '../../utils/NavigationUtils';
-import {getListMusic} from '../../services/apis/musicServices.ts';
 import {musicStore} from '../../hooks/useMusic';
 import {getUserInformation} from '../../services/apis';
+import {ROUTES} from '../../navigators';
+import {useUserInformation} from '../../hooks';
+import {User} from '../../models/User.ts';
 
 const WelcomeScreen = () => {
   const {setListMusic} = musicStore();
+  const {setInformation} = useUserInformation();
+  const getUserInfor = useCallback(async () => {
+    try {
+      const user: User = await getUserInformation();
+      setInformation(user);
+    } catch (e) {
+      console.log(e);
+    }
+  }, [setInformation]);
 
   useEffect(() => {
-    const value = AsyncStorage.getItem(ACCESS_TOKEN);
-    getListMusic()
-      .then(response => {
-        // @ts-ignore
-        setListMusic(response);
-        if (value !== null) {
-          navigateReplace(PageName.BottomTab);
+    // getListMusic()
+    //   .then(response => {
+    //     // @ts-ignore
+    //     setListMusic(response);
+    //   })
+    //   .catch(e => {
+    //     console.log(e);
+    //   });
+    AsyncStorage.getItem(ACCESS_TOKEN)
+      .then(res => {
+        if (res) {
+          navigateReplace(ROUTES.BottomTab);
+          getUserInfor();
         } else {
-          navigateReplace(PageName.Login);
+          navigateReplace(ROUTES.Login);
         }
       })
       .catch(e => {
         console.log(e);
       });
-    const userInfor = getUserInformation();
-    console.log(userInfor);
-  }, [setListMusic]);
+  }, [getUserInfor, setListMusic]);
 
   return (
     <Container justifyContent="space-around">

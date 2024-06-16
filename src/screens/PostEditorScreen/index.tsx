@@ -8,19 +8,16 @@ import {
   ImageBackground,
   Keyboard,
   KeyboardAvoidingView,
-  LayoutChangeEvent,
-  NativeUIEvent,
   PanResponder,
   Platform,
   StyleSheet,
-  Text,
   TextInput,
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {launchImageLibrary} from 'react-native-image-picker';
-import {goBackNavigation, navigatePush} from '../../utils/NavigationUtils.ts';
+import {goBackNavigation} from '../../utils/NavigationUtils.ts';
 import {AppInfor} from '../../constants/AppInfor.ts';
 import ButtonComponent from '../../components/ButtonComponent.tsx';
 import ImageComponent from '../../components/ImageComponent.tsx';
@@ -30,7 +27,7 @@ import Box from '../../components/Box.tsx';
 import Video, {VideoRef} from 'react-native-video';
 import TextComponent from '../../components/TextComponent.tsx';
 import ModalSticker from './components/ModalSticker.tsx';
-import {useStoryStore} from '../../hooks/useStoryEditor.ts';
+import {useStoryStore} from '../../hooks';
 import StickerSelected from './components/StickerSelected.tsx';
 import AnimatedReanimated, {
   useAnimatedStyle,
@@ -38,9 +35,8 @@ import AnimatedReanimated, {
   withTiming,
 } from 'react-native-reanimated';
 import ViewShot from 'react-native-view-shot';
-import {PageName} from '../../config/PageName.ts';
 import ModalMusic from './components/ModalMusic.tsx';
-import {musicStore} from '../../hooks/useMusic.ts';
+import {musicStore} from '../../hooks';
 import TrackPlayer from 'react-native-track-player';
 import {globalStyle} from '../../styles/globalStyle.ts';
 import ListColor from './components/ListColor.tsx';
@@ -48,6 +44,11 @@ import StoryBarEditor from './components/StoryBarEditor.tsx';
 import ListFont from './components/ListFont.tsx';
 import fonts from '../../assets/fonts';
 import SliderComponent from '../../components/SliderComponent.tsx';
+import Modal from 'react-native-modal';
+import {handleUpStory} from '../../services/apis';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {ACCESS_TOKEN} from '../../constants/AsyncStorage.ts';
+import ModalLoading from '../../components/ModalLoading.tsx';
 
 const PostEditorScreen = () => {
   const [isShowInput, setIsShowInput] = useState(false);
@@ -643,14 +644,6 @@ const PostEditorScreen = () => {
     </KeyboardAvoidingView>
   );
 };
-import Modal from 'react-native-modal';
-import {handleUpStory} from '../../services/apis/storyServices.ts';
-import {Media} from '../../models/Media.ts';
-import {userInforStore} from '../../hooks/useUserInfor.ts';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import {ACCESS_TOKEN} from '../../constants/AsyncStorage.ts';
-import {useAppStore} from '../../hooks/useAppStore.ts';
-import ModalLoading from '../../components/ModalLoading.tsx';
 
 const styles = StyleSheet.create({
   videoStyle: {

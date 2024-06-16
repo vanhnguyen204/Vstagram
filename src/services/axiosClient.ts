@@ -1,7 +1,7 @@
-import axios from 'axios';
-import {ProdConfig} from '../config/AxiosConfig.ts';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import {ACCESS_TOKEN} from '../constants/AsyncStorage.ts';
+import axios from "axios";
+import { ProdConfig } from "../config/AxiosConfig.ts";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { ACCESS_TOKEN } from "../constants/AsyncStorage.ts";
 
 const axiosClient = axios.create({
   baseURL: ProdConfig.BASE_URL,
@@ -20,16 +20,24 @@ axiosClient.interceptors.request.use(async config => {
   return config;
 });
 axiosClient.interceptors.response.use(
-  res => {
-    if (res.data) {
-      return res.data;
+  response => {
+    // Check if the response has a data property
+    if (response.data) {
+      return response.data;
     }
-    throw Error('Error response from axios');
+    return response;
   },
   error => {
-    throw new Error(JSON.stringify(error.response));
+    if (error.response) {
+      return Promise.reject(error.response);
+    } else if (error.request) {
+      return Promise.reject(new Error('No response received'));
+    } else {
+      return Promise.reject(new Error(error.message));
+    }
   },
 );
+
 export const request = async <T>(
   url: string,
   method: string,
@@ -37,7 +45,7 @@ export const request = async <T>(
 ): Promise<T> => {
   try {
     const token = await AsyncStorage.getItem(ACCESS_TOKEN);
-    const response = await axiosClient.request<T>({
+    const dataResponse: any = await axiosClient.request<T>({
       url,
       method,
       data,
@@ -45,10 +53,7 @@ export const request = async <T>(
         Authorization: `Bear ${token}`,
       },
     });
-    if (response.data && (response.data as any).data) {
-      return (response.data as any).data;
-    }
-    return response.data;
+    return dataResponse;
   } catch (error: any) {
     handleLogError(error, url, method);
     throw error;

@@ -18,12 +18,22 @@ import Icon from 'react-native-vector-icons/AntDesign';
 import {goBackNavigation, navigatePush} from '../../utils/NavigationUtils.ts';
 import {verifyCode} from '../../services/apis/auth.ts';
 import {PageName} from '../../config/PageName.ts';
-type VerifyRegisterProps = {
-  route: RouteProp<any>;
+import {RootStackParams, ROUTES} from '../../navigators';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+type CheckoutScreenRouteProp = RouteProp<RootStackParams, 'VerifyRegister'>;
+type CheckoutScreenNavigationProp = NativeStackNavigationProp<
+  RootStackParams,
+  'VerifyRegister'
+>;
+
+type Props = {
+  route: CheckoutScreenRouteProp;
+  navigation: CheckoutScreenNavigationProp;
 };
 
-const VerifyRegister = ({route}: VerifyRegisterProps) => {
-  const data = route.params;
+const VerifyRegister = (props: Props) => {
+  const {route} = props;
+  const {email} = route.params;
   const [verificationCode, setVerificationCode] = useState([
     '',
     '',
@@ -68,15 +78,11 @@ const VerifyRegister = ({route}: VerifyRegisterProps) => {
   );
   const handleVerifyCode = useCallback(() => {
     const code = verificationCode.join('');
-    const verifyData = {
-      email: data?.email,
-      codeRegister: +code,
-    };
-    verifyCode(verifyData)
+
+    verifyCode(email, +code)
       .then(response => {
-        console.log(response);
-        if (response?.status === 200) {
-          navigatePush(PageName.CreatePasswordScreen, {email: data?.email});
+        if (response.code === 200) {
+          navigatePush(ROUTES.CreatePasswordScreen, {email: email});
           return;
         }
         Alert.alert('Mã xác nhận sai!');
@@ -84,7 +90,7 @@ const VerifyRegister = ({route}: VerifyRegisterProps) => {
       .catch(e => {
         console.log(e);
       });
-  }, [data?.email, verificationCode]);
+  }, [email, verificationCode]);
   return (
     <Container backgroundColor={appColors.black} justifyContent={'flex-start'}>
       <ButtonComponent
@@ -117,7 +123,7 @@ const VerifyRegister = ({route}: VerifyRegisterProps) => {
         />
         <TextComponent
           alignSelf="flex-start"
-          value={`${data?.email}`}
+          value={`${email}`}
           marginHorizontal={15}
           color={appColors.white}
           marginBottom={20}

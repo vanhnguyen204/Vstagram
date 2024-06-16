@@ -1,4 +1,4 @@
-import {View, Text, ActivityIndicator, Alert} from 'react-native';
+import {ActivityIndicator, Alert} from 'react-native';
 import React, {useCallback, useState} from 'react';
 import Container from '../../components/Container';
 import {appColors} from '../../assets/colors/appColors';
@@ -7,21 +7,21 @@ import ButtonComponent from '../../components/ButtonComponent';
 import Box from '../../components/Box';
 import InputComponent from '../../components/InputComponent';
 import {navigatePush, navigateReplace} from '../../utils/NavigationUtils';
-import {PageName} from '../../config/PageName';
 import {useLoginStore} from '../../hooks/useLogin';
 import {validateEmail, validatePass} from '../../utils/ValidateAuth';
 import TextComponent from '../../components/TextComponent';
-import {login} from '../../services/apis/auth';
-import {userInforStore} from '../../hooks/useUserInfor';
+import {login} from '../../services/apis';
+import {userInforStore} from '../../hooks/useUserInformation.ts';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {ACCESS_TOKEN} from '../../constants/AsyncStorage';
+import {ROUTES} from '../../navigators';
 
 const Login = () => {
   const loginStore = useLoginStore();
   const {setInformation} = userInforStore();
   const [isLoading, setIsLoading] = useState(false);
   const goToRegister = useCallback(() => {
-    navigatePush(PageName.Register);
+    navigatePush(ROUTES.Register);
   }, []);
   const onEmailChange = useCallback(
     (value: string) => {
@@ -48,11 +48,12 @@ const Login = () => {
         setIsLoading(false);
         console.log('Login success', response);
 
+        // @ts-ignore
         setInformation(response);
         // @ts-ignore
         AsyncStorage.setItem(ACCESS_TOKEN, response.token)
           .then(() => {
-            navigateReplace(PageName.BottomTab);
+            navigateReplace(ROUTES.BottomTab);
           })
           .catch(e => {
             console.log(e);

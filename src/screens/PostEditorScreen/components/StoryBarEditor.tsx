@@ -4,6 +4,7 @@ import {appColors} from '../../../assets/colors/appColors';
 import TextComponent from '../../../components/TextComponent';
 import Box from '../../../components/Box';
 import ImageComponent from '../../../components/ImageComponent';
+import {StyleSheet} from 'react-native';
 interface StoryBarEditorProps {
   onCloseStoryEditor: () => void;
   toggleInput: () => void;
@@ -36,6 +37,7 @@ const StoryBarEditor = (props: StoryBarEditorProps) => {
       justifyContent={'space-between'}>
       {/* Close story editor */}
       <ButtonComponent
+        style={styles.btnEditor}
         backgroundColor={appColors.black900}
         padding={3}
         alignSelf={'center'}
@@ -56,6 +58,7 @@ const StoryBarEditor = (props: StoryBarEditorProps) => {
       <Box flexDirection={'row'}>
         {/*Button show textinput */}
         <ButtonComponent
+          style={styles.btnEditor}
           backgroundColor={appColors.black900}
           padding={6}
           alignSelf={'center'}
@@ -68,6 +71,7 @@ const StoryBarEditor = (props: StoryBarEditorProps) => {
         </ButtonComponent>
         {/* Button show modal sticker */}
         <ButtonComponent
+          style={styles.btnEditor}
           backgroundColor={appColors.black900}
           padding={6}
           alignSelf={'center'}
@@ -85,6 +89,7 @@ const StoryBarEditor = (props: StoryBarEditorProps) => {
         </ButtonComponent>
         {/* Button show list music */}
         <ButtonComponent
+          style={styles.btnEditor}
           backgroundColor={appColors.black900}
           padding={6}
           alignSelf={'center'}
@@ -101,19 +106,33 @@ const StoryBarEditor = (props: StoryBarEditorProps) => {
         </ButtonComponent>
         {/* Button complete story editor */}
         <ButtonComponent
+          flexDirection={'row'}
+          radius={20}
+          padding={7}
           backgroundColor={appColors.black900}
-          padding={6}
           marginHorizontal={10}
           alignSelf={'center'}
-          name={'Continute'}
+          name={'Continue'}
           onPress={() => {
             onCapture();
           }}>
           <TextComponent value="Tiếp" />
+          <ImageComponent
+            marginLeft={5}
+            tintColor={appColors.secondary}
+            width={20}
+            height={20}
+            src={require('../../../assets/icons/right-arrow.png')}
+          />
         </ButtonComponent>
       </Box>
     </Box>
   );
 };
 
+const styles = StyleSheet.create({
+  btnEditor: {
+    borderRadius: 50,
+  },
+});
 export default StoryBarEditor;

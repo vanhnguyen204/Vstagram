@@ -1,11 +1,17 @@
-import React, { memo } from "react";
+import React, {memo} from 'react';
 import Box from '../../../components/Box.tsx';
 import ImageComponent from '../../../components/ImageComponent.tsx';
 import {AppInfor} from '../../../constants/AppInfor.ts';
 import {appColors} from '../../../assets/colors/appColors.ts';
 import ButtonComponent from '../../../components/ButtonComponent.tsx';
+interface HeaderHomeScreenProps {
+  onLogoPress: () => void;
+  onNotificationPress: () => void;
+  onChatPress: () => void;
+}
+const HeaderHomeScreen = (props: HeaderHomeScreenProps) => {
+  const {onNotificationPress, onChatPress, onLogoPress} = props;
 
-const Header = () => {
   return (
     <Box
       style={{width: AppInfor.width}}
@@ -20,7 +26,7 @@ const Header = () => {
         tintColor={appColors.white}
       />
       <Box flexDirection={'row'}>
-        <ButtonComponent name={''} onPress={() => {}}>
+        <ButtonComponent name={''} onPress={onNotificationPress}>
           <ImageComponent
             tintColor={appColors.white}
             width={28}
@@ -28,7 +34,7 @@ const Header = () => {
             src={require('../../../assets/icons/bell.png')}
           />
         </ButtonComponent>
-        <ButtonComponent name={''} onPress={() => {}}>
+        <ButtonComponent marginHorizontal={10} name={''} onPress={onChatPress}>
           <ImageComponent
             tintColor={appColors.white}
             width={28}
@@ -41,4 +47,4 @@ const Header = () => {
   );
 };
 
-export default memo(Header);
+export default memo(HeaderHomeScreen);

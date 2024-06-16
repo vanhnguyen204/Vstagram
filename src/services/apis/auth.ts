@@ -1,15 +1,19 @@
 import {Method, request} from '../axiosClient.ts';
 import endPoint from '../endPoint.ts';
-import { User } from "../../models/UserModel.ts";
+import {User} from '../../models/User.ts';
+import {MessageResponse} from '../../models/MessageResponse.ts';
 
-export const register = (data: object) =>
-  request(endPoint().register, Method.POST, data);
-export const verifyCode = (data: object) =>
-  request(endPoint().verifyCode, Method.POST, data);
+export const register = (email: string) =>
+  request<MessageResponse>(endPoint().register, Method.POST, {email});
+export const verifyCode = (email: string, codeRegister: number) =>
+  request<MessageResponse>(endPoint().verifyCode, Method.POST, {
+    email,
+    codeRegister,
+  });
 export const createAccount = (data: object) =>
   request(endPoint().confirmRegisterAccount, Method.POST, data);
 export const login = (data: object) =>
-  request(endPoint().login, Method.POST, data);
+  request<User>(endPoint().login, Method.POST, data);
 
 export const getUserInformation = () =>
   request<User>(endPoint().getUserInformation, Method.GET);

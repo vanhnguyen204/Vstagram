@@ -17,13 +17,10 @@ const Register = () => {
   const [isLoading, setIsLoading] = useState(false);
   const handleRegister = () => {
     setIsLoading(true);
-    const data = {
-      email,
-    };
-    register(data)
+    register(email)
       .then(res => {
-        if (res) {
-          navigatePush(ROUTES.VerifyRegister, data);
+        if (res.code === 201) {
+          navigatePush(ROUTES.VerifyRegister, {email});
         } else {
           Alert.alert(
             'Thông báo',
@@ -84,6 +81,7 @@ const Register = () => {
           />
         </Box>
         <ButtonComponent
+          disabled={isLoading}
           onPress={() => {
             handleRegister();
           }}

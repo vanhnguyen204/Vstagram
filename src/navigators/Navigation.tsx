@@ -2,35 +2,35 @@ import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Register from '../screens/Auth/Register.tsx';
 import WelcomeScreen from '../screens/WelcomeScreen/index.tsx';
-import {PageName} from '../config/PageName.ts';
 import {screenOptions} from '../utils/NavigationUtils.ts';
 import VerifyRegister from '../screens/Auth/VerifyRegister.tsx';
 import CreatePasswordScreen from '../screens/Auth/CreatePasswordScreen.tsx';
 import Login from '../screens/Auth/Login.tsx';
-import HomeScreen from '../screens/HomeScreen/index.tsx';
 import BottomTab from './BottomTab.tsx';
 import PostEditorScreen from '../screens/PostEditorScreen';
 import CompleteStoryScreen from '../screens/CompleteStoryScreen/index.tsx';
+import {RootStackParams} from './RootStackParams.ts';
+import {ROUTES} from './Routes.ts';
 
-const Stack = createNativeStackNavigator();
+const Stack = createNativeStackNavigator<RootStackParams>();
 const Navigation = () => {
   return (
     <Stack.Navigator screenOptions={screenOptions}>
-      <Stack.Screen name={PageName.WelcomeScreen} component={WelcomeScreen} />
-      <Stack.Screen name={PageName.Login} component={Login} />
-      <Stack.Screen name={PageName.Register} component={Register} />
-      <Stack.Screen name={PageName.VerifyRegister} component={VerifyRegister} />
+      <Stack.Screen name={ROUTES.WelcomeScreen} component={WelcomeScreen} />
+      <Stack.Screen name={ROUTES.Login} component={Login} />
+      <Stack.Screen name={ROUTES.Register} component={Register} />
+      <Stack.Screen name={ROUTES.VerifyRegister} component={VerifyRegister} />
       <Stack.Screen
-        name={PageName.CreatePasswordScreen}
+        name={ROUTES.CreatePasswordScreen}
         component={CreatePasswordScreen}
       />
-      <Stack.Screen name={PageName.BottomTab} component={BottomTab} />
+      <Stack.Screen name={ROUTES.BottomTab} component={BottomTab} />
       <Stack.Screen
-        name={PageName.PostEditorScreen}
+        name={ROUTES.PostEditorScreen}
         component={PostEditorScreen}
       />
       <Stack.Screen
-        name={PageName.CompleteStoryScreen}
+        name={ROUTES.CompleteStoryScreen}
         component={CompleteStoryScreen}
       />
     </Stack.Navigator>

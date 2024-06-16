@@ -1,4 +1,4 @@
-import {View, Text, ActivityIndicator, Alert} from 'react-native';
+import {ActivityIndicator, Alert} from 'react-native';
 import React, {useState} from 'react';
 import Container from '../../components/Container';
 import ImageComponent from '../../components/ImageComponent';
@@ -7,14 +7,10 @@ import Box from '../../components/Box';
 import InputComponent from '../../components/InputComponent';
 import {useRegisterStore} from '../../hooks/useRegister';
 import ButtonComponent from '../../components/ButtonComponent';
-import {
-  goBackNavigation,
-  navigate,
-  navigatePush,
-} from '../../utils/NavigationUtils.ts';
-import {PageName} from '../../config/PageName.ts';
+import {goBackNavigation, navigatePush} from '../../utils/NavigationUtils.ts';
 import {register} from '../../services/apis/auth.ts';
 import Icon from 'react-native-vector-icons/AntDesign';
+import {ROUTES} from '../../navigators';
 
 const Register = () => {
   const {email, setEmail} = useRegisterStore();
@@ -27,7 +23,7 @@ const Register = () => {
     register(data)
       .then(res => {
         if (res) {
-          navigatePush(PageName.VerifyRegister, data);
+          navigatePush(ROUTES.VerifyRegister, data);
         } else {
           Alert.alert(
             'Thông báo',
@@ -61,7 +57,7 @@ const Register = () => {
         backgroundColor={appColors.transparent}>
         <ImageComponent
           marginBottom={20}
-          tinColor={appColors.white}
+          tintColor={appColors.white}
           width={200}
           height={60}
           src={require('../../assets/icons/text-app.png')}

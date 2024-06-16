@@ -84,6 +84,7 @@ const PostEditorScreen = () => {
       onPanResponderMove: (event, gestureState) => {
         panInput.setValue({x: gestureState.dx, y: gestureState.dy});
         // const currentX = panInput.x._value;
+        // @ts-ignore
         const currentY = panInput.y._value;
 
         if (currentY < AppInfor.height - bottomEdgePosition) {
@@ -177,6 +178,7 @@ const PostEditorScreen = () => {
         setMusicPlaying('');
       }
     };
+    // @ts-ignore
     TrackPlayer.addEventListener('playback-state', onPlaybackStateChange);
   }, [setMusicPlaying]);
 

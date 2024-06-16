@@ -6,11 +6,7 @@ import ImageComponent from '../../components/ImageComponent';
 import ButtonComponent from '../../components/ButtonComponent';
 import Box from '../../components/Box';
 import InputComponent from '../../components/InputComponent';
-import {
-  navigate,
-  navigatePush,
-  navigateReplace,
-} from '../../utils/NavigationUtils';
+import {navigatePush, navigateReplace} from '../../utils/NavigationUtils';
 import {PageName} from '../../config/PageName';
 import {useLoginStore} from '../../hooks/useLogin';
 import {validateEmail, validatePass} from '../../utils/ValidateAuth';
@@ -19,11 +15,10 @@ import {login} from '../../services/apis/auth';
 import {userInforStore} from '../../hooks/useUserInfor';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {ACCESS_TOKEN} from '../../constants/AsyncStorage';
-import {User} from '../../models/UserModel';
 
 const Login = () => {
   const loginStore = useLoginStore();
-  const {setInforMation} = userInforStore();
+  const {setInformation} = userInforStore();
   const [isLoading, setIsLoading] = useState(false);
   const goToRegister = useCallback(() => {
     navigatePush(PageName.Register);
@@ -53,7 +48,7 @@ const Login = () => {
         setIsLoading(false);
         console.log('Login success', response);
 
-        setInforMation(response);
+        setInformation(response);
         // @ts-ignore
         AsyncStorage.setItem(ACCESS_TOKEN, response.token)
           .then(() => {
@@ -71,7 +66,7 @@ const Login = () => {
         );
         setIsLoading(false);
       });
-  }, [loginStore.email, loginStore.passWord, setInforMation]);
+  }, [loginStore.email, loginStore.passWord, setInformation]);
   return (
     <Container justifyContent="space-around">
       <ImageComponent

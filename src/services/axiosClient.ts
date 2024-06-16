@@ -30,13 +30,25 @@ axiosClient.interceptors.response.use(
     throw new Error(JSON.stringify(error.response));
   },
 );
-export const request = async (url: string, method: string, data?: any) => {
+export const request = async <T>(
+  url: string,
+  method: string,
+  data?: any,
+): Promise<T> => {
   try {
-    return await axiosClient.request({
+    const token = await AsyncStorage.getItem(ACCESS_TOKEN);
+    const response = await axiosClient.request<T>({
       url,
       method,
       data,
+      headers: {
+        Authorization: `Bear ${token}`,
+      },
     });
+    if (response.data && (response.data as any).data) {
+      return (response.data as any).data;
+    }
+    return response.data;
   } catch (error: any) {
     handleLogError(error, url, method);
     throw error;

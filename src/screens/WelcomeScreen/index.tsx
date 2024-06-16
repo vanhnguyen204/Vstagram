@@ -13,11 +13,11 @@ import {ACCESS_TOKEN} from '../../constants/AsyncStorage';
 import {navigateReplace} from '../../utils/NavigationUtils';
 import {getListMusic} from '../../services/apis/musicServices.ts';
 import {musicStore} from '../../hooks/useMusic';
-interface WelcomeScreenProps {
-  navigation: NavigationProp<any>; // Thay any bằng kiểu dữ liệu cụ thể của màn hình tiếp theo
-}
-const WelcomeScreen = (props: WelcomeScreenProps) => {
+import {getUserInformation} from '../../services/apis';
+
+const WelcomeScreen = () => {
   const {setListMusic} = musicStore();
+
   useEffect(() => {
     const value = AsyncStorage.getItem(ACCESS_TOKEN);
     getListMusic()
@@ -33,7 +33,9 @@ const WelcomeScreen = (props: WelcomeScreenProps) => {
       .catch(e => {
         console.log(e);
       });
-  }, []);
+    const userInfor = getUserInformation();
+    console.log(userInfor);
+  }, [setListMusic]);
 
   return (
     <Container justifyContent="space-around">

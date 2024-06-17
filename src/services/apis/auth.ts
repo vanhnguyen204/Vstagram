@@ -12,8 +12,8 @@ export const verifyCode = (email: string, codeRegister: number) =>
   });
 export const createAccount = (data: object) =>
   request(endPoint().confirmRegisterAccount, Method.POST, data);
-export const login = (data: object) =>
-  request<User>(endPoint().login, Method.POST, data);
+export const login = (email: string, passWord: string) =>
+  request<User>(endPoint().login, Method.POST, {}, {email, passWord});
 
 export const getUserInformation = () =>
   request<User>(endPoint().getUserInformation, Method.GET);

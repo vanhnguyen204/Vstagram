@@ -9,10 +9,10 @@ interface StickerProps {
   index?: number;
 }
 const StickerItem = (props: StickerProps) => {
-  const {setSticker, stickers, toggleModalSticker} = useStoryStore();
+  const {setStickers, stickers, toggleModalSticker} = useStoryStore();
   const {url, index} = props;
   const handleSelected = () => {
-    setSticker(url);
+    setStickers(url);
   };
   return (
     <ButtonComponent

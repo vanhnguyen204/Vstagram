@@ -3,6 +3,7 @@ import {
   FlatList,
   NativeScrollEvent,
   NativeSyntheticEvent,
+  SafeAreaView,
   StyleSheet,
   View,
   ViewStyle,
@@ -15,7 +16,7 @@ import Box from './Box.tsx';
 
 type Props<T> = {
   data: T[];
-  renderItem: ({item}: {item: T}) => React.ReactElement;
+  renderItem: ({item, index}: {item: T; index: number}) => React.ReactElement;
   keyExtractor: (item: T, index: number) => string;
   visible: boolean;
   onClose: () => void;
@@ -63,28 +64,30 @@ const ScrollableModal = <T extends any>({
       propagateSwipe={true}
       style={styles.modal}>
       <View style={[styles.scrollableModal, containerStyle]}>
-        <Box alignItems={'center'} justifyContent={'center'}>
-          <View style={styles.modalIndicatorTop} />
-          <ButtonComponent
-            style={styles.buttonCancel}
-            nameColor={buttonCloseColor}
-            name={'Huỷ'}
-            onPress={onClose}
-            alignSelf={'flex-end'}
+        <SafeAreaView>
+          <Box alignItems={'center'} justifyContent={'center'}>
+            <View style={styles.modalIndicatorTop} />
+            <ButtonComponent
+              style={styles.buttonCancel}
+              nameColor={buttonCloseColor}
+              name={'Huỷ'}
+              onPress={onClose}
+              alignSelf={'flex-end'}
+            />
+          </Box>
+          <FlatList
+            onEndReachedThreshold={0.5}
+            onEndReached={({distanceFromEnd}) => {
+              onEndReached(distanceFromEnd);
+            }}
+            ref={scrollViewRef}
+            onScroll={handleOnScroll}
+            scrollEventThrottle={16}
+            data={data}
+            keyExtractor={keyExtractor}
+            renderItem={renderItem}
           />
-        </Box>
-        <FlatList
-          onEndReachedThreshold={0.5}
-          onEndReached={({distanceFromEnd}) => {
-            onEndReached(distanceFromEnd);
-          }}
-          ref={scrollViewRef}
-          onScroll={handleOnScroll}
-          scrollEventThrottle={16}
-          data={data}
-          keyExtractor={keyExtractor}
-          renderItem={renderItem}
-        />
+        </SafeAreaView>
       </View>
     </Modal>
   );
@@ -111,7 +114,7 @@ const styles = StyleSheet.create({
   modalIndicatorTop: {
     height: 5,
     width: 40,
-    backgroundColor: appColors.grays.gray500,
+    backgroundColor: appColors.grays.gray700,
     marginBottom: 10,
     borderRadius: 20,
   },

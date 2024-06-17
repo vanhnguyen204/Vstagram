@@ -1,6 +1,6 @@
 import {create} from 'zustand';
 
-interface UseStoryEditorType {
+interface StoryEditorType {
   stickers: string[];
   isModalStickerShow: boolean;
   isModalMusicShow: boolean;
@@ -9,8 +9,8 @@ interface UseStoryEditorType {
   fontSize: number;
 }
 
-interface UseStoryEditorActions extends UseStoryEditorType {
-  setSticker: (sticker: string) => void;
+interface StoryEditorActions extends StoryEditorType {
+  setStickers: (sticker: string) => void;
   clearStickerStory: () => void;
   toggleModalSticker: (isVisible: boolean) => void;
   toggleModalMusic: (isVisible: boolean) => void;
@@ -18,14 +18,14 @@ interface UseStoryEditorActions extends UseStoryEditorType {
   setFont: (font: string) => void;
   setFontSize: (fontSize: number) => void;
 }
-export const useStoryStore = create<UseStoryEditorActions>(set => ({
+export const useStoryStore = create<StoryEditorActions>(set => ({
   stickers: [],
   isModalStickerShow: false,
   isModalMusicShow: false,
   textColor: '#fff',
   font: '',
   fontSize: 14,
-  setSticker: (sticker: string) =>
+  setStickers: (sticker: string) =>
     set(state => ({stickers: [...state.stickers, sticker]})),
   clearStickerStory: () => set(() => ({stickers: []})),
   toggleModalSticker: (isVisible: boolean) =>

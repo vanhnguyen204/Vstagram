@@ -3,13 +3,15 @@ import Container from '../../components/Container';
 import Header from './Components/Header.tsx';
 import Box from '../../components/Box.tsx';
 import MyStory from './Components/MyStory.tsx';
-import {navigatePush} from '../../utils/NavigationUtils.ts';
+import {navigateAndReset, navigatePush} from '../../utils/NavigationUtils.ts';
 import TextComponent from '../../components/TextComponent.tsx';
 import ButtonComponent from '../../components/ButtonComponent.tsx';
 import {ROUTES} from '../../navigators';
 import {useUserInformation} from '../../hooks';
 import ScrollableModal from '../../components/ScrollableModal.tsx';
 import {appColors} from '../../assets/colors/appColors.ts';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {ACCESS_TOKEN} from '../../constants/AsyncStorage.ts';
 
 const HomeScreen = () => {
   const {information} = useUserInformation();
@@ -57,6 +59,18 @@ const HomeScreen = () => {
         keyExtractor={(item, index) => index.toString()}
         visible={isVisible}
         onClose={toggle}
+      />
+      <ButtonComponent
+        name={'Log out'}
+        onPress={() => {
+          AsyncStorage.setItem(ACCESS_TOKEN, '')
+            .then(res => {
+              navigateAndReset([{name: ROUTES.Login}]);
+            })
+            .catch(e => {
+              console.log(e);
+            });
+        }}
       />
       {/*<ModalStory*/}
       {/*  isVisible={isVisible}*/}

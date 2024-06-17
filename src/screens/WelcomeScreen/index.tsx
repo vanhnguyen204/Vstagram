@@ -8,7 +8,7 @@ import Box from '../../components/Box';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {ACCESS_TOKEN} from '../../constants/AsyncStorage';
 import {navigateReplace} from '../../utils/NavigationUtils';
-import {musicStore} from '../../hooks/useMusic';
+import {musicStore} from '../../hooks';
 import {getUserInformation} from '../../services/apis';
 import {ROUTES} from '../../navigators';
 import {useUserInformation} from '../../hooks';
@@ -16,7 +16,7 @@ import {User} from '../../models/User.ts';
 import {getMusics} from '../../services/apis/musicServices.ts';
 
 const WelcomeScreen = () => {
-  const {setListMusic} = musicStore();
+  const {setMusics} = musicStore();
   const {setInformation} = useUserInformation();
   const getUserInfor = useCallback(async () => {
     try {
@@ -26,15 +26,14 @@ const WelcomeScreen = () => {
       console.log(e);
     }
   }, [setInformation]);
-  const getMusicsAxios = async () => {
+  const getMusicsAxios = useCallback(async () => {
     try {
-      const musics = await getMusics();
-      setListMusic(musics.data);
-      console.log(musics);
+      const musics = await getMusics(7, 1);
+      setMusics(musics);
     } catch (e) {
       console.log(e);
     }
-  };
+  }, [setMusics]);
   useEffect(() => {
     Promise.allSettled([getMusicsAxios()]);
     AsyncStorage.getItem(ACCESS_TOKEN)
@@ -49,7 +48,7 @@ const WelcomeScreen = () => {
       .catch(e => {
         console.log(e);
       });
-  }, [getUserInfor, setListMusic]);
+  }, [getMusicsAxios, getUserInfor]);
 
   return (
     <Container justifyContent="space-around">

@@ -7,18 +7,18 @@ import ButtonComponent from '../../components/ButtonComponent';
 import Box from '../../components/Box';
 import InputComponent from '../../components/InputComponent';
 import {navigatePush, navigateReplace} from '../../utils/NavigationUtils';
-import {useLoginStore} from '../../hooks/useLogin';
+import {useLoginStore} from '../../hooks';
 import {validateEmail, validatePass} from '../../utils/ValidateAuth';
 import TextComponent from '../../components/TextComponent';
 import {login} from '../../services/apis';
-import {userInforStore} from '../../hooks/useUserInformation.ts';
+import {useUserInformation} from '../../hooks';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {ACCESS_TOKEN} from '../../constants/AsyncStorage';
 import {ROUTES} from '../../navigators';
 
 const Login = () => {
   const loginStore = useLoginStore();
-  const {setInformation} = userInforStore();
+  const {setInformation} = useUserInformation();
   const [isLoading, setIsLoading] = useState(false);
   const goToRegister = useCallback(() => {
     navigatePush(ROUTES.Register);
@@ -38,17 +38,11 @@ const Login = () => {
     [loginStore],
   );
   const handleLogin = useCallback(() => {
-    const data = {
-      email: loginStore.email,
-      passWord: loginStore.passWord,
-    };
     setIsLoading(true);
-    login(data)
+    login(loginStore.email, loginStore.passWord)
       .then(response => {
         setIsLoading(false);
         console.log('Login success', response);
-
-        // @ts-ignore
         setInformation(response);
         // @ts-ignore
         AsyncStorage.setItem(ACCESS_TOKEN, response.token)
@@ -76,7 +70,7 @@ const Login = () => {
         height={60}
         src={require('../../assets/icons/icon-app.png')}
       />
-      <Box padding={10}>
+      <Box padding={10} alignSelf={'stretch'}>
         <Box
           backgroundColor="transparent"
           marginVertical={10}
@@ -136,6 +130,7 @@ const Login = () => {
           />
         )}
         <ButtonComponent
+          padding={10}
           onPress={() => {
             handleLogin();
           }}
@@ -149,6 +144,7 @@ const Login = () => {
         </ButtonComponent>
       </Box>
       <ButtonComponent
+        padding={10}
         marginHorizontal={10}
         onPress={goToRegister}
         name="Tạo tài khoản mới"

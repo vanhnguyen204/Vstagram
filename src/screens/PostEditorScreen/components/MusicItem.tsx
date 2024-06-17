@@ -6,7 +6,7 @@ import Box from '../../../components/Box';
 import TextComponent from '../../../components/TextComponent';
 import {appColors} from '../../../assets/colors/appColors';
 import ButtonComponent from '../../../components/ButtonComponent';
-import {musicStore} from '../../../hooks/useMusic';
+import {musicStore} from '../../../hooks/musicStore.ts';
 import TrackPlayer from 'react-native-track-player';
 import {AppInfor} from '../../../constants/AppInfor';
 interface MusicProps {

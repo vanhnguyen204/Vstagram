@@ -1,95 +1,149 @@
-import React, {memo, useRef, useState} from 'react';
+import React, {Component, RefObject} from 'react';
 import {
   FlatList,
   NativeScrollEvent,
   NativeSyntheticEvent,
-  ScrollView,
+  SafeAreaView,
   StyleSheet,
-  Text,
   View,
+  ViewStyle,
 } from 'react-native';
 import Modal from 'react-native-modal';
-import ModalBaseScene from '../utils/ModalBaseScene.tsx';
-import App from '../../App.tsx';
-import {AppInfor} from '../constants/AppInfor.ts';
-import app from '../../App.tsx';
-import {appColors} from '../assets/colors/appColors.ts';
+import {appColors} from '../assets/colors/appColors';
+import ButtonComponent from './ButtonComponent.tsx';
 import Box from './Box.tsx';
-import TextComponent from './TextComponent.tsx';
+import { AppInfor } from "../constants/AppInfor.ts";
 
-interface ScrollableModalProps {
-  children: React.ReactNode;
-  isVisible: boolean;
+type Props<T> = {
+  data: T[];
+  renderItem: ({item, index}: {item: T; index: number}) => React.ReactElement;
+  keyExtractor: (item: T, index: number) => string;
+  visible: boolean;
   onClose: () => void;
-  data?: any;
-}
-
-const ModalScrollable = (props: ScrollableModalProps) => {
-  const {children, isVisible, onClose, data} = props;
-  const [scrollOffset, setScrollOffset] = useState<number | undefined>(0);
-  const scrollViewRef = useRef<FlatList<number>>(null);
-  const data1 = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
-
-  const handleOnScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-    setScrollOffset(event.nativeEvent.contentOffset.y);
-  };
-
-  const handleScrollTo = (offset: number, animated?: boolean) => {
-    if (scrollViewRef.current) {
-      scrollViewRef.current.scrollToOffset({offset, animated});
-    }
-  };
-  return (
-    <Modal
-      isVisible={isVisible}
-      swipeDirection={['down']}
-      onSwipeComplete={onClose}
-      scrollTo={(params: {x: number; y: number; animated?: boolean}) =>
-        handleScrollTo(params.y, params.animated)
-      }
-      scrollOffset={scrollOffset}
-      scrollOffsetMax={100}
-      propagateSwipe={true}>
-      <Box
-        style={{
-          position: 'absolute',
-          height: AppInfor.height / 2,
-          bottom: 0,
-          right: 0,
-          backgroundColor: appColors.blue500,
-          alignSelf: 'stretch',
-        }}>
-        <FlatList
-          data={data1}
-          onScroll={handleOnScroll}
-          scrollEventThrottle={16}
-          keyExtractor={item => item.toString()}
-          renderItem={({item}) => (
-            <Box
-              marginBottom={10}
-              flex={1}
-              padding={20}
-              backgroundColor={'green'}
-              alignSelf={'stretch'}>
-              <TextComponent value={item.toString()} />
-            </Box>
-          )}
-        />
-      </Box>
-    </Modal>
-  );
+  containerStyle?: ViewStyle;
+  buttonCloseColor?: string;
+  onEndReached: (distance: number) => void;
 };
 
+type State = {
+  scrollOffset: null | number;
+  visible: boolean;
+};
+
+class ModalScrollable<T> extends Component<Props<T>, State> {
+  public scrollViewRef: RefObject<FlatList<T>>;
+
+  constructor(props: Props<T>) {
+    super(props);
+    this.scrollViewRef = React.createRef();
+    this.state = {
+      scrollOffset: null,
+      visible: this.props.visible,
+    };
+  }
+
+  handleOnScroll = (event: NativeSyntheticEvent<NativeScrollEvent>): void => {
+    this.setState({
+      scrollOffset: event.nativeEvent.contentOffset.y,
+    });
+  };
+
+  handleScrollTo = (p: {x: number; y: number; animated?: boolean}) => {
+    if (this.scrollViewRef.current) {
+      this.scrollViewRef.current.scrollToOffset({
+        offset: p.y,
+        animated: p.animated,
+      });
+    }
+  };
+
+  render(): React.ReactElement<any> {
+    const {
+      data,
+      renderItem,
+      keyExtractor,
+      onClose,
+      visible,
+      containerStyle,
+      buttonCloseColor,
+      onEndReached,
+    } = this.props;
+    return (
+      <Modal
+        testID={'modal'}
+        isVisible={visible}
+        onSwipeComplete={onClose}
+        swipeDirection={['down']}
+        scrollTo={(params: {x: number; y: number; animated?: boolean}) =>
+          this.handleScrollTo(params)
+        }
+        scrollOffset={this.state.scrollOffset ?? 0}
+        scrollOffsetMax={100}
+        propagateSwipe={true}
+        style={styles.modal}>
+        <View style={[styles.scrollableModal, containerStyle]}>
+          <SafeAreaView>
+            <Box alignItems={'center'} justifyContent={'center'}>
+              <View style={styles.modalIndicatorTop} />
+              <ButtonComponent
+                style={styles.buttonCancel}
+                nameColor={buttonCloseColor}
+                name={'Huỷ'}
+                onPress={onClose}
+                alignSelf={'flex-end'}
+              />
+            </Box>
+            <FlatList
+              onEndReachedThreshold={0.5}
+              onEndReached={({distanceFromEnd}) => {
+                onEndReached(distanceFromEnd);
+              }}
+              ref={this.scrollViewRef}
+              onScroll={this.handleOnScroll}
+              scrollEventThrottle={16}
+              data={data}
+              keyExtractor={keyExtractor}
+              renderItem={renderItem}
+            />
+          </SafeAreaView>
+        </View>
+      </Modal>
+    );
+  }
+}
+
 const styles = StyleSheet.create({
+  view: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  modal: {
+    justifyContent: 'flex-end',
+    margin: 0,
+  },
   scrollableModal: {
     height: AppInfor.height / 2,
-    width: AppInfor.width,
-    backgroundColor: appColors.white,
+    backgroundColor: appColors.gray,
+    borderTopRightRadius: 20,
+    borderTopLeftRadius: 20,
+    padding: 10,
+  },
+  modalIndicatorTop: {
+    height: 5,
+    width: 40,
+    backgroundColor: appColors.grays.gray700,
+    marginBottom: 10,
+    borderRadius: 20,
+  },
+  buttonCancel: {
     position: 'absolute',
-    bottom: 0,
-    left: 0,
     right: 0,
+    top: 0,
+  },
+  button: {
+    marginTop: 20,
   },
 });
 
-export default memo(ModalScrollable);
+export default ModalScrollable;

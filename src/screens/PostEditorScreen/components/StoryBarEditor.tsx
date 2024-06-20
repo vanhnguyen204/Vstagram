@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {memo} from 'react';
 import ButtonComponent from '../../../components/ButtonComponent';
 import {appColors} from '../../../assets/colors/appColors';
 import TextComponent from '../../../components/TextComponent';
@@ -32,7 +32,7 @@ const StoryBarEditor = (props: StoryBarEditorProps) => {
       top={10}
       right={0}
       left={0}
-      padding={2}
+      paddingHorizontal={10}
       flexDirection={'row'}
       justifyContent={'space-between'}>
       {/* Close story editor */}
@@ -41,7 +41,6 @@ const StoryBarEditor = (props: StoryBarEditorProps) => {
         backgroundColor={appColors.black900}
         padding={3}
         alignSelf={'center'}
-        marginHorizontal={5}
         name={'Close'}
         onPress={() => {
           onCloseStoryEditor();
@@ -56,7 +55,7 @@ const StoryBarEditor = (props: StoryBarEditorProps) => {
       </ButtonComponent>
 
       <Box flexDirection={'row'}>
-        {/*Button show textinput */}
+        {/*Button show text input */}
         <ButtonComponent
           style={styles.btnEditor}
           backgroundColor={appColors.black900}
@@ -104,21 +103,22 @@ const StoryBarEditor = (props: StoryBarEditorProps) => {
             height={25}
           />
         </ButtonComponent>
-        {/* Button complete story editor */}
+
         <ButtonComponent
+          marginLeft={5}
           flexDirection={'row'}
           radius={20}
           padding={7}
           backgroundColor={appColors.black900}
-          marginHorizontal={10}
-          alignSelf={'center'}
+          alignSelf={'stretch'}
           name={'Continue'}
           onPress={() => {
             onCapture();
           }}>
           <TextComponent value="Tiếp" />
           <ImageComponent
-            marginLeft={5}
+            alignSelf={'center'}
+            marginLeft={8}
             tintColor={appColors.secondary}
             width={20}
             height={20}
@@ -135,4 +135,4 @@ const styles = StyleSheet.create({
     borderRadius: 50,
   },
 });
-export default StoryBarEditor;
+export default memo(StoryBarEditor);

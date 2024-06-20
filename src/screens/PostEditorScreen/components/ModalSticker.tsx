@@ -6,10 +6,10 @@ import Box from '../../../components/Box.tsx';
 import {AppInfor} from '../../../constants/AppInfor.ts';
 import {Stickers} from '../../../models/Stickers.ts';
 import StickerItem from './StickerItem.tsx';
-import {useStoryStore} from "../../../hooks";
+import { useStoryEditor, useStoryStore } from "../../../hooks";
 
 const ModalSticker = () => {
-  const {isModalStickerShow, toggleModalSticker} = useStoryStore();
+  const {isModalStickerShow, toggleModalSticker} = useStoryEditor();
 
   return (
     <Modal

@@ -37,11 +37,12 @@ const ScrollableModal = <T extends any>({
 }: Props<T>) => {
   const scrollViewRef = useRef<FlatList<T>>(null);
   const [scrollOffset, setScrollOffset] = useState<number | null>(null);
-
   const handleOnScroll = (
     event: NativeSyntheticEvent<NativeScrollEvent>,
   ): void => {
-    setScrollOffset(event.nativeEvent.contentOffset.y);
+    const offsetY = event.nativeEvent.contentOffset.y;
+    setScrollOffset(offsetY);
+
   };
 
   const handleScrollTo = (offset: number, animated?: boolean): void => {
@@ -54,6 +55,8 @@ const ScrollableModal = <T extends any>({
     <Modal
       testID={'modal'}
       isVisible={visible}
+      animationIn={'slideInUp'}
+      animationOut={'fadeOut'}
       onSwipeComplete={onClose}
       swipeDirection={['down']}
       scrollTo={(params: {x: number; y: number; animated?: boolean}) =>

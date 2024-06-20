@@ -1,21 +1,24 @@
-import {View, Text} from 'react-native';
-import React, {memo, useCallback, useEffect, useState} from 'react';
-import {Music} from '../../../models/Music';
+import React, {memo, useCallback} from 'react';
+import {Music} from '../../../models';
 import ImageComponent from '../../../components/ImageComponent';
 import Box from '../../../components/Box';
 import TextComponent from '../../../components/TextComponent';
 import {appColors} from '../../../assets/colors/appColors';
 import ButtonComponent from '../../../components/ButtonComponent';
-import {musicStore} from '../../../hooks/musicStore.ts';
+import {musicStore} from '../../../hooks';
 import TrackPlayer from 'react-native-track-player';
 import {AppInfor} from '../../../constants/AppInfor';
+import {useStoryEditor} from '../../../hooks';
+
 interface MusicProps {
   item: Music;
   index: number;
+  toggleModalMusic: (visible: boolean) => void;
 }
 const MusicItem = (props: MusicProps) => {
-  const {item, index} = props;
+  const {item, index, toggleModalMusic} = props;
   const {musicPlaying = '', setMusicPlaying, setUrlMusicPlaying} = musicStore();
+  const {addMusic} = useStoryEditor();
   const playMusic = useCallback(async (music: string) => {
     await TrackPlayer.reset();
     setMusicPlaying(item._id);
@@ -40,6 +43,10 @@ const MusicItem = (props: MusicProps) => {
 
   return (
     <Box
+      // onPress={() => {
+      //   addMusic(item);
+      //   toggleModalMusic(false);
+      // }}
       flexDirection="row"
       marginHorizontal={10}
       width={AppInfor.width}
@@ -52,7 +59,7 @@ const MusicItem = (props: MusicProps) => {
           width={50}
           height={50}
           resizeMode="cover"
-          style={{borderRadius: 90}}
+          borderRadius={90}
           src={{uri: item.image}}
         />
         <Box marginHorizontal={10}>

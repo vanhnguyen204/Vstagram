@@ -1,15 +1,14 @@
 import React, {memo} from 'react';
-import {ImageSourcePropType, View} from 'react-native';
 import ImageComponent from '../../../components/ImageComponent.tsx';
 import ButtonComponent from '../../../components/ButtonComponent.tsx';
-import {useStoryStore} from '../../../hooks/useStoryEditor.ts';
+import {useStoryEditor} from '../../../hooks';
 
 interface StickerProps {
   url: string;
   index?: number;
 }
 const StickerItem = (props: StickerProps) => {
-  const {setStickers, stickers, toggleModalSticker} = useStoryStore();
+  const {setStickers, stickers, toggleModalSticker} = useStoryEditor();
   const {url, index} = props;
   const handleSelected = () => {
     setStickers(url);

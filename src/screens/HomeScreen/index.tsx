@@ -1,20 +1,24 @@
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import Container from '../../components/Container';
 import Header from './Components/Header.tsx';
 import Box from '../../components/Box.tsx';
 import MyStory from './Components/MyStory.tsx';
-import {navigateAndReset, navigatePush} from '../../utils/NavigationUtils.ts';
+import {navigatePush} from '../../utils/NavigationUtils.ts';
 import TextComponent from '../../components/TextComponent.tsx';
 import ButtonComponent from '../../components/ButtonComponent.tsx';
 import {ROUTES} from '../../navigators';
-import {useUserInformation} from '../../hooks';
-import ScrollableModal from '../../components/ScrollableModal.tsx';
-import {appColors} from '../../assets/colors/appColors.ts';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import {ACCESS_TOKEN} from '../../constants/AsyncStorage.ts';
-
+import {useStoryStore, useUserInformation} from '../../hooks';
+import ModalScrollable from '../../components/ModalScrollable.tsx';
+import {Image, StyleSheet, View} from 'react-native';
+import ModalStory from './Components/ModalStory.tsx';
+import {Story} from '../../models/Story.ts';
+export interface TestStory {
+  id: string;
+  stories: Story[];
+}
 const HomeScreen = () => {
   const {information} = useUserInformation();
+  const {stories} = useStoryStore();
   const navigateToCreatePost = useCallback(() => {
     navigatePush(ROUTES.PostEditorScreen);
   }, []);
@@ -22,9 +26,7 @@ const HomeScreen = () => {
   const toggle = () => {
     setIsVisible(!isVisible);
   };
-  const array = Array.from({length: 50}, (_, index) => index + 1);
-  const [dataTest, setDataTest] = useState(array);
-  const array2 = Array.from({length: 50}, (_, index) => index + 1);
+
   return (
     <Container justifyContent={'flex-start'}>
       <Header
@@ -32,6 +34,7 @@ const HomeScreen = () => {
         onLogoPress={() => {}}
         onNotificationPress={() => {}}
       />
+      <ModalStory isVisible={isVisible} onClose={toggle} stories={stories} />
       <Box
         alignSelf="stretch"
         flexDirection={'row'}
@@ -43,42 +46,21 @@ const HomeScreen = () => {
       <TextComponent value="Hello ae" fontFamily="Briem Hand" fontSize={20} />
       <TextComponent value="Hello ae" fontFamily="Bradley Hand" />
       <ButtonComponent name={'Show modal'} onPress={() => toggle()} />
-      <ScrollableModal<number>
-        onEndReached={distance => {
-          console.log(distance);
-          if (distance > 150) {
-            setDataTest(prevState => [...prevState, ...array2]);
-          }
-        }}
-        data={dataTest}
-        renderItem={({item}) => (
-          <Box backgroundColor={appColors.grays.gray600} marginVertical={10}>
-            <TextComponent value={item.toString()} />
-          </Box>
-        )}
-        keyExtractor={(item, index) => index.toString()}
-        visible={isVisible}
-        onClose={toggle}
-      />
-      <ButtonComponent
-        name={'Log out'}
-        onPress={() => {
-          AsyncStorage.setItem(ACCESS_TOKEN, '')
-            .then(res => {
-              navigateAndReset([{name: ROUTES.Login}]);
-            })
-            .catch(e => {
-              console.log(e);
-            });
-        }}
-      />
-      {/*<ModalStory*/}
-      {/*  isVisible={isVisible}*/}
-      {/*  onClose={toggle}*/}
-      {/*  dataStory={['1', '2', '3']}*/}
-      {/*/>*/}
     </Container>
   );
 };
-
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    padding: 20,
+  },
+  progressItem: {
+    marginVertical: 10,
+  },
+  progressText: {
+    marginTop: 10,
+    textAlign: 'center',
+  },
+});
 export default HomeScreen;

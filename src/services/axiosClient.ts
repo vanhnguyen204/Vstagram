@@ -61,21 +61,22 @@ export const request = async <T>(
     throw error;
   }
 };
-export const uploadRequest = async (
+export const uploadRequest = async <T>(
   url: string,
   data: object,
-  authToken: any,
-) => {
+): Promise<T> => {
   try {
-    const response = await axiosClient.post(url, data, {
+    const token = await AsyncStorage.getItem(ACCESS_TOKEN);
+    const response: any = await axiosClient.post(url, data, {
       headers: {
         'Content-Type': 'multipart/form-data',
-        Authorization: `Bearer ${authToken}`,
+        Authorization: `Bearer ${token}`,
       },
     });
-    return response.data;
+    return response;
   } catch (e) {
     handleLogError(e, url, 'POST');
+    throw e;
   }
 };
 const handleLogError = (error: any, url: string, method: string): void => {

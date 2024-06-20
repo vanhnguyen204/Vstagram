@@ -46,8 +46,8 @@ const Container = (props: ContainerProps) => {
         {
           backgroundColor: backgroundColor || appColors.backgroundApp,
           flexDirection: flexDirection ?? 'column',
-          alignItems: alignItems ?? 'flex-start',
-          justifyContent: justifyContent ?? 'center',
+          alignItems: alignItems ?? undefined,
+          justifyContent: justifyContent ?? undefined,
           padding,
         },
       ]}>

@@ -8,15 +8,16 @@ import Box from '../../components/Box';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {ACCESS_TOKEN} from '../../constants/AsyncStorage';
 import {navigateReplace} from '../../utils/NavigationUtils';
-import {musicStore} from '../../hooks';
-import {getUserInformation} from '../../services/apis';
+
+import {getStories, getUserInformation} from '../../services/apis';
 import {ROUTES} from '../../navigators';
-import {useUserInformation} from '../../hooks';
+import {musicStore, useStoryStore, useUserInformation} from '../../hooks';
 import {User} from '../../models/User.ts';
 import {getMusics} from '../../services/apis/musicServices.ts';
 
 const WelcomeScreen = () => {
   const {setMusics} = musicStore();
+  const {setListStory} = useStoryStore();
   const {setInformation} = useUserInformation();
   const getUserInfor = useCallback(async () => {
     try {
@@ -26,21 +27,33 @@ const WelcomeScreen = () => {
       console.log(e);
     }
   }, [setInformation]);
+  const getMyStories = async () => {
+    try {
+      const response = await getStories();
+      setListStory(response);
+    } catch (e) {
+      console.log('ERROR GET MY STORIES');
+      console.log(e);
+    }
+  };
   const getMusicsAxios = useCallback(async () => {
     try {
-      const musics = await getMusics(7, 1);
+      const musics = await getMusics(10, 1);
       setMusics(musics);
     } catch (e) {
       console.log(e);
     }
   }, [setMusics]);
   useEffect(() => {
-    Promise.allSettled([getMusicsAxios()]);
     AsyncStorage.getItem(ACCESS_TOKEN)
       .then(res => {
         if (res) {
           navigateReplace(ROUTES.BottomTab);
-          getUserInfor();
+          Promise.allSettled([getMusicsAxios(), getMyStories(), getUserInfor()])
+            .then(() => {})
+            .catch(e => {
+              console.log(e);
+            });
         } else {
           navigateReplace(ROUTES.Login);
         }

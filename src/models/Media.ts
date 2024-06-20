@@ -1,36 +1,49 @@
 export class Media {
-  readonly userId: string;
-  readonly imageMedia: string[];
-  readonly audioMedia: string;
-  readonly type: string;
-  readonly timePlay: number;
+  private _userId: string;
+  private _image: string;
+  private _type: string;
+  private _timeCreated: string;
 
   constructor(
     userId: string,
-    imageMedia: string[],
-    audioMedia: string,
+    image: string,
     type: string,
-    timePlay: number,
+    timeCreated: string,
   ) {
-    this.userId = userId;
-    this.imageMedia = imageMedia;
-    this.audioMedia = audioMedia;
-    this.type = type;
-    this.timePlay = timePlay;
+    this._userId = userId;
+    this._image = image;
+    this._type = type;
+    this._timeCreated = timeCreated;
   }
-  getUserId(): string {
-    return this.userId;
+
+  get userId(): string {
+    return this._userId;
   }
-  getImageMedia(): string[] {
-    return this.imageMedia;
+
+  set userId(value: string) {
+    this._userId = value;
   }
-  getAudioMedia(): string {
-    return this.audioMedia;
+
+  get image(): string {
+    return this._image;
   }
-  getType(): string {
-    return this.type;
+
+  set image(value: string) {
+    this._image = value;
   }
-  getTimePlay(): number {
-    return this.timePlay;
+
+  get type(): string {
+    return this._type;
+  }
+
+  set type(value: string) {
+    this._type = value;
+  }
+  get timeCreated(): string {
+    return this._timeCreated;
+  }
+
+  set timeCreated(value: string) {
+    this._timeCreated = value;
   }
 }

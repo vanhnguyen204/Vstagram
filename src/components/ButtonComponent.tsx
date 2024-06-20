@@ -13,6 +13,10 @@ interface ButtonComponentProps extends FlexBoxProp {
   children?: ReactNode | undefined;
   fontSize?: number;
   disabled?: boolean;
+  onPressIn?: () => void;
+  onPressOut?: () => void;
+  onLongPress?: () => void;
+  activeOpacity?: number;
 }
 
 const ButtonComponent = (props: ButtonComponentProps) => {
@@ -47,6 +51,10 @@ const ButtonComponent = (props: ButtonComponentProps) => {
     paddingVertical,
     paddingLeft,
     paddingRight,
+    onPressIn,
+    onPressOut,
+    onLongPress,
+    activeOpacity,
   } = props;
 
   const buttonStyle: ViewStyle = {
@@ -77,6 +85,10 @@ const ButtonComponent = (props: ButtonComponentProps) => {
 
   return (
     <TouchableOpacity
+      activeOpacity={activeOpacity}
+      onPressIn={onPressIn}
+      onPressOut={onPressOut}
+      onLongPress={onLongPress}
       disabled={disabled}
       onPress={onPress}
       style={[buttonStyle, style]}>

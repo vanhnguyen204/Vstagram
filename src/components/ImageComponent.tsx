@@ -10,8 +10,8 @@ import {appColors} from '../assets/colors/appColors';
 import {globalStyle} from '../styles/globalStyle';
 interface ImageProps {
   src: ImageSourcePropType;
-  width?: number;
-  height?: number | undefined;
+  width?: number | string | undefined;
+  height?: number | string | undefined;
   tintColor?: string;
   resizeMode?: ImageResizeMode;
   alignSelf?: FlexAlignType;
@@ -22,6 +22,7 @@ interface ImageProps {
   marginRight?: number;
   marginTop?: number;
   marginBottom?: number;
+  borderRadius?: number;
   flex?: number;
   style?: ViewStyle;
 }
@@ -42,27 +43,29 @@ const ImageComponent = (props: ImageProps) => {
     marginVertical = 0,
     flex,
     style,
+    borderRadius = 0,
   } = props;
   return (
     <Image
       source={src}
       style={[
+        style,
         {
           height: height ?? undefined,
           width: width ?? undefined,
           tintColor: tintColor,
           resizeMode: resizeMode,
           alignSelf: alignSelf,
-          margin: margin,
-          marginBottom: marginBottom,
-          marginHorizontal: marginHorizontal,
-          marginLeft: marginLeft,
-          marginRight: marginRight,
-          marginTop: marginTop,
-          marginVertical: marginVertical,
+          margin: margin ?? undefined,
+          marginBottom: marginBottom ?? undefined,
+          marginHorizontal: marginHorizontal ?? undefined,
+          marginLeft: marginLeft ?? undefined,
+          marginRight: marginRight ?? undefined,
+          marginTop: marginTop ?? undefined,
+          marginVertical: marginVertical ?? undefined,
           flex: flex ?? 0,
+          borderRadius,
         },
-        style,
       ]}
     />
   );

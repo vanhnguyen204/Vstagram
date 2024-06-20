@@ -27,7 +27,7 @@ import Box from '../../components/Box.tsx';
 import Video, {VideoRef} from 'react-native-video';
 import TextComponent from '../../components/TextComponent.tsx';
 import ModalSticker from './components/ModalSticker.tsx';
-import {useStoryStore} from '../../hooks';
+import {musicStore, useStoryEditor} from '../../hooks';
 import StickerSelected from './components/StickerSelected.tsx';
 import AnimatedReanimated, {
   useAnimatedStyle,
@@ -36,7 +36,6 @@ import AnimatedReanimated, {
 } from 'react-native-reanimated';
 import ViewShot from 'react-native-view-shot';
 import ModalMusic from './components/ModalMusic.tsx';
-import {musicStore} from '../../hooks';
 import TrackPlayer from 'react-native-track-player';
 import {globalStyle} from '../../styles/globalStyle.ts';
 import ListColor from './components/ListColor.tsx';
@@ -46,9 +45,8 @@ import fonts from '../../assets/fonts';
 import SliderComponent from '../../components/SliderComponent.tsx';
 import Modal from 'react-native-modal';
 import {handleUpStory} from '../../services/apis';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import {ACCESS_TOKEN} from '../../constants/AsyncStorage.ts';
 import ModalLoading from '../../components/ModalLoading.tsx';
+import FastImage from 'react-native-fast-image';
 
 const PostEditorScreen = () => {
   const [isShowInput, setIsShowInput] = useState(false);
@@ -64,7 +62,8 @@ const PostEditorScreen = () => {
     font,
     fontSize,
     setFontSize,
-  } = useStoryStore();
+    musicSelected,
+  } = useStoryEditor();
   const [topEdgePosition, setTopEdgePosition] = useState(0);
   const [bottomEdgePosition, setBottomEdgePosition] = useState(0);
   const binOffset = useSharedValue<number>(200);
@@ -121,13 +120,12 @@ const PostEditorScreen = () => {
   const navigation = useNavigation<NavigationProp<any>>();
   // select media
   const [mediaSelected, setMediaSelected] = useState<any>();
-  const chooseMedia = useCallback(async () => {
+  const chooseMedia = useCallback(() => {
     launchImageLibrary({
       mediaType: 'mixed',
       maxHeight: AppInfor.height / 2,
     })
       .then(res => {
-        console.log(res);
         if (res.didCancel) {
           goBackNavigation();
           clearStickerStory();
@@ -147,8 +145,7 @@ const PostEditorScreen = () => {
   //Check type of media
   const subType = useMemo(() => {
     let index = mediaSelected?.type.indexOf('/');
-    let type = mediaSelected?.type.substring(0, index);
-    return type;
+    return mediaSelected?.type.substring(0, index);
   }, [mediaSelected?.type]);
   // Trash animation style
   const binAnimatedStyles = useAnimatedStyle(() => ({
@@ -200,11 +197,6 @@ const PostEditorScreen = () => {
     uriCap: string;
     uriOriginal: string;
   }>({uriCap: '', uriOriginal: ''});
-  const modalHeight = useSharedValue(AppInfor.height / 2.5); // Initial height of the modal
-
-  const animatedStyleViewModal = useAnimatedStyle(() => ({
-    height: modalHeight.value,
-  }));
   const onCapture = useCallback(() => {
     toggleImageBackgroundSale();
     if (viewShotRef.current?.capture) {
@@ -279,20 +271,35 @@ const PostEditorScreen = () => {
       ],
     };
   });
+  const opacityBottomEditor = useSharedValue(1);
+  const heightBottomEditor = useSharedValue(50);
+  useEffect(() => {
+    if (imageCapture.uriCap === '') {
+      opacityBottomEditor.value = 1;
+      heightBottomEditor.value = 50;
+    } else {
+      opacityBottomEditor.value = 0;
+      heightBottomEditor.value = 0;
+    }
+  }, [heightBottomEditor, imageCapture.uriCap, opacityBottomEditor]);
   const modalShareStoryFeat = [
     {
+      id: '1',
       image: require('../../assets/icons/user-avatar.png'),
       text: 'Tin của bạn',
     },
     {
+      id: '2',
       image: require('../../assets/icons/user-avatar.png'),
       text: 'Bạn thân',
     },
     {
+      id: '3',
       image: require('../../assets/icons/user-avatar.png'),
       text: 'Tin nhắn',
     },
     {
+      id: '4',
       image: require('../../assets/icons/user-avatar.png'),
       text: 'Người yêu',
     },
@@ -331,24 +338,25 @@ const PostEditorScreen = () => {
       style={[globalStyle.containerStyle]}
       keyboardVerticalOffset={Platform.select({ios: 0, android: 500})}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <Container justifyContent={'flex-start'}>
+        <Container justifyContent={'flex-start'} alignItems={'flex-start'}>
           <ModalLoading isShow={isModalLoading} />
           <AnimatedReanimated.View style={[animatedStyleImageBackground]}>
-            <ImageBackground
-              style={[styles.imageBackgroundContainer]}
-              blurRadius={20}
-              source={{uri: mediaSelected?.uri}}
-              resizeMode={'cover'}>
-              {/* modal show sticker */}
-              <ModalSticker />
-              {/* modal show list music */}
-              <ModalMusic />
+            {/* Modal show sticker */}
+            <ModalSticker />
+            {/* Modal show list music */}
+            <ModalMusic />
 
-              {/* Capture this view and export image that's includes text and
+            {/* Capture this view and export image that's includes text and
             sticker */}
-              <ViewShot
-                ref={viewShotRef}
-                style={[styles.containerImageAndSticker]}>
+
+            <ViewShot
+              ref={viewShotRef}
+              style={[styles.containerImageAndSticker]}>
+              <ImageBackground
+                style={[styles.imageBackgroundContainer]}
+                blurRadius={20}
+                source={{uri: mediaSelected?.uri}}
+                resizeMode={'cover'}>
                 {/*Show input */}
 
                 {isShowInput ? (
@@ -425,103 +433,102 @@ const PostEditorScreen = () => {
                     />
                   );
                 })}
-              </ViewShot>
-              {/* Editor bar  */}
-              {isShowInput ? (
-                <Box
-                  position="absolute"
-                  top={10}
-                  right={0}
-                  left={0}
-                  justifyContent={'center'}
-                  padding={2}
-                  alignItems={'center'}
-                  flexDirection={'row'}>
-                  <Box flexDirection={'row'} alignItems={'center'}>
+              </ImageBackground>
+            </ViewShot>
+            {/* Editor bar  */}
+            {isShowInput ? (
+              <Box
+                position="absolute"
+                top={10}
+                right={0}
+                left={0}
+                justifyContent={'center'}
+                padding={2}
+                alignItems={'center'}
+                flexDirection={'row'}>
+                <Box flexDirection={'row'} alignItems={'center'}>
+                  <ButtonComponent
+                    borderColor={appColors.white}
+                    name={'Select font'}
+                    onPress={() => {
+                      toggleShowListColorOrFont(false);
+                    }}>
+                    <ImageComponent
+                      src={require('../../assets/icons/typography.png')}
+                      height={30}
+                      width={30}
+                    />
+                  </ButtonComponent>
+
+                  <Box flexDirection={'column'}>
                     <ButtonComponent
+                      padding={0}
+                      radius={99}
+                      marginHorizontal={5}
+                      borderWidth={2}
                       borderColor={appColors.white}
-                      name={'Select font'}
+                      name={'Select color'}
                       onPress={() => {
-                        toggleShowListColorOrFont(false);
+                        toggleShowListColorOrFont(true);
                       }}>
                       <ImageComponent
-                        src={require('../../assets/icons/typography.png')}
+                        src={require('../../assets/icons/colour.png')}
                         height={30}
                         width={30}
                       />
                     </ButtonComponent>
-
-                    <Box flexDirection={'column'}>
-                      <ButtonComponent
-                        padding={0}
-                        marginHorizontal={5}
-                        borderWidth={2}
-                        borderColor={appColors.white}
-                        name={'Select color'}
-                        onPress={() => {
-                          toggleShowListColorOrFont(true);
-                        }}>
-                        <ImageComponent
-                          src={require('../../assets/icons/colour.png')}
-                          height={30}
-                          width={30}
-                        />
-                      </ButtonComponent>
-                    </Box>
-                  </Box>
-                  <ButtonComponent
-                    alignSelf={'center'}
-                    style={{position: 'absolute', right: 10}}
-                    name="Xong"
-                    fontSize={18}
-                    onPress={() => {
-                      toggleShowListColor();
-                      toggleInput();
-                    }}
-                  />
-                  <Box
-                    position={'absolute'}
-                    top={AppInfor.height / 4}
-                    left={-70}>
-                    <SliderComponent
-                      value={fontSize}
-                      onValueChange={value => setFontSize(value)}
-                    />
                   </Box>
                 </Box>
-              ) : (
-                <StoryBarEditor
-                  opacity={imageCapture.uriCap !== '' ? 0 : 1}
-                  onCloseStoryEditor={onCloseStoryEditor}
-                  toggleInput={toggleInput}
-                  toggleShowListColor={toggleShowListColor}
-                  toggleModalSticker={toggleModalSticker}
-                  toggleModalMusic={toggleModalMusic}
-                  onCapture={onCapture}
+                <ButtonComponent
+                  alignSelf={'center'}
+                  style={{position: 'absolute', right: 10}}
+                  name="Xong"
+                  fontSize={18}
+                  onPress={() => {
+                    toggleShowListColor();
+                    toggleInput();
+                  }}
                 />
-              )}
+                <Box position={'absolute'} top={AppInfor.height / 4} left={-70}>
+                  <SliderComponent
+                    value={fontSize}
+                    onValueChange={value => setFontSize(value)}
+                  />
+                </Box>
+              </Box>
+            ) : (
+              <StoryBarEditor
+                opacity={imageCapture.uriCap !== '' ? 0 : 1}
+                onCloseStoryEditor={onCloseStoryEditor}
+                toggleInput={toggleInput}
+                toggleShowListColor={toggleShowListColor}
+                toggleModalSticker={toggleModalSticker}
+                toggleModalMusic={toggleModalMusic}
+                onCapture={onCapture}
+              />
+            )}
 
-              {/* Trash to remove sticker and text */}
-              <AnimatedReanimated.View
-                style={[binAnimatedStyles, styles.binStyle]}>
-                <ImageComponent
-                  width={30}
-                  tintColor={appColors.white}
-                  height={30}
-                  src={require('../../assets/icons/trash-bin.png')}
-                />
-              </AnimatedReanimated.View>
-              {/* Show list color or list font when edit text */}
-              <AnimatedReanimated.View
-                style={[listColorAnimatedStyle, styles.listFontStyle]}>
-                {showListColorOrFont ? (
-                  <ListColor colors={appColors.colorsStoryTextEditor} />
-                ) : (
-                  <ListFont fonts={fonts.fontsStory} />
-                )}
-              </AnimatedReanimated.View>
-            </ImageBackground>
+            {/* Trash to remove sticker and text */}
+            <AnimatedReanimated.View
+              style={[binAnimatedStyles, styles.binStyle]}>
+              <ImageComponent
+                width={30}
+                tintColor={appColors.white}
+                height={30}
+                src={require('../../assets/icons/trash-bin.png')}
+              />
+            </AnimatedReanimated.View>
+            {/* Show list color or list font when edit text */}
+            <AnimatedReanimated.View
+              style={[listColorAnimatedStyle, styles.listFontStyle]}>
+              {showListColorOrFont ? (
+                <ListColor colors={appColors.colorsStoryTextEditor} />
+              ) : (
+                <ListFont fonts={fonts.fontsStory} />
+              )}
+            </AnimatedReanimated.View>
           </AnimatedReanimated.View>
+
           {imageCapture.uriCap !== '' && (
             <Modal
               isVisible={imageCapture.uriCap !== ''}
@@ -561,13 +568,15 @@ const PostEditorScreen = () => {
                     style={styles.viewHorizontalTop}
                     marginVertical={10}
                     radius={20}
+                    alignSelf={'center'}
                     backgroundColor={appColors.gray}>
                     <View />
                   </Box>
                   <TextComponent value={'Chia sẻ tin'} />
                   <FlatList
+                    keyExtractor={item => item.id.toString()}
                     data={modalShareStoryFeat}
-                    renderItem={({item, index}) => (
+                    renderItem={({item}) => (
                       <Box
                         alignSelf={'stretch'}
                         flexDirection={'row'}
@@ -585,30 +594,22 @@ const PostEditorScreen = () => {
                     )}
                   />
                   <ButtonComponent
+                    padding={10}
+                    radius={20}
                     onPress={async () => {
                       setIsModalLoading(true);
-                      const accessToken = await AsyncStorage.getItem(
-                        ACCESS_TOKEN,
-                      );
                       const formData = new FormData();
-                      formData.append('userId', '');
-                      formData.append('audioMedia', urlMusicPlaying);
-                      formData.append('type', 'story');
-                      formData.append('timePlay', 15);
-                      formData.append('accessToken', accessToken);
-                      formData.append('file', {
-                        uri: mediaSelected?.uri,
-                        type: mediaSelected?.type,
-                        name: mediaSelected?.fileName,
-                      });
+                      formData.append('music', urlMusicPlaying);
+                      formData.append('type', 'photo');
+                      formData.append('duration', 15);
                       formData.append('file', {
                         uri: imageCapture?.uriCap,
                         type: 'image/png',
                         name: imageCapture?.uriCap,
                       });
-                      handleUpStory(formData, accessToken)
+                      handleUpStory(formData)
                         .then(response => {
-                          if (response) {
+                          if (response.code === 201) {
                             setIsModalLoading(false);
                             goBackNavigation();
                             clearStickerStory();
@@ -684,7 +685,12 @@ const styles = StyleSheet.create({
     zIndex: 99,
   },
   listColorStyle: {position: 'absolute', bottom: 20},
-  listFontStyle: {position: 'absolute', bottom: 20, flex: 1},
+  listFontStyle: {
+    position: 'absolute',
+    bottom: 20,
+    flex: 1,
+    alignSelf: 'center',
+  },
   viewHorizontalTop: {
     width: 40,
     height: 5,

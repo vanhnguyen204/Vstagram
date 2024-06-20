@@ -1,6 +1,7 @@
-import React, { memo } from "react";
-import {FlatList, Text, View} from 'react-native';
-import StoryItem from './StoryItem.tsx';
+import React, {memo} from 'react';
+import {FlatList} from 'react-native';
+import StoryBarItem from './StoryBarItem.tsx';
+
 interface StoryBarProps {
   data: number[];
 }
@@ -11,7 +12,7 @@ const StoryBar = ({data}: StoryBarProps) => {
       horizontal={true}
       data={data}
       renderItem={({item, index}) => {
-        return <StoryItem />;
+        return <StoryBarItem />;
       }}
     />
   );

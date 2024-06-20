@@ -4,3 +4,4 @@ export * from './useLogin.ts';
 export * from './musicStore.ts';
 export * from './useRegister.ts';
 export * from './useStoryEditor.ts';
+export * from './useStoryStore.ts';

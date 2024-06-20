@@ -1,14 +1,15 @@
 import React, {memo} from 'react';
 import LinearGradient from 'react-native-linear-gradient';
-import {StyleSheet, TouchableOpacity, View} from 'react-native';
+import {StyleSheet, TouchableOpacity} from 'react-native';
 import {appColors} from '../../../assets/colors/appColors.ts';
 import ImageComponent from '../../../components/ImageComponent.tsx';
-interface StoryItemProps {
+
+interface StoryBarItemProps {
   item?: object;
   marginHorizontal?: number;
   onStoryPress?: () => void;
 }
-const StoryItem = (props: StoryItemProps) => {
+const StoryBarItem = (props: StoryBarItemProps) => {
   const {item, marginHorizontal, onStoryPress} = props;
   return (
     <LinearGradient
@@ -46,4 +47,4 @@ const styles = StyleSheet.create({
     borderRadius: 999,
   },
 });
-export default memo(StoryItem);
+export default memo(StoryBarItem);

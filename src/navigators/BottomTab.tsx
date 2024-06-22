@@ -10,10 +10,12 @@ import SettingScreen from '../screens/SettingScreen';
 import ImageComponent from '../components/ImageComponent.tsx';
 import {appColors} from '../assets/colors/appColors.ts';
 import {iconBottomTab} from '../styles/iconBottomTab.ts';
+import {ROUTES} from './Routes.ts';
 const Tab = createBottomTabNavigator();
 const BottomTab = () => {
   return (
     <Tab.Navigator
+      initialRouteName={PageName.HomeScreen}
       screenOptions={{
         headerShown: false,
         tabBarShowLabel: false,
@@ -33,6 +35,7 @@ const BottomTab = () => {
             return (
               <ImageComponent
                 src={iconBottomTab.homeIcon}
+                alignSelf={'center'}
                 width={size}
                 height={size}
                 tintColor={color}
@@ -48,6 +51,7 @@ const BottomTab = () => {
           tabBarIcon: ({size, color}) => {
             return (
               <ImageComponent
+                alignSelf={'center'}
                 src={iconBottomTab.searchIcon}
                 width={size}
                 height={size}
@@ -65,6 +69,7 @@ const BottomTab = () => {
             return (
               <ImageComponent
                 src={iconBottomTab.createPostIcon}
+                alignSelf={'center'}
                 width={size}
                 height={size}
                 tintColor={color}
@@ -82,6 +87,7 @@ const BottomTab = () => {
               <ImageComponent
                 src={iconBottomTab.reelsIcon}
                 width={size}
+                alignSelf={'center'}
                 height={size}
                 tintColor={color}
               />
@@ -98,6 +104,7 @@ const BottomTab = () => {
               <ImageComponent
                 src={iconBottomTab.settingIcon}
                 width={size}
+                alignSelf={'center'}
                 height={size}
                 tintColor={color}
               />

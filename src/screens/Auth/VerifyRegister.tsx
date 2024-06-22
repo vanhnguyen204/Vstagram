@@ -20,15 +20,15 @@ import {verifyCode} from '../../services/apis/auth.ts';
 import {PageName} from '../../config/PageName.ts';
 import {RootStackParams, ROUTES} from '../../navigators';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-type CheckoutScreenRouteProp = RouteProp<RootStackParams, 'VerifyRegister'>;
-type CheckoutScreenNavigationProp = NativeStackNavigationProp<
+type VerifyRegisterProps = RouteProp<RootStackParams, 'VerifyRegister'>;
+type VerifyRegisterNavigationProp = NativeStackNavigationProp<
   RootStackParams,
   'VerifyRegister'
 >;
 
 type Props = {
-  route: CheckoutScreenRouteProp;
-  navigation: CheckoutScreenNavigationProp;
+  route: VerifyRegisterProps;
+  navigation: VerifyRegisterNavigationProp;
 };
 
 const VerifyRegister = (props: Props) => {

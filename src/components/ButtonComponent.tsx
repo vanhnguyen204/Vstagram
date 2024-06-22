@@ -1,5 +1,5 @@
-import {TouchableOpacity, ViewStyle} from 'react-native';
-import React, {memo, ReactNode} from 'react';
+import {Animated, TouchableOpacity, ViewStyle} from 'react-native';
+import React, {memo, ReactNode, useRef} from 'react';
 import {FlexBoxProp} from '../constants/FlexBoxProp';
 import TextComponent from './TextComponent';
 import {appColors} from '../assets/colors/appColors';
@@ -17,10 +17,14 @@ interface ButtonComponentProps extends FlexBoxProp {
   onPressOut?: () => void;
   onLongPress?: () => void;
   activeOpacity?: number;
+  scaleAnimated?: boolean;
+  scaleInValue?: 0.1 | 0.2 | 0.3 | 0.4 | 0.5 | 0.6 | 0.7 | 0.8 | 0.9;
 }
 
 const ButtonComponent = (props: ButtonComponentProps) => {
   const {
+    scaleAnimated = false,
+    scaleInValue = 0.6,
     name,
     onPress,
     disabled,
@@ -82,27 +86,59 @@ const ButtonComponent = (props: ButtonComponentProps) => {
     paddingLeft,
     paddingRight,
   };
+  const scaleValue = useRef(new Animated.Value(1)).current;
 
+  const onButtonPressIn = () => {
+    Animated.spring(scaleValue, {
+      toValue: scaleInValue,
+      useNativeDriver: true,
+    }).start();
+  };
+
+  const onButtonPressOut = () => {
+    Animated.spring(scaleValue, {
+      toValue: 1,
+      friction: 3,
+      useNativeDriver: true,
+    }).start();
+  };
   return (
     <TouchableOpacity
       activeOpacity={activeOpacity}
-      onPressIn={onPressIn}
-      onPressOut={onPressOut}
+      onPressIn={() => {
+        if (onPressIn) {
+          onPressIn();
+        }
+        onButtonPressIn();
+      }}
+      onPressOut={() => {
+        if (onPressOut) {
+          onPressOut();
+        }
+        onButtonPressOut();
+      }}
       onLongPress={onLongPress}
       disabled={disabled}
       onPress={onPress}
       style={[buttonStyle, style]}>
-      {children ? (
-        children
-      ) : name ? (
-        <TextComponent
-          color={nameColor}
-          fontSize={fontSize}
-          value={name ?? ''}
-        />
-      ) : (
-        <></>
-      )}
+      <Animated.View
+        style={[
+          buttonStyle,
+          style,
+          scaleAnimated && {transform: [{scale: scaleValue}]},
+        ]}>
+        {children ? (
+          children
+        ) : name ? (
+          <TextComponent
+            color={nameColor}
+            fontSize={fontSize}
+            value={name ?? ''}
+          />
+        ) : (
+          <></>
+        )}
+      </Animated.View>
     </TouchableOpacity>
   );
 };

@@ -27,7 +27,17 @@ end
 
 target 'Vstagram' do
   config = use_native_modules!
+target 'videoplayer' do
+  config = use_native_modules!
 
+  use_frameworks! :linkage => :static
+
+  if ENV['RNV_SAMPLE_ENABLE_ADS']
+    $RNVideoUseGoogleIMA = true
+  end
+  if ENV['RNV_SAMPLE_VIDEO_CACHING']
+    $RNVideoUseVideoCaching = true
+  end
   use_react_native!(
     :path => config[:reactNativePath],
     # Enables Flipper.

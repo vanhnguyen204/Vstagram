@@ -38,7 +38,10 @@ const ModalStory = (props: ModalStoryProps) => {
   const currentStoryFocus = useRef<number>(0);
   return (
     <Modal
-      onSwipeComplete={() => onClose()}
+      onSwipeComplete={() => {
+        onClose();
+        stopTrack();
+      }}
       swipeDirection={['down']}
       animationIn={'slideInUp'}
       animationOut={'fadeOut'}

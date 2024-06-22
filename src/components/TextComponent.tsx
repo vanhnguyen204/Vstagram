@@ -1,4 +1,4 @@
-import {View, Text} from 'react-native';
+import {View, Text, TextBase} from 'react-native';
 import React, {memo} from 'react';
 import {globalStyle} from '../styles/globalStyle';
 import {appColors} from '../assets/colors/appColors';
@@ -46,6 +46,7 @@ const TextComponent = (props: TextProps) => {
   } = props;
   return (
     <Text
+      {...props}
       style={[
         globalStyle.textStyle,
         {

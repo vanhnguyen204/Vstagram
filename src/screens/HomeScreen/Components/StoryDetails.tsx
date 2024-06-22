@@ -13,7 +13,12 @@ import FastImage from 'react-native-fast-image';
 import ButtonComponent from '../../../components/ButtonComponent.tsx';
 import {AppInfor} from '../../../constants/AppInfor.ts';
 
-import {pauseTrack, resumeTrack} from '../../../../service';
+import {
+  pauseTrack,
+  playTrack,
+  resumeTrack,
+  stopTrack,
+} from '../../../../service';
 import {View} from 'react-native';
 import {mockStories, SetStory} from '../../../models/Mockup.ts';
 import {ICarouselInstance} from 'react-native-reanimated-carousel';
@@ -84,13 +89,19 @@ const StoryDetails: React.FC<StoryDetailsProps> = (
     return index !== -1 ? index : 0;
   }, [progresses]);
 
-  const startNextProgress = useCallback((index: number) => {
-    setProgresses(prevProgresses =>
-      prevProgresses.map((progress, i) =>
-        i === index ? {...progress, started: true} : progress,
-      ),
-    );
-  }, []);
+  const startNextProgress = useCallback(
+    (index: number) => {
+      setProgresses(prevProgresses =>
+        prevProgresses.map((progress, i) =>
+          i === index ? {...progress, started: true} : progress,
+        ),
+      );
+      if (itemStory.dataStories[index].music) {
+        playTrack(itemStory.dataStories[index].music);
+      }
+    },
+    [itemStory.dataStories],
+  );
 
   useEffect(() => {
     if (
@@ -118,6 +129,7 @@ const StoryDetails: React.FC<StoryDetailsProps> = (
         setActiveProgressIndex(index + 1);
       } else {
         onClose();
+        stopTrack();
       }
     },
     [onClose, progresses.length],

@@ -57,6 +57,7 @@ export const mockReels: Reel[] = [
       'https://nodejs-vstagram-aws-s3.s3.ap-southeast-2.amazonaws.com/reels/turkey_playingfootball.MP4',
     comment: [
       {
+        _id: '1',
         userId: '1999',
         comment: 'omg',
         like: 22,
@@ -66,6 +67,7 @@ export const mockReels: Reel[] = [
           'https://img.freepik.com/premium-photo/animal-icon-hd-8k-wallpaper-stock-photographic-image_915071-38615.jpg',
       },
       {
+        _id: '2',
         userId: '1999',
         comment: 'omg',
         like: 22,
@@ -75,6 +77,107 @@ export const mockReels: Reel[] = [
           'https://img.freepik.com/premium-photo/animal-icon-hd-8k-wallpaper-stock-photographic-image_915071-38615.jpg',
       },
       {
+        _id: '3',
+        userId: '1999',
+        comment: 'omg',
+        like: 22,
+        name: 'username',
+        timeCreate: '2024-06-18 14:56:45',
+        userAvatar:
+          'https://img.freepik.com/premium-photo/animal-icon-hd-8k-wallpaper-stock-photographic-image_915071-38615.jpg',
+      },
+      {
+        _id: '4',
+        userId: '1999',
+        comment: 'omg',
+        like: 22,
+        name: 'username',
+        timeCreate: '2024-06-18 14:56:45',
+        userAvatar:
+          'https://img.freepik.com/premium-photo/animal-icon-hd-8k-wallpaper-stock-photographic-image_915071-38615.jpg',
+      },
+      {
+        _id: '5',
+        userId: '1999',
+        comment: 'omg',
+        like: 22,
+        name: 'username',
+        timeCreate: '2024-06-18 14:56:45',
+        userAvatar:
+          'https://img.freepik.com/premium-photo/animal-icon-hd-8k-wallpaper-stock-photographic-image_915071-38615.jpg',
+      },
+      {
+        _id: '6',
+        userId: '1999',
+        comment: 'omg',
+        like: 22,
+        name: 'username',
+        timeCreate: '2024-06-18 14:56:45',
+        userAvatar:
+          'https://img.freepik.com/premium-photo/animal-icon-hd-8k-wallpaper-stock-photographic-image_915071-38615.jpg',
+      },
+      {
+        _id: '7',
+        userId: '1999',
+        comment: 'omg',
+        like: 22,
+        name: 'username',
+        timeCreate: '2024-06-18 14:56:45',
+        userAvatar:
+          'https://img.freepik.com/premium-photo/animal-icon-hd-8k-wallpaper-stock-photographic-image_915071-38615.jpg',
+      },
+      {
+        _id: '8',
+        userId: '1999',
+        comment: 'omg',
+        like: 22,
+        name: 'username',
+        timeCreate: '2024-06-18 14:56:45',
+        userAvatar:
+          'https://img.freepik.com/premium-photo/animal-icon-hd-8k-wallpaper-stock-photographic-image_915071-38615.jpg',
+      },
+      {
+        _id: '9',
+        userId: '1999',
+        comment: 'omg',
+        like: 22,
+        name: 'username',
+        timeCreate: '2024-06-18 14:56:45',
+        userAvatar:
+          'https://img.freepik.com/premium-photo/animal-icon-hd-8k-wallpaper-stock-photographic-image_915071-38615.jpg',
+      },
+      {
+        _id: '10',
+        userId: '1999',
+        comment: 'omg',
+        like: 22,
+        name: 'username',
+        timeCreate: '2024-06-18 14:56:45',
+        userAvatar:
+          'https://img.freepik.com/premium-photo/animal-icon-hd-8k-wallpaper-stock-photographic-image_915071-38615.jpg',
+      },
+      {
+        _id: '11',
+        userId: '1999',
+        comment: 'omg',
+        like: 22,
+        name: 'username',
+        timeCreate: '2024-06-18 14:56:45',
+        userAvatar:
+          'https://img.freepik.com/premium-photo/animal-icon-hd-8k-wallpaper-stock-photographic-image_915071-38615.jpg',
+      },
+      {
+        _id: '12',
+        userId: '1999',
+        comment: 'omg',
+        like: 22,
+        name: 'username',
+        timeCreate: '2024-06-18 14:56:45',
+        userAvatar:
+          'https://img.freepik.com/premium-photo/animal-icon-hd-8k-wallpaper-stock-photographic-image_915071-38615.jpg',
+      },
+      {
+        _id: '13',
         userId: '1999',
         comment: 'omg',
         like: 22,
@@ -98,6 +201,7 @@ export const mockReels: Reel[] = [
       'https://nodejs-vstagram-aws-s3.s3.ap-southeast-2.amazonaws.com/reels/marvel_test1.mp4',
     comment: [
       {
+        _id: '4',
         userId: '1999',
         comment: 'omg',
         like: 22,
@@ -107,6 +211,7 @@ export const mockReels: Reel[] = [
           'https://img.freepik.com/premium-photo/animal-icon-hd-8k-wallpaper-stock-photographic-image_915071-38615.jpg',
       },
       {
+        _id: '5',
         userId: '1999',
         comment: 'omg',
         like: 22,
@@ -116,6 +221,7 @@ export const mockReels: Reel[] = [
           'https://img.freepik.com/premium-photo/animal-icon-hd-8k-wallpaper-stock-photographic-image_915071-38615.jpg',
       },
       {
+        _id: '6',
         userId: '1999',
         comment: 'omg',
         like: 22,
@@ -140,6 +246,7 @@ export const mockReels: Reel[] = [
       'https://nodejs-vstagram-aws-s3.s3.ap-southeast-2.amazonaws.com/reels/rogri_on_fire.mp4',
     comment: [
       {
+        _id: '7',
         userId: '1999',
         comment: 'omg',
         like: 22,
@@ -149,6 +256,7 @@ export const mockReels: Reel[] = [
           'https://img.freepik.com/premium-photo/animal-icon-hd-8k-wallpaper-stock-photographic-image_915071-38615.jpg',
       },
       {
+        _id: '8',
         userId: '1999',
         comment: 'omg',
         like: 22,
@@ -158,6 +266,7 @@ export const mockReels: Reel[] = [
           'https://img.freepik.com/premium-photo/animal-icon-hd-8k-wallpaper-stock-photographic-image_915071-38615.jpg',
       },
       {
+        _id: '9',
         userId: '1999',
         comment: 'omg',
         like: 22,
@@ -181,6 +290,7 @@ export const mockReels: Reel[] = [
       'https://nodejs-vstagram-aws-s3.s3.ap-southeast-2.amazonaws.com/reels/avenger_2.mp4',
     comment: [
       {
+        _id: '10',
         userId: '1999',
         comment: 'omg',
         like: 22,
@@ -190,6 +300,7 @@ export const mockReels: Reel[] = [
           'https://img.freepik.com/premium-photo/animal-icon-hd-8k-wallpaper-stock-photographic-image_915071-38615.jpg',
       },
       {
+        _id: '11',
         userId: '1999',
         comment: 'omg',
         like: 22,
@@ -199,6 +310,7 @@ export const mockReels: Reel[] = [
           'https://img.freepik.com/premium-photo/animal-icon-hd-8k-wallpaper-stock-photographic-image_915071-38615.jpg',
       },
       {
+        _id: '12',
         userId: '1999',
         comment: 'omg',
         like: 22,

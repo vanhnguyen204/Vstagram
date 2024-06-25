@@ -1,10 +1,15 @@
-import React, {Component, RefObject} from 'react';
+import React, {Component, ReactNode, RefObject} from 'react';
 import {
   FlatList,
+  Keyboard,
+  KeyboardAvoidingView,
   NativeScrollEvent,
   NativeSyntheticEvent,
+  Platform,
   SafeAreaView,
   StyleSheet,
+  TextInput,
+  TouchableWithoutFeedback,
   View,
   ViewStyle,
 } from 'react-native';
@@ -12,7 +17,8 @@ import Modal from 'react-native-modal';
 import {appColors} from '../assets/colors/appColors';
 import ButtonComponent from './ButtonComponent.tsx';
 import Box from './Box.tsx';
-import { AppInfor } from "../constants/AppInfor.ts";
+import {AppInfor} from '../constants/AppInfor.ts';
+import TextComponent from './TextComponent.tsx';
 
 type Props<T> = {
   data: T[];
@@ -22,6 +28,7 @@ type Props<T> = {
   onClose: () => void;
   containerStyle?: ViewStyle;
   buttonCloseColor?: string;
+  footer?: ReactNode;
   onEndReached: (distance: number) => void;
 };
 
@@ -67,10 +74,10 @@ class ModalScrollable<T> extends Component<Props<T>, State> {
       containerStyle,
       buttonCloseColor,
       onEndReached,
+      footer,
     } = this.props;
     return (
       <Modal
-        testID={'modal'}
         isVisible={visible}
         onSwipeComplete={onClose}
         swipeDirection={['down']}
@@ -82,29 +89,46 @@ class ModalScrollable<T> extends Component<Props<T>, State> {
         propagateSwipe={true}
         style={styles.modal}>
         <View style={[styles.scrollableModal, containerStyle]}>
-          <SafeAreaView>
-            <Box alignItems={'center'} justifyContent={'center'}>
-              <View style={styles.modalIndicatorTop} />
+          <Box
+            flexDirection={'row'}
+            justifyContent={'center'}
+            alignItems={'center'}
+            padding={10}>
+            <View style={styles.modalIndicatorTop} />
+            <Box position={'absolute'} right={10}>
               <ButtonComponent
-                style={styles.buttonCancel}
                 nameColor={buttonCloseColor}
                 name={'Huỷ'}
                 onPress={onClose}
                 alignSelf={'flex-end'}
               />
             </Box>
-            <FlatList
-              onEndReachedThreshold={0.5}
-              onEndReached={({distanceFromEnd}) => {
-                onEndReached(distanceFromEnd);
-              }}
-              ref={this.scrollViewRef}
-              onScroll={this.handleOnScroll}
-              scrollEventThrottle={16}
-              data={data}
-              keyExtractor={keyExtractor}
-              renderItem={renderItem}
-            />
+          </Box>
+
+          <SafeAreaView style={styles.container}>
+            <KeyboardAvoidingView
+              keyboardVerticalOffset={Platform.select({
+                ios: 200,
+                android: 500,
+              })}
+              style={{flex: 1, justifyContent: 'flex-end'}}
+              behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+              <FlatList
+                onEndReachedThreshold={0.5}
+                onEndReached={({distanceFromEnd}) => {
+                  onEndReached(distanceFromEnd);
+                }}
+                ref={this.scrollViewRef}
+                onScroll={this.handleOnScroll}
+                scrollEventThrottle={16}
+                data={data}
+                keyExtractor={keyExtractor}
+                renderItem={renderItem}
+              />
+              <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                {footer}
+              </TouchableWithoutFeedback>
+            </KeyboardAvoidingView>
           </SafeAreaView>
         </View>
       </Modal>
@@ -113,21 +137,18 @@ class ModalScrollable<T> extends Component<Props<T>, State> {
 }
 
 const styles = StyleSheet.create({
-  view: {
+  container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   modal: {
     justifyContent: 'flex-end',
     margin: 0,
   },
   scrollableModal: {
-    height: AppInfor.height / 2,
+    height: AppInfor.height / 1.2,
     backgroundColor: appColors.gray,
     borderTopRightRadius: 20,
     borderTopLeftRadius: 20,
-    padding: 10,
   },
   modalIndicatorTop: {
     height: 5,
@@ -137,9 +158,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
   buttonCancel: {
-    position: 'absolute',
-    right: 0,
-    top: 0,
+    alignSelf: 'flex-end',
   },
   button: {
     marginTop: 20,

@@ -1,4 +1,4 @@
-import React, {memo, useEffect, useRef, useState} from 'react';
+import React, { memo, Ref, useEffect, useRef, useState } from "react";
 import {Reel} from '../../../models/Reel.ts';
 import {SafeAreaView, View} from 'react-native';
 import {AppInfor} from '../../../constants/AppInfor.ts';
@@ -7,20 +7,21 @@ import Box from '../../../components/Box.tsx';
 import ButtonComponent from '../../../components/ButtonComponent.tsx';
 import ReelController, {ReelControllerHandle} from './ReelController.tsx';
 import {appColors} from '../../../assets/colors/appColors.ts';
+import {useComment} from '../../../hooks/useComment.ts';
 interface ReelProps {
   item: Reel;
   isFocused: boolean;
+  videoRef: Ref<VideoRef>
 }
 const ReelCard = (props: ReelProps) => {
-  const {item, isFocused} = props;
+  const {item, isFocused, videoRef} = props;
   const likeRef = useRef<ReelControllerHandle>(null);
-  const videoRef = useRef<VideoRef>(null);
+
+  const {visible,setVisible, setComments} = useComment();
   const [paused, setPaused] = useState<boolean>(!isFocused);
   useEffect(() => {
     setPaused(!isFocused);
-    if (videoRef.current) {
-      videoRef.current.seek(0);
-    }
+
   }, [isFocused]);
   const handleLikePress = () => {
     if (likeRef.current) {
@@ -42,6 +43,7 @@ const ReelCard = (props: ReelProps) => {
         style={{flex: 1}}
       />
       <ReelController
+        onShare={() => {}}
         paused={paused}
         ref={likeRef}
         item={item}
@@ -51,7 +53,11 @@ const ReelCard = (props: ReelProps) => {
         onLikePress={() => {
           handleLikePress();
         }}
-        onCommentPress={() => {}}
+
+        onCommentPress={() => {
+          setVisible();
+          setComments(item.comment);
+        }}
       />
     </SafeAreaView>
   );

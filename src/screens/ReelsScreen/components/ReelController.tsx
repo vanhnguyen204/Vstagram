@@ -15,11 +15,13 @@ import {Reel} from '../../../models/Reel.ts';
 import Box from '../../../components/Box.tsx';
 import Spacer from '../../../components/Spacer.tsx';
 import {likesFormat} from '../../../utils/Media.ts';
+import {useComment} from '../../../hooks/useComment.ts';
 interface ReelControllerProps {
   onPause: () => void;
   onLikePress: () => void;
   onCommentPress: () => void;
   paused: boolean;
+  onShare: () => void;
   item: Reel;
 }
 export interface ReelControllerHandle {
@@ -28,7 +30,7 @@ export interface ReelControllerHandle {
 }
 const ReelController = forwardRef<ReelControllerHandle, ReelControllerProps>(
   (props, ref) => {
-    const {onPause, paused, onCommentPress, onLikePress, item} = props;
+    const {onPause, paused, onCommentPress, onLikePress, item, onShare} = props;
     const [isLike, setIsLike] = useState<boolean>(item.isLike);
     const [hiddenDescription, setHiddenDescription] = useState(false);
     useImperativeHandle(ref, () => ({
@@ -71,35 +73,33 @@ const ReelController = forwardRef<ReelControllerHandle, ReelControllerProps>(
                 onLikePress();
               }}>
               <ImageComponent
-                width={30}
-                height={30}
-                src={require('../../../assets/icons/heart_button.png')}
+
                 tintColor={isLike ? appColors.red : appColors.white}
+                style={styles.iconStyle}
+                src={require('../../../assets/icons/heart_button.png')}
               />
+              <TextComponent value={likesFormat(item.like)} />
             </ButtonComponent>
-            <TextComponent value={likesFormat(item.like)} />
             <Spacer height={15} />
             <ButtonComponent
               activeOpacity={1}
               scaleInValue={0.7}
               scaleAnimated={true}
-              onPress={() => {}}>
+              onPress={onCommentPress}>
               <ImageComponent
-                width={30}
-                height={30}
-                src={require('../../../assets/icons/comment.png')}
                 tintColor={appColors.white}
+                src={require('../../../assets/icons/chat-2.png')}
+                style={styles.iconStyle}
               />
+              <TextComponent value={likesFormat(item.comment.length)} />
             </ButtonComponent>
-            <TextComponent value={likesFormat(item.comment.length)} />
 
             <Spacer height={15} />
-            <ButtonComponent onPress={() => {}}>
+            <ButtonComponent onPress={onShare}>
               <ImageComponent
-                width={30}
-                height={30}
-                src={require('../../../assets/icons/share.png')}
                 tintColor={appColors.white}
+                src={require('../../../assets/icons/share.png')}
+                style={styles.iconStyle}
               />
             </ButtonComponent>
           </Box>
@@ -145,6 +145,12 @@ const styles = StyleSheet.create({
     bottom: 10,
     end: 0,
     top: 0,
+  },
+  iconStyle: {
+    height: 30,
+    width: 30,
+    alignSelf: 'center',
+    marginBottom: 2,
   },
 });
 export default memo(ReelController);

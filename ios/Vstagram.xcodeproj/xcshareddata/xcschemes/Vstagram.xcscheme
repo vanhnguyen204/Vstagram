@@ -38,6 +38,17 @@
                ReferencedContainer = "container:Vstagram.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "5E3FFB842C27FB690078690B"
+               BuildableName = "videoplayerTests.xctest"
+               BlueprintName = "videoplayerTests"
+               ReferencedContainer = "container:Vstagram.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction

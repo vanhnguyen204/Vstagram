@@ -11,11 +11,12 @@ import ImageComponent from '../components/ImageComponent.tsx';
 import {appColors} from '../assets/colors/appColors.ts';
 import {iconBottomTab} from '../styles/iconBottomTab.ts';
 import {ROUTES} from './Routes.ts';
-const Tab = createBottomTabNavigator();
+import { RootStackParams } from "./RootStackParams.ts";
+const Tab = createBottomTabNavigator<RootStackParams>();
 const BottomTab = () => {
   return (
     <Tab.Navigator
-      initialRouteName={PageName.HomeScreen}
+      initialRouteName={ROUTES.Home}
       screenOptions={{
         headerShown: false,
         tabBarShowLabel: false,
@@ -28,7 +29,7 @@ const BottomTab = () => {
         tabBarActiveTintColor: appColors.white,
       }}>
       <Tab.Screen
-        name={PageName.HomeScreen}
+        name={ROUTES.Home}
         component={HomeScreen}
         options={{
           tabBarIcon: ({size, color}) => {
@@ -45,7 +46,7 @@ const BottomTab = () => {
         }}
       />
       <Tab.Screen
-        name={PageName.SearchScreen}
+        name={ROUTES.Search}
         component={SearchScreen}
         options={{
           tabBarIcon: ({size, color}) => {
@@ -62,7 +63,7 @@ const BottomTab = () => {
         }}
       />
       <Tab.Screen
-        name={PageName.CreatePostScreen}
+        name={ROUTES.CreatePost}
         component={CreatePostScreen}
         options={{
           tabBarIcon: ({size, color}) => {
@@ -79,7 +80,7 @@ const BottomTab = () => {
         }}
       />
       <Tab.Screen
-        name={PageName.ReelsScreen}
+        name={ROUTES.Reels}
         component={ReelsScreen}
         options={{
           tabBarIcon: ({size, color}) => {
@@ -96,7 +97,7 @@ const BottomTab = () => {
         }}
       />
       <Tab.Screen
-        name={PageName.SettingScreen}
+        name={ROUTES.Setting}
         component={SettingScreen}
         options={{
           tabBarIcon: ({size, color}) => {

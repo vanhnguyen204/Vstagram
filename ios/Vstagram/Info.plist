@@ -32,7 +32,15 @@
 		<false/>
 		<key>NSAllowsLocalNetworking</key>
 		<true/>
+
 	</dict>
+            <key>NSCameraUsageDescription</key>
+            <string>Vstagram needs access to your Camera.</string>
+
+            <!-- optionally, if you want to record audio: -->
+            <key>NSMicrophoneUsageDescription</key>
+            <string>Vstagram needs access to your Microphone.</string>
+
 	<key>NSCameraUsageDescription</key>
 	<string>Vstagram muốn truy cập vào camera để sử dụng chức năng này</string>
 	<key>NSLocationWhenInUseUsageDescription</key>

@@ -57,7 +57,7 @@ const TextComponent = (props: TextProps) => {
           marginBottom: marginBottom ?? null,
           marginLeft: marginLeft ?? null,
           marginRight: marginRight ?? null,
-          alignSelf: alignSelf ?? 'center',
+          alignSelf: alignSelf ?? undefined,
           marginVertical: marginVertical ?? 0,
           marginHorizontal: marginHorizontal ?? 0,
           margin: margin ?? 0,

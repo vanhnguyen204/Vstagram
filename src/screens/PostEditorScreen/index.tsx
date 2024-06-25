@@ -108,7 +108,9 @@ const PostEditorScreen = () => {
         Animated.event([null, {dx: pan.x}]);
         const timeSeek = Math.floor(gestureState.dx);
         if (!isNaN(timeSeek) && timeSeek >= 0 && timeSeek <= videoDuration) {
-          videoRef.current.seek(timeSeek);
+          if (videoRef.current) {
+            videoRef.current.seek(timeSeek);
+          }
         }
       },
       onPanResponderRelease: () => {

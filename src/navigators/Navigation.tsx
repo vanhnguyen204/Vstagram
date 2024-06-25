@@ -11,6 +11,7 @@ import PostEditorScreen from '../screens/PostEditorScreen';
 import CompleteStoryScreen from '../screens/CompleteStoryScreen/index.tsx';
 import {RootStackParams} from './RootStackParams.ts';
 import {ROUTES} from './Routes.ts';
+import Capture from '../screens/Capture';
 
 const Stack = createNativeStackNavigator<RootStackParams>();
 const Navigation = () => {
@@ -33,6 +34,7 @@ const Navigation = () => {
         name={ROUTES.CompleteStoryScreen}
         component={CompleteStoryScreen}
       />
+      <Stack.Screen name={ROUTES.Capture} component={Capture} />
     </Stack.Navigator>
   );
 };

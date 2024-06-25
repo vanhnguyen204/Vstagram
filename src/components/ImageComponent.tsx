@@ -46,10 +46,10 @@ const ImageComponent = (props: ImageProps) => {
     borderRadius = 0,
   } = props;
   return (
+  // @ts-ignore
     <Image
       source={src}
       style={[
-        style,
         {
           height: height ?? undefined,
           width: width ?? undefined,
@@ -66,6 +66,7 @@ const ImageComponent = (props: ImageProps) => {
           flex: flex ?? 0,
           borderRadius,
         },
+        style,
       ]}
     />
   );

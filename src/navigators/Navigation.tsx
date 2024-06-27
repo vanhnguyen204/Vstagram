@@ -12,6 +12,8 @@ import CompleteStoryScreen from '../screens/CompleteStoryScreen/index.tsx';
 import {RootStackParams} from './RootStackParams.ts';
 import {ROUTES} from './Routes.ts';
 import Capture from '../screens/Capture';
+import PreviewReel from '../screens/PreviewReel';
+import Photos from '../screens/Photos';
 
 const Stack = createNativeStackNavigator<RootStackParams>();
 const Navigation = () => {
@@ -35,6 +37,8 @@ const Navigation = () => {
         component={CompleteStoryScreen}
       />
       <Stack.Screen name={ROUTES.Capture} component={Capture} />
+      <Stack.Screen name={ROUTES.PreviewReel} component={PreviewReel} />
+      <Stack.Screen name={ROUTES.Photos} component={Photos} />
     </Stack.Navigator>
   );
 };

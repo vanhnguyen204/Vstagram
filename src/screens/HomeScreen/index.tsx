@@ -9,9 +9,11 @@ import ButtonComponent from '../../components/ButtonComponent.tsx';
 import {ROUTES} from '../../navigators';
 import {useStoryStore, useUserInformation} from '../../hooks';
 import ModalScrollable from '../../components/ModalScrollable.tsx';
-import {Image, StyleSheet, View} from 'react-native';
+import {FlatList, Image, StyleSheet, View} from 'react-native';
 import ModalStory from './Components/ModalStory.tsx';
 import {Story} from '../../models/Story.ts';
+import {usePhotos} from '../../hooks/Media/usePhotos.ts';
+import ImageComponent from '../../components/ImageComponent.tsx';
 export interface TestStory {
   id: string;
   stories: Story[];
@@ -19,6 +21,7 @@ export interface TestStory {
 const HomeScreen = () => {
   const {information} = useUserInformation();
   const {stories} = useStoryStore();
+  const {photos} = usePhotos();
   const navigateToCreatePost = useCallback(() => {
     navigatePush(ROUTES.PostEditorScreen);
   }, []);
@@ -26,7 +29,6 @@ const HomeScreen = () => {
   const toggle = () => {
     setIsVisible(!isVisible);
   };
-
   return (
     <Container justifyContent={'flex-start'}>
       <Header
@@ -45,6 +47,8 @@ const HomeScreen = () => {
       <TextComponent value="Hello ae" fontFamily="Dancing Script" />
       <TextComponent value="Hello ae" fontFamily="Briem Hand" fontSize={20} />
       <TextComponent value="Hello ae" fontFamily="Bradley Hand" />
+      <TextComponent value={photos.length.toString()} />
+
       <ButtonComponent name={'Show modal'} onPress={() => toggle()} />
     </Container>
   );

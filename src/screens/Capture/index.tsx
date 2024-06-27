@@ -14,14 +14,15 @@ import {appColors} from '../../assets/colors/appColors.ts';
 import Box from '../../components/Box.tsx';
 import TextComponent from '../../components/TextComponent.tsx';
 import ImageComponent from '../../components/ImageComponent.tsx';
-import {goBackNavigation} from '../../utils/NavigationUtils.ts';
+import {goBackNavigation, navigatePush} from '../../utils/NavigationUtils.ts';
 import ShuffleSvg from '../../assets/svg/capture/ShuffleSvg.tsx';
 import CloseSvg from '../../assets/svg/public/CloseSvg.tsx';
 import SquareSvg from '../../assets/svg/public/SquareSvg.tsx';
 import SwapSvg from '../../assets/svg/capture/SwapSvg.tsx';
+import {ROUTES} from '../../navigators';
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
-
+const circleStroke = 2 * Math.PI * 50;
 const Capture = () => {
   const [permission, setPermission] = useState({
     hasCameraPermission: false,
@@ -32,12 +33,31 @@ const Capture = () => {
     duration: 0,
     paused: false,
   });
+  const cameraRef = useRef<Camera>(null);
+  const [videoFinished, setVideoFinished] = useState<VideoFile>({
+    duration: 0,
+    height: 0,
+    width: 0,
+    path: '',
+  });
   const [cameraType, setCameraType] = useState<boolean>(false);
   const device = useCameraDevice(cameraType ? 'back' : 'front');
   const MAX_RECORD_DURATION = 30;
-  const strokeDashoffset = useRef(new Animated.Value(2 * Math.PI * 50)).current;
+  const strokeDashoffset = useRef(new Animated.Value(circleStroke)).current;
   const countdownRef = useRef<number>(0);
+  const isFocusedScreen = useIsFocused();
 
+  useFocusEffect(
+    useCallback(() => {
+      // stop recording when screen unmount! vanh 25/6/2024
+      return () => {
+        cameraRef.current &&
+          cameraRef.current.stopRecording().catch(e => {
+            console.log(e);
+          });
+      };
+    }, []),
+  );
   useEffect(() => {
     const requestPermissions = async () => {
       const cameraPermission = await Camera.requestCameraPermission();
@@ -49,8 +69,6 @@ const Capture = () => {
     };
     requestPermissions();
   }, []);
-
-  const cameraRef = useRef<Camera>(null);
 
   if (!device) {
     return <Text>Loading...</Text>;
@@ -65,6 +83,10 @@ const Capture = () => {
           },
           onRecordingFinished(video: VideoFile) {
             console.log('Recording finished:', video);
+            strokeDashoffset.stopAnimation();
+            strokeDashoffset.setValue(circleStroke);
+            countdownRef.current = 0;
+            navigatePush(ROUTES.PreviewReel, {video});
           },
           fileType: 'mov',
         });
@@ -102,7 +124,6 @@ const Capture = () => {
           isRecording: false,
           paused: false,
         }));
-
         if (countdownRef.current) {
           clearInterval(countdownRef.current);
         }
@@ -133,7 +154,8 @@ const Capture = () => {
     if (cameraRef.current) {
       try {
         console.log('Resuming recording...');
-        await cameraRef.current.resumeRecording();
+        const video = await cameraRef.current.resumeRecording();
+        console.log(video);
         setRecord(prevState => ({
           ...prevState,
           paused: false,
@@ -181,19 +203,6 @@ const Capture = () => {
     }).start();
   };
 
-  const isFocusedScreen = useIsFocused();
-
-  useFocusEffect(
-    useCallback(() => {
-      // stop recording when screen unmount! vanh 25/6/2024
-      return () => {
-        cameraRef.current &&
-          cameraRef.current.stopRecording().catch(e => {
-            console.log(e);
-          });
-      };
-    }, []),
-  );
   if (!permission.hasCameraPermission) {
     return (
       <Container justifyContent={'center'} alignItems={'center'}>
@@ -229,11 +238,24 @@ const Capture = () => {
           video={true}
           audio={permission.hasMicrophonePermission}
         />
-        <Box padding={15}>
+        <Box
+          padding={15}
+          flexDirection={'row'}
+          justifyContent={'space-between'}>
           <ButtonComponent
             onPress={() => goBackNavigation()}
             alignSelf={'flex-start'}>
             <CloseSvg size={32} />
+          </ButtonComponent>
+          <ButtonComponent
+            padding={3}
+            backgroundColor={appColors.grays.gray500}
+            radius={20}
+            onPress={() => {
+              stopRecording();
+            }}
+            alignSelf={'flex-start'}>
+            <TextComponent value={'Tiếp tục'} />
           </ButtonComponent>
         </Box>
         <Box>
@@ -256,7 +278,7 @@ const Capture = () => {
                   stroke={appColors.red}
                   strokeWidth="10"
                   fill="none"
-                  strokeDasharray={[2 * Math.PI * 50, 2 * Math.PI * 50]}
+                  strokeDasharray={[circleStroke, circleStroke]}
                   strokeDashoffset={strokeDashoffset as unknown as NumberProp}
                 />
               </Svg>

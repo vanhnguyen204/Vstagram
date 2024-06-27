@@ -11,13 +11,23 @@ import ImageComponent from '../components/ImageComponent.tsx';
 import {appColors} from '../assets/colors/appColors.ts';
 import {iconBottomTab} from '../styles/iconBottomTab.ts';
 import {ROUTES} from './Routes.ts';
-import { RootStackParams } from "./RootStackParams.ts";
-const Tab = createBottomTabNavigator<RootStackParams>();
+import {RootStackParams} from './RootStackParams.ts';
+import ButtonComponent from '../components/ButtonComponent.tsx';
+import {navigatePush} from '../utils/NavigationUtils.ts';
+import {BottomTabParams} from './BottomTabParams.ts';
+const Tab = createBottomTabNavigator<BottomTabParams>();
 const BottomTab = () => {
+  const bottomTabRoutes = [
+    ROUTES.Home,
+    ROUTES.Search,
+    ROUTES.Album,
+    ROUTES.Reels,
+    ROUTES.Setting,
+  ];
   return (
     <Tab.Navigator
       initialRouteName={ROUTES.Home}
-      screenOptions={{
+      screenOptions={({route}) => ({
         headerShown: false,
         tabBarShowLabel: false,
         tabBarStyle: [
@@ -27,7 +37,7 @@ const BottomTab = () => {
           },
         ],
         tabBarActiveTintColor: appColors.white,
-      }}>
+      })}>
       <Tab.Screen
         name={ROUTES.Home}
         component={HomeScreen}
@@ -68,13 +78,18 @@ const BottomTab = () => {
         options={{
           tabBarIcon: ({size, color}) => {
             return (
-              <ImageComponent
-                src={iconBottomTab.createPostIcon}
-                alignSelf={'center'}
-                width={size}
-                height={size}
-                tintColor={color}
-              />
+              <ButtonComponent
+                onPress={() => {
+                  navigatePush(ROUTES.Photos, {mediaType: 'post'});
+                }}>
+                <ImageComponent
+                  src={iconBottomTab.createPostIcon}
+                  alignSelf={'center'}
+                  width={size}
+                  height={size}
+                  tintColor={color}
+                />
+              </ButtonComponent>
             );
           },
         }}

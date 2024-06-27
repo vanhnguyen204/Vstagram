@@ -1,5 +1,5 @@
-import {ActivityIndicator} from 'react-native';
-import React, {useCallback, useEffect} from 'react';
+import {ActivityIndicator, PermissionsAndroid, Platform} from 'react-native';
+import React, {useCallback, useEffect, useState} from 'react';
 import {appColors} from '../../assets/colors/appColors';
 import Container from '../../components/Container';
 import TextComponent from '../../components/TextComponent';
@@ -14,6 +14,20 @@ import {ROUTES} from '../../navigators';
 import {musicStore, useStoryStore, useUserInformation} from '../../hooks';
 import {User} from '../../models/User.ts';
 import {getMusics} from '../../services/apis/musicServices.ts';
+import {
+  CameraRoll,
+  GetPhotosParams,
+  PhotoIdentifier,
+  PhotoIdentifiersPage,
+} from '@react-native-camera-roll/camera-roll';
+import {usePhotos} from '../../hooks/Media/usePhotos.ts';
+export interface GetPhotosReturnType {
+  edges: PhotoIdentifier[];
+  page_info: {
+    has_next_page: boolean;
+    end_cursor: string | null;
+  };
+}
 
 const WelcomeScreen = () => {
   const {setMusics} = musicStore();
@@ -27,7 +41,7 @@ const WelcomeScreen = () => {
       console.log(e);
     }
   }, [setInformation]);
-  const getMyStories = async () => {
+  const getMyStories = useCallback(async () => {
     try {
       const response = await getStories();
       setListStory(response);
@@ -35,7 +49,7 @@ const WelcomeScreen = () => {
       console.log('ERROR GET MY STORIES');
       console.log(e);
     }
-  };
+  }, [setListStory]);
   const getMusicsAxios = useCallback(async () => {
     try {
       const musics = await getMusics(10, 1);
@@ -61,7 +75,65 @@ const WelcomeScreen = () => {
       .catch(e => {
         console.log(e);
       });
-  }, [getMusicsAxios, getUserInfor]);
+  }, [getMusicsAxios, getMyStories, getUserInfor]);
+
+  const requestPermissions = async (): Promise<boolean> => {
+    if (Platform.OS === 'android') {
+      try {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+          {
+            title: 'Permission Explanation',
+            message: 'This app needs access to your photos.',
+            buttonPositive: 'OK',
+          },
+        );
+        return granted === PermissionsAndroid.RESULTS.GRANTED;
+      } catch (err) {
+        console.warn(err);
+        return false;
+      }
+    } else {
+      return true;
+    }
+  };
+
+  const getAllImages = async (): Promise<PhotoIdentifier[]> => {
+    let photos: PhotoIdentifier[] = [];
+    let endCursor: string | undefined;
+    let hasNextPage = true;
+
+    while (hasNextPage) {
+      try {
+        const res: PhotoIdentifiersPage = await CameraRoll.getPhotos({
+          first: 50,
+          assetType: 'All',
+          after: endCursor,
+        });
+
+        photos = photos.concat(res.edges);
+        endCursor = res.page_info.end_cursor;
+        hasNextPage = res.page_info.has_next_page;
+      } catch (error) {
+        console.error('Error getting photos:', error);
+        hasNextPage = false;
+      }
+    }
+    return photos;
+  };
+  const {setPhotos} = usePhotos();
+
+  useEffect(() => {
+    const fetchImages = async () => {
+      const permissionGranted = await requestPermissions();
+      if (permissionGranted) {
+        const allImages = await getAllImages();
+        setPhotos(allImages);
+      }
+    };
+
+    fetchImages();
+  }, []);
 
   return (
     <Container justifyContent="space-around">

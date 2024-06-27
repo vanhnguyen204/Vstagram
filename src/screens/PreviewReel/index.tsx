@@ -4,21 +4,28 @@ import Video from 'react-native-video';
 import {RouteProp} from '@react-navigation/native';
 import {RootStackParams} from '../../navigators';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-type PreviewReelsProps = RouteProp<RootStackParams, 'PreviewReel'>;
-type PreviewReelsNavigationProp = NativeStackNavigationProp<
+type PreviewReelProp = RouteProp<RootStackParams, 'PreviewReel'>;
+type PreviewReelNavigationProp = NativeStackNavigationProp<
   RootStackParams,
   'PreviewReel'
 >;
 
 type Props = {
-  route: PreviewReelsProps;
-  navigation: PreviewReelsNavigationProp;
+  route: PreviewReelProp;
+  navigation: PreviewReelNavigationProp;
 };
 const PreviewReel = (props: Props) => {
-  const {videoUrl} = props.route.params;
+  const {video} = props.route.params;
+  console.log(video);
   return (
     <Container>
-      <Video repeat={true} source={{uri: videoUrl}} resizeMode={'contain'}/>
+      <Video
+
+        style={{flex: 1}}
+        repeat={true}
+        source={{uri: video.path}}
+        resizeMode={'contain'}
+      />
     </Container>
   );
 };

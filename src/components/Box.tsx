@@ -1,4 +1,4 @@
-import {FlexStyle, View, ViewStyle} from 'react-native';
+import {FlexStyle, StyleProp, View, ViewStyle} from 'react-native';
 import React, {memo, ReactNode} from 'react';
 import {appColors} from '../assets/colors/appColors';
 interface BoxProps {
@@ -73,7 +73,7 @@ interface BoxProps {
   right?: number;
   bottom?: number;
   left?: number;
-  style?: ViewStyle | ViewStyle[];
+  style?: StyleProp<ViewStyle>;
   zIndex?: number;
 }
 const Box = (props: BoxProps) => {

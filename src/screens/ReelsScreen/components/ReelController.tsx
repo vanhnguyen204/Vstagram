@@ -54,6 +54,8 @@ const ReelController = forwardRef<ReelControllerHandle, ReelControllerProps>(
               right: 0,
               bottom: 0,
               flex: 1,
+              alignItems: 'center',
+              justifyContent: 'center',
             }}>
             {paused && (
               <ImageComponent
@@ -73,7 +75,6 @@ const ReelController = forwardRef<ReelControllerHandle, ReelControllerProps>(
                 onLikePress();
               }}>
               <ImageComponent
-
                 tintColor={isLike ? appColors.red : appColors.white}
                 style={styles.iconStyle}
                 src={require('../../../assets/icons/heart_button.png')}

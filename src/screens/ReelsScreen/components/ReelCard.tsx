@@ -1,27 +1,26 @@
-import React, { memo, Ref, useEffect, useRef, useState } from "react";
+import React, {memo, Ref, useEffect, useRef, useState} from 'react';
 import {Reel} from '../../../models/Reel.ts';
-import {SafeAreaView, View} from 'react-native';
-import {AppInfor} from '../../../constants/AppInfor.ts';
+import {ActivityIndicator, SafeAreaView} from 'react-native';
 import Video, {VideoRef} from 'react-native-video';
-import Box from '../../../components/Box.tsx';
-import ButtonComponent from '../../../components/ButtonComponent.tsx';
 import ReelController, {ReelControllerHandle} from './ReelController.tsx';
-import {appColors} from '../../../assets/colors/appColors.ts';
 import {useComment} from '../../../hooks/useComment.ts';
+import Box from '../../../components/Box.tsx';
+import {appColors} from '../../../assets/colors/appColors.ts';
+
 interface ReelProps {
   item: Reel;
   isFocused: boolean;
-  videoRef: Ref<VideoRef>
 }
 const ReelCard = (props: ReelProps) => {
-  const {item, isFocused, videoRef} = props;
+  const {item, isFocused} = props;
   const likeRef = useRef<ReelControllerHandle>(null);
-
-  const {visible,setVisible, setComments} = useComment();
+  const videoRef = useRef<VideoRef>(null);
+  const {visible, setVisible, setComments} = useComment();
+  const [loading, setLoading] = useState(true);
   const [paused, setPaused] = useState<boolean>(!isFocused);
   useEffect(() => {
     setPaused(!isFocused);
-
+    videoRef.current && videoRef.current.seek(0);
   }, [isFocused]);
   const handleLikePress = () => {
     if (likeRef.current) {
@@ -35,6 +34,9 @@ const ReelCard = (props: ReelProps) => {
         justifyContent: 'flex-start',
       }}>
       <Video
+        onLoad={data => {
+          setLoading(false);
+        }}
         repeat={true}
         ref={videoRef}
         paused={paused}
@@ -42,6 +44,19 @@ const ReelCard = (props: ReelProps) => {
         resizeMode={'contain'}
         style={{flex: 1}}
       />
+      {loading && (
+        <Box
+          flex={1}
+          position={'absolute'}
+          top={0}
+          left={0}
+          alignItems={'center'}
+          justifyContent={'center'}
+          right={0}
+          bottom={0}>
+          <ActivityIndicator size={'small'} color={appColors.white} />
+        </Box>
+      )}
       <ReelController
         onShare={() => {}}
         paused={paused}
@@ -53,7 +68,6 @@ const ReelCard = (props: ReelProps) => {
         onLikePress={() => {
           handleLikePress();
         }}
-
         onCommentPress={() => {
           setVisible();
           setComments(item.comment);

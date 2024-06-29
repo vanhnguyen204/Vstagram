@@ -29,8 +29,8 @@ interface ImageProps {
 const ImageComponent = (props: ImageProps) => {
   const {
     src,
-    height,
-    width,
+    height = 24,
+    width = 24,
     tintColor = undefined,
     resizeMode = 'contain',
     alignSelf = 'flex-start',

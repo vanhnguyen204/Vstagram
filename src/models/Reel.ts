@@ -1,13 +1,6 @@
 import {Comment} from './Comment.ts';
+import {Media} from './Media.ts';
 
-export interface Reel {
-  _id: string;
-  userId: string;
-  avatar: string;
-  name: string;
-  description: string;
+export interface Reel extends Media {
   videoURL: string;
-  like: number;
-  comment: Comment[];
-  isLike: boolean;
 }

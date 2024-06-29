@@ -29,51 +29,49 @@ const Photos = (props: Props) => {
   const {mediaType} = props.route.params;
   const {photos} = usePhotos();
   const {
-    photoSelected,
-    onPhotoUnSelected,
-    onPhotoSelected,
-    clearPhotoSelected,
+    imageSelected,
+    onImageSelected,
+    onImageUnSelected,
+    clearImageSelected,
   } = usePhotos();
 
   const isSelected = useCallback(
     (id: string) => {
-      return photoSelected.some(photo => photo.id === id);
+      return imageSelected.some(photo => photo.id === id);
     },
-    [photoSelected],
+    [imageSelected],
   );
   const findIndex = useCallback(
     (id: string) => {
-      return photoSelected.findIndex(photo => photo.id === id);
+      return imageSelected.findIndex(photo => photo.id === id);
     },
-    [photoSelected],
+    [imageSelected],
   );
   const isOpen = useIsFocused();
   useFocusEffect(
     useCallback(() => {
       return () => {
         if (!isOpen) {
-          clearPhotoSelected();
+          clearImageSelected();
           console.log('Un focus');
         }
       };
-    }, [clearPhotoSelected, isOpen]),
+    }, [clearImageSelected, isOpen]),
   );
-  console.log(photoSelected.length);
   const toggleSelected = useCallback(
     (item: PhotoIdentifier) => {
       if (isSelected(item.node.id)) {
-        onPhotoUnSelected(item.node.id);
-        console.log('Handle Unselected');
+        onImageUnSelected(item.node.id);
       } else {
-        onPhotoSelected({
+        onImageSelected({
           id: item.node.id,
-          image: item.node.image.uri,
+          uri: item.node.image.uri,
+          type: item.node.type,
+          name: item.node.image.filename ?? '',
         });
-        console.log('Handle selected');
       }
-      console.log('Selected', findIndex(item.node.id));
     },
-    [findIndex, isSelected, onPhotoSelected, onPhotoUnSelected],
+    [findIndex, isSelected, onImageSelected, onImageUnSelected],
   );
   const renderItem = useCallback(
     ({item, index}: {item: PhotoIdentifier; index: number}) => (

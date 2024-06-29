@@ -5,6 +5,7 @@ import {appColors} from '../../../assets/colors/appColors.ts';
 import ImageComponent from '../../../components/ImageComponent.tsx';
 import ButtonComponent from '../../../components/ButtonComponent.tsx';
 import Box from '../../../components/Box.tsx';
+import TextComponent from '../../../components/TextComponent.tsx';
 interface MyStoryProps {
   item?: object;
   marginHorizontal?: number;
@@ -15,45 +16,48 @@ const MyStory = (props: MyStoryProps) => {
   const {item, marginHorizontal, onStoryPress, onIconAddPress} = props;
 
   return (
-    <Box style={{overflow: 'visible'}}>
-      <LinearGradient
-        style={[
-          {
-            marginHorizontal: marginHorizontal ?? 2,
-            //   overflow: 'visible'
-          },
-          styles.borderStoryGradient,
-        ]}
-        colors={['#FD1D1D', '#E1306C', '#F77737', '#FCAF45']}
-        start={{x: 0, y: 0}}
-        end={{x: 1, y: 0}}>
-        <TouchableOpacity
-          onPress={onStoryPress}
-          style={[styles.borderStoryChild]}>
+    <Box alignItems={'center'}>
+      <Box style={{overflow: 'visible'}}>
+        <LinearGradient
+          style={[
+            {
+              marginHorizontal: marginHorizontal ?? 2,
+              //   overflow: 'visible'
+            },
+            styles.borderStoryGradient,
+          ]}
+          colors={['#FD1D1D', '#E1306C', '#F77737', '#FCAF45']}
+          start={{x: 0, y: 0}}
+          end={{x: 1, y: 0}}>
+          <TouchableOpacity
+            onPress={onStoryPress}
+            style={[styles.borderStoryChild]}>
+            <ImageComponent
+              margin={2}
+              width={70}
+              height={70}
+              src={require('../../../assets/icons/user-avatar.png')}
+            />
+          </TouchableOpacity>
+        </LinearGradient>
+        <ButtonComponent
+          radius={50}
+          onPress={onIconAddPress}
+          backgroundColor={appColors.blue500}
+          borderWidth={2}
+          name="Add new story"
+          borderColor={appColors.black}
+          padding={2}
+          style={styles.iconAddStyle}>
           <ImageComponent
-            margin={2}
-            width={70}
-            height={70}
-            src={require('../../../assets/icons/user-avatar.png')}
+            tintColor={appColors.white}
+            width={20}
+            height={20}
+            src={require('../../../assets/icons/plus.png')}
           />
-        </TouchableOpacity>
-      </LinearGradient>
-      <ButtonComponent
-        radius={50}
-        onPress={onIconAddPress}
-        backgroundColor={appColors.blue500}
-        borderWidth={2}
-        name="Add new story"
-        borderColor={appColors.black}
-        padding={2}
-        style={styles.iconAddStyle}>
-        <ImageComponent
-          tintColor={appColors.white}
-          width={20}
-          height={20}
-          src={require('../../../assets/icons/plus.png')}
-        />
-      </ButtonComponent>
+        </ButtonComponent>
+      </Box>
+      <TextComponent value={'Tin của bạn'} />
     </Box>
   );
 };

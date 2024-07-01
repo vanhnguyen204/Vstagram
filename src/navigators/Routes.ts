@@ -1,5 +1,5 @@
 import {RootStackParams} from './RootStackParams.ts';
-import { BottomTabParams } from "./BottomTabParams.ts";
+import {BottomTabParams} from './BottomTabParams.ts';
 
 export const ROUTES = {
   WelcomeScreen: 'WelcomeScreen' as keyof RootStackParams,
@@ -12,10 +12,11 @@ export const ROUTES = {
   CompleteStoryScreen: 'CompleteStoryScreen' as keyof RootStackParams,
   Capture: 'Capture' as keyof RootStackParams,
   PreviewReel: 'PreviewReel' as keyof RootStackParams,
+  NewPost: 'NewPost' as keyof RootStackParams,
+  Album: 'Album' as keyof RootStackParams,
   Home: 'Home' as keyof BottomTabParams,
   Search: 'Search' as keyof BottomTabParams,
   Reels: 'Reels' as keyof BottomTabParams,
   Setting: 'Setting' as keyof BottomTabParams,
-  CreatePost: 'CreatePost' as keyof BottomTabParams,
-  Photos: 'Photos' as keyof RootStackParams,
+  EmptyScreen: 'EmptyScreen' as keyof BottomTabParams,
 };

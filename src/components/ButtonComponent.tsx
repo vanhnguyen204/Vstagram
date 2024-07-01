@@ -58,10 +58,12 @@ const ButtonComponent = (props: ButtonComponentProps) => {
     onPressIn,
     onPressOut,
     onLongPress,
-    activeOpacity,
+    activeOpacity = 0.6,
+    flex,
   } = props;
 
   const buttonStyle: ViewStyle = {
+    flex: flex,
     backgroundColor: backgroundColor || appColors.transparent,
     borderRadius: radius,
     padding,
@@ -119,8 +121,7 @@ const ButtonComponent = (props: ButtonComponentProps) => {
       }}
       onLongPress={onLongPress}
       disabled={disabled}
-      onPress={onPress}
-      style={[buttonStyle, style]}>
+      onPress={onPress}>
       <Animated.View
         style={[
           buttonStyle,

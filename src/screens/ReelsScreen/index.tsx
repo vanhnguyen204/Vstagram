@@ -16,15 +16,15 @@ import {RouteProp, useIsFocused} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import { BottomTabParams } from "../../navigators/BottomTabParams.ts";
 
-type ReelProps = RouteProp<BottomTabParams, 'Reel'>;
-type ReelNavigationProp = NativeStackNavigationProp<BottomTabParams, 'Reel'>;
+type ReelProps = RouteProp<BottomTabParams, 'Reels'>;
+type ReelNavigationProp = NativeStackNavigationProp<BottomTabParams, 'Reels'>;
 
 type Props = {
   route: ReelProps;
   navigation: ReelNavigationProp;
 };
 
-const ReelsScreen = (props: Props) => {
+const ReelsScreen  = (props: Props) => {
   const {navigation} = props;
   const isFocusedScreen = useIsFocused();
   const [activeVideo, setActiveVideo] = useState<number>(0);

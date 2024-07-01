@@ -1,6 +1,6 @@
 import {PhotoIdentifier} from '@react-native-camera-roll/camera-roll';
 import {create} from 'zustand';
-import photos from '../../screens/Photos';
+import photos from '../../screens/Album';
 export interface ImageType {
   id: string;
   uri: string;
@@ -24,6 +24,8 @@ interface UsePhotosType {
 
 interface UsePhotosActions extends UsePhotosType {
   setPhotos: (photos: PhotoIdentifier[]) => void;
+  setImages: (images: PhotoIdentifier[]) => void;
+  setVideos: (videos: PhotoIdentifier[]) => void;
   onImageSelected: (photo: ImageType) => void;
   onImageUnSelected: (photoId: string) => void;
   clearImageSelected: () => void;
@@ -46,6 +48,7 @@ export const usePhotos = create<UsePhotosActions>(setState => ({
   //All photo
   setPhotos: (pts: PhotoIdentifier[]) => setState({photos: pts}),
   // handle videos
+  setVideos: (videos: PhotoIdentifier[]) => setState({videos}),
   onVideoSelected: (video: VideoType) => setState({videoSelected: video}),
   clearVideoSelected: () =>
     setState({
@@ -58,6 +61,7 @@ export const usePhotos = create<UsePhotosActions>(setState => ({
       },
     }),
   // handle images
+  setImages: (images: PhotoIdentifier[]) => setState({images}),
   onImageUnSelected: (photoId: string) =>
     setState(state => ({
       imageSelected: state.imageSelected.filter(item => item.id !== photoId),

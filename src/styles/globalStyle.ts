@@ -19,4 +19,11 @@ export const globalStyle = StyleSheet.create({
     width: 20,
     height: 20,
   },
+  headerStyle: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: 10,
+    marginBottom: 10,
+  },
 });

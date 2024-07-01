@@ -8,7 +8,6 @@ import {
   Platform,
   SafeAreaView,
   StyleSheet,
-  TextInput,
   TouchableWithoutFeedback,
   View,
   ViewStyle,
@@ -18,7 +17,6 @@ import {appColors} from '../assets/colors/appColors';
 import ButtonComponent from './ButtonComponent.tsx';
 import Box from './Box.tsx';
 import {AppInfor} from '../constants/AppInfor.ts';
-import TextComponent from './TextComponent.tsx';
 
 type Props<T> = {
   data: T[];
@@ -125,9 +123,11 @@ class ModalScrollable<T> extends Component<Props<T>, State> {
                 keyExtractor={keyExtractor}
                 renderItem={renderItem}
               />
-              <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                {footer}
-              </TouchableWithoutFeedback>
+              {footer && (
+                <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                  {footer}
+                </TouchableWithoutFeedback>
+              )}
             </KeyboardAvoidingView>
           </SafeAreaView>
         </View>

@@ -1,29 +1,29 @@
-import {View, Text} from 'react-native';
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import HomeScreen from '../screens/HomeScreen';
-import {PageName} from '../config/PageName.ts';
 import SearchScreen from '../screens/SearchScreen';
-import CreatePostScreen from '../screens/CreatePostScreen';
+import EmptyScreen from '../screens/EmptyScreen';
 import ReelsScreen from '../screens/ReelsScreen';
 import SettingScreen from '../screens/SettingScreen';
 import ImageComponent from '../components/ImageComponent.tsx';
 import {appColors} from '../assets/colors/appColors.ts';
 import {iconBottomTab} from '../styles/iconBottomTab.ts';
 import {ROUTES} from './Routes.ts';
-import {RootStackParams} from './RootStackParams.ts';
+import {BottomTabParams} from './BottomTabParams.ts';
 import ButtonComponent from '../components/ButtonComponent.tsx';
 import {navigatePush} from '../utils/NavigationUtils.ts';
-import {BottomTabParams} from './BottomTabParams.ts';
+import Box from '../components/Box.tsx';
+
 const Tab = createBottomTabNavigator<BottomTabParams>();
 const BottomTab = () => {
   const bottomTabRoutes = [
     ROUTES.Home,
     ROUTES.Search,
-    ROUTES.Album,
+    ROUTES.EmptyScreen,
     ROUTES.Reels,
     ROUTES.Setting,
   ];
+
   return (
     <Tab.Navigator
       initialRouteName={ROUTES.Home}
@@ -34,100 +34,51 @@ const BottomTab = () => {
           {
             backgroundColor: appColors.backgroundApp,
             borderTopWidth: 0,
+            display: route.name === ROUTES.NewPost ? 'none' : 'flex',
           },
         ],
         tabBarActiveTintColor: appColors.white,
+        tabBarIcon: ({size, color}) => {
+          if (
+            bottomTabRoutes.includes(route.name) &&
+            route.name !== ROUTES.EmptyScreen
+          ) {
+            return (
+              <ImageComponent
+                alignSelf={'center'}
+                tintColor={color}
+                src={iconBottomTab[route.name]}
+                height={size}
+                width={size}
+              />
+            );
+          } else {
+            return (
+              <Box flex={1} alignSelf={'stretch'} justifyContent={'center'}>
+                <ButtonComponent
+                  alignSelf={'stretch'}
+                  onPress={() =>
+                    navigatePush(ROUTES.Album, {mediaType: 'post'})
+                  }>
+                  <ImageComponent
+                    alignSelf={'center'}
+                    tintColor={color}
+                    src={iconBottomTab[route.name]}
+                    height={size}
+                    width={size}
+                  />
+                </ButtonComponent>
+              </Box>
+            );
+          }
+        },
       })}>
-      <Tab.Screen
-        name={ROUTES.Home}
-        component={HomeScreen}
-        options={{
-          tabBarIcon: ({size, color}) => {
-            return (
-              <ImageComponent
-                src={iconBottomTab.homeIcon}
-                alignSelf={'center'}
-                width={size}
-                height={size}
-                tintColor={color}
-              />
-            );
-          },
-        }}
-      />
-      <Tab.Screen
-        name={ROUTES.Search}
-        component={SearchScreen}
-        options={{
-          tabBarIcon: ({size, color}) => {
-            return (
-              <ImageComponent
-                alignSelf={'center'}
-                src={iconBottomTab.searchIcon}
-                width={size}
-                height={size}
-                tintColor={color}
-              />
-            );
-          },
-        }}
-      />
-      <Tab.Screen
-        name={ROUTES.CreatePost}
-        component={CreatePostScreen}
-        options={{
-          tabBarIcon: ({size, color}) => {
-            return (
-              <ButtonComponent
-                onPress={() => {
-                  navigatePush(ROUTES.Photos, {mediaType: 'post'});
-                }}>
-                <ImageComponent
-                  src={iconBottomTab.createPostIcon}
-                  alignSelf={'center'}
-                  width={size}
-                  height={size}
-                  tintColor={color}
-                />
-              </ButtonComponent>
-            );
-          },
-        }}
-      />
-      <Tab.Screen
-        name={ROUTES.Reels}
-        component={ReelsScreen}
-        options={{
-          tabBarIcon: ({size, color}) => {
-            return (
-              <ImageComponent
-                src={iconBottomTab.reelsIcon}
-                width={size}
-                alignSelf={'center'}
-                height={size}
-                tintColor={color}
-              />
-            );
-          },
-        }}
-      />
-      <Tab.Screen
-        name={ROUTES.Setting}
-        component={SettingScreen}
-        options={{
-          tabBarIcon: ({size, color}) => {
-            return (
-              <ImageComponent
-                src={iconBottomTab.settingIcon}
-                width={size}
-                alignSelf={'center'}
-                height={size}
-                tintColor={color}
-              />
-            );
-          },
-        }}
-      />
+      <Tab.Screen name={ROUTES.Home} component={HomeScreen} />
+      <Tab.Screen name={ROUTES.Search} component={SearchScreen} />
+      <Tab.Screen name={ROUTES.EmptyScreen} component={EmptyScreen} />
+      {/*@ts-ignore*/}
+      <Tab.Screen name={ROUTES.Reels} component={ReelsScreen} />
+      <Tab.Screen name={ROUTES.Setting} component={SettingScreen} />
     </Tab.Navigator>
   );
 };

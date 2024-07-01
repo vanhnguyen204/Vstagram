@@ -71,7 +71,7 @@ const HomeScreen = () => {
         data={mockPost}
         renderItem={renderPost}
         viewabilityConfig={{
-          itemVisiblePercentThreshold: 50,
+          itemVisiblePercentThreshold: 70,
         }}
         onViewableItemsChanged={onViewableItemsChanged}
       />

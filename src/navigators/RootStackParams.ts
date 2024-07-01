@@ -12,6 +12,7 @@ export type RootStackParams = {
   CompleteStoryScreen: undefined;
   Capture: undefined;
   Reels: undefined;
+  NewPost: {mediaType: string};
   PreviewReel: {video: VideoFile};
-  Photos: {mediaType: string};
+  Album: {mediaType: string};
 };

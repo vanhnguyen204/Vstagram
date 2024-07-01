@@ -17,7 +17,12 @@ interface PhotoCardProps {
   index: number;
 }
 
-const PhotoCard = ({item, onSelected, isSelected, index}: PhotoCardProps) => {
+const AlbumImageCard = ({
+  item,
+  onSelected,
+  isSelected,
+  index,
+}: PhotoCardProps) => {
   const handleSelected = useCallback(() => {
     onSelected(item);
   }, [item, onSelected]);
@@ -47,6 +52,9 @@ const PhotoCard = ({item, onSelected, isSelected, index}: PhotoCardProps) => {
   );
 };
 const areEqual = (prevProps: PhotoCardProps, nextProps: PhotoCardProps) => {
-  return prevProps.isSelected === nextProps.isSelected && prevProps.index === nextProps.index;
+  return (
+    prevProps.isSelected === nextProps.isSelected &&
+    prevProps.index === nextProps.index
+  );
 };
-export default memo(PhotoCard, areEqual);
+export default memo(AlbumImageCard, areEqual);

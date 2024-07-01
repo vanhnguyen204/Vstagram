@@ -307,7 +307,6 @@ const PostEditorScreen = () => {
     },
   ];
   const [isModalLoading, setIsModalLoading] = useState<boolean>(false);
-  // console.log('Is modal loading: ', isModalLoading);
   if (subType === 'video') {
     return (
       <Container justifyContent="flex-start">

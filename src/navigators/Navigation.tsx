@@ -13,7 +13,8 @@ import {RootStackParams} from './RootStackParams.ts';
 import {ROUTES} from './Routes.ts';
 import Capture from '../screens/Capture';
 import PreviewReel from '../screens/PreviewReel';
-import Photos from '../screens/Photos';
+import Album from '../screens/Album';
+import NewPost from '../screens/NewPost';
 
 const Stack = createNativeStackNavigator<RootStackParams>();
 const Navigation = () => {
@@ -22,6 +23,7 @@ const Navigation = () => {
       <Stack.Screen name={ROUTES.WelcomeScreen} component={WelcomeScreen} />
       <Stack.Screen name={ROUTES.Login} component={Login} />
       <Stack.Screen name={ROUTES.Register} component={Register} />
+      {/*@ts-ignore*/}
       <Stack.Screen name={ROUTES.VerifyRegister} component={VerifyRegister} />
       <Stack.Screen
         name={ROUTES.CreatePasswordScreen}
@@ -37,8 +39,11 @@ const Navigation = () => {
         component={CompleteStoryScreen}
       />
       <Stack.Screen name={ROUTES.Capture} component={Capture} />
+      {/*@ts-ignore*/}
       <Stack.Screen name={ROUTES.PreviewReel} component={PreviewReel} />
-      <Stack.Screen name={ROUTES.Photos} component={Photos} />
+      {/*@ts-ignore*/}
+      <Stack.Screen name={ROUTES.Album} component={Album} />
+      <Stack.Screen name={ROUTES.NewPost} component={NewPost} />
     </Stack.Navigator>
   );
 };

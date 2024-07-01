@@ -46,7 +46,6 @@ const Capture = () => {
   const strokeDashoffset = useRef(new Animated.Value(circleStroke)).current;
   const countdownRef = useRef<number>(0);
   const isFocusedScreen = useIsFocused();
-
   useFocusEffect(
     useCallback(() => {
       // stop recording when screen unmount! vanh 25/6/2024

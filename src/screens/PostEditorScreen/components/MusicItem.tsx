@@ -13,40 +13,27 @@ import {useStoryEditor} from '../../../hooks';
 interface MusicProps {
   item: Music;
   index: number;
-  toggleModalMusic: (visible: boolean) => void;
+  onPlay: (music: Music) => void;
+  onStop: () => void;
+  onMusicSelected: (music: Music) => void;
+  isPlaying: boolean;
 }
 const MusicItem = (props: MusicProps) => {
-  const {item, index, toggleModalMusic} = props;
-  const {musicPlaying = '', setMusicPlaying, setUrlMusicPlaying} = musicStore();
-  const {addMusic} = useStoryEditor();
-  const playMusic = useCallback(async (music: string) => {
-    await TrackPlayer.reset();
-    setMusicPlaying(item._id);
-    setUrlMusicPlaying(item.urlMedia);
-    await TrackPlayer.add({
-      id: music,
-      url: item.urlMedia,
-      artwork: item.image,
-      title: item.title,
-      artist: item.artist,
-    });
-    await TrackPlayer.play();
-  }, []);
-  const stopMusic = useCallback(async () => {
-    try {
-      await TrackPlayer.reset();
-      setMusicPlaying('');
-    } catch (error) {
-      console.error('Error stopping music:', error);
-    }
-  }, []);
+  const {item, isPlaying, index, onMusicSelected, onPlay, onStop} = props;
+  const playMusic = useCallback(() => {
+    onPlay(item);
+  }, [item, onPlay]);
 
+  const handleTogglePlayback = useCallback(() => {
+    if (isPlaying) {
+      onStop();
+    } else {
+      playMusic();
+    }
+  }, [isPlaying, onStop, playMusic]);
+  console.log('render item: ', index);
   return (
     <Box
-      // onPress={() => {
-      //   addMusic(item);
-      //   toggleModalMusic(false);
-      // }}
       flexDirection="row"
       marginHorizontal={10}
       width={AppInfor.width}
@@ -80,19 +67,11 @@ const MusicItem = (props: MusicProps) => {
           </Box>
         </Box>
       </Box>
-      <ButtonComponent
-        name="play music"
-        onPress={() => {
-          if (musicPlaying === item._id) {
-            stopMusic();
-          } else {
-            playMusic(item.urlMedia);
-          }
-        }}>
+      <ButtonComponent name="play music" onPress={handleTogglePlayback}>
         <ImageComponent
           tintColor={appColors.white}
           src={
-            musicPlaying === item._id
+            isPlaying
               ? require('../../../assets/icons/pause.png')
               : require('../../../assets/icons/play.png')
           }
@@ -104,4 +83,10 @@ const MusicItem = (props: MusicProps) => {
   );
 };
 
-export default memo(MusicItem);
+const areEqual = (prevProps: MusicProps, nextProps: MusicProps) => {
+  return (
+    prevProps.isPlaying === nextProps.isPlaying &&
+    prevProps.item._id === nextProps.item._id
+  );
+};
+export default memo(MusicItem, areEqual);

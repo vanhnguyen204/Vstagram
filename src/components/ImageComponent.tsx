@@ -24,6 +24,7 @@ interface ImageProps {
   marginBottom?: number;
   borderRadius?: number;
   flex?: number;
+  aspectRatio?: number | string | undefined;
   style?: ViewStyle;
 }
 const ImageComponent = (props: ImageProps) => {
@@ -44,6 +45,7 @@ const ImageComponent = (props: ImageProps) => {
     flex,
     style,
     borderRadius = 0,
+    aspectRatio,
   } = props;
   return (
     // @ts-ignore
@@ -65,6 +67,7 @@ const ImageComponent = (props: ImageProps) => {
           marginVertical: marginVertical ?? undefined,
           flex: flex ?? 0,
           borderRadius,
+          aspectRatio: aspectRatio,
         },
         style,
       ]}

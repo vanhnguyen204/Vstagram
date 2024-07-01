@@ -4,14 +4,13 @@ import {MusicResponse} from '../models/MusicResponse.ts';
 
 interface MusicsType {
   musics: MusicResponse;
-  musicPlaying: string;
-  urlMusicPlaying: string;
+  musicPlaying: Music;
 }
 
 interface MusicActions extends MusicsType {
   setMusics: (musics: MusicResponse) => void;
-  setMusicPlaying: (musicId: string) => void;
-  setUrlMusicPlaying: (musicUrl: string) => void;
+  setMusicPlaying: (music: Music) => void;
+  clearMusicPlaying: () => void;
 }
 
 export const musicStore = create<MusicActions>(set => ({
@@ -22,8 +21,13 @@ export const musicStore = create<MusicActions>(set => ({
     nextPage: 0,
     prevPage: 0,
   },
-  musicPlaying: '',
-  urlMusicPlaying: '',
+  musicPlaying: {
+    _id: '',
+    image: '',
+    artist: '',
+    title: '',
+    urlMedia: '',
+  },
   setMusics: (musics: MusicResponse) =>
     set(state => ({
       musics: {
@@ -35,6 +39,15 @@ export const musicStore = create<MusicActions>(set => ({
         page: musics.page,
       },
     })),
-  setMusicPlaying: (musicId: string) => set({musicPlaying: musicId}),
-  setUrlMusicPlaying: (url: string) => set({urlMusicPlaying: url}),
+  setMusicPlaying: (music: Music) => set({musicPlaying: music}),
+  clearMusicPlaying: () =>
+    set({
+      musicPlaying: {
+        _id: '',
+        image: '',
+        artist: '',
+        title: '',
+        urlMedia: '',
+      },
+    }),
 }));

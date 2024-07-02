@@ -1,12 +1,10 @@
 import React, {memo} from 'react';
-import ButtonComponent from '../../../../components/ButtonComponent.tsx';
 import FastImage from 'react-native-fast-image';
-import Spacer from '../../../../components/Spacer.tsx';
-import TextComponent from '../../../../components/TextComponent.tsx';
 import {FlatList} from 'react-native';
 import {AppInfor} from '../../../../constants/AppInfor.ts';
 import Box from '../../../../components/Box.tsx';
 import PostActions from './PostActions.tsx';
+
 interface MultipleImageProps {
   images: string[];
 }

@@ -13,6 +13,7 @@ import {usePhotos} from '../../hooks/Media/usePhotos.ts';
 import {Post} from '../../models/Post.ts';
 import PostCard from './Components/Post/PostCard.tsx';
 import {mockPost} from '../../models/Mockup.ts';
+import {usePostStore} from '../../hooks/usePostStore.ts';
 
 export interface TestStory {
   id: string;
@@ -21,7 +22,7 @@ export interface TestStory {
 const HomeScreen = () => {
   const {information} = useUserInformation();
   const {stories} = useStoryStore();
-  const {photos} = usePhotos();
+  const {posts} = usePostStore();
   const [viewableVideoPosts, setViewableVideoPosts] = useState<string[]>([]);
   const navigateToCreatePost = useCallback(() => {
     navigatePush(ROUTES.PostEditorScreen);
@@ -68,7 +69,7 @@ const HomeScreen = () => {
           </Box>
         }
         showsVerticalScrollIndicator={false}
-        data={mockPost}
+        data={posts}
         renderItem={renderPost}
         viewabilityConfig={{
           itemVisiblePercentThreshold: 70,

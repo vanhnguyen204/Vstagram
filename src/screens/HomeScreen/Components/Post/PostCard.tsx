@@ -5,8 +5,6 @@ import TextComponent from '../../../../components/TextComponent.tsx';
 import Spacer from '../../../../components/Spacer.tsx';
 import {AppInfor} from '../../../../constants/AppInfor.ts';
 import {appColors} from '../../../../assets/colors/appColors.ts';
-import PostActions from './PostActions.tsx';
-import {usePhotos} from '../../../../hooks/Media/usePhotos.ts';
 import VideoRender from './VideoRender.tsx';
 import SingleImage from './SingleImage.tsx';
 import MultipleImage from './MultipleImage.tsx';
@@ -21,24 +19,22 @@ interface PostCardProps {
 
 const PostCard = (props: PostCardProps) => {
   const {item, paused} = props;
-  const {photos} = usePhotos();
 
   const renderPhotos = useCallback(() => {
-    if (!item?.images) {
-      return null;
+    if (item.postType.type === PostType.PHOTO) {
+      if (item.postType.images.length > 1) {
+        return <MultipleImage images={item.postType.images} />;
+      } else {
+        return <SingleImage item={item.postType.images[0]} />;
+      }
     }
-    if (item.images.length > 1) {
-      return <MultipleImage images={item.images} />;
-    }
-
-    return <SingleImage item={item.images[0]} />;
   }, [item]);
 
   const renderContent = useCallback(() => {
-    switch (item.type) {
-      case 0:
+    switch (item.postType.type) {
+      case PostType.PHOTO:
         return renderPhotos();
-      case 1:
+      case PostType.VIDEO:
         return <VideoRender paused={paused} item={item} />;
       default:
         return null;
@@ -52,7 +48,7 @@ const PostCard = (props: PostCardProps) => {
         background={appColors.grays.gray800}
         height={1}
       />
-      {item.type === PostType.PHOTO && (
+      {item.postType.type === PostType.PHOTO && (
         <ButtonComponent
           marginTop={5}
           alignSelf={'flex-start'}

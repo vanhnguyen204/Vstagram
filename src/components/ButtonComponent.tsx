@@ -60,6 +60,7 @@ const ButtonComponent = (props: ButtonComponentProps) => {
     onLongPress,
     activeOpacity = 0.6,
     flex,
+    position,
   } = props;
 
   const buttonStyle: ViewStyle = {
@@ -87,6 +88,7 @@ const ButtonComponent = (props: ButtonComponentProps) => {
     paddingVertical,
     paddingLeft,
     paddingRight,
+    position,
   };
   const scaleValue = useRef(new Animated.Value(1)).current;
 

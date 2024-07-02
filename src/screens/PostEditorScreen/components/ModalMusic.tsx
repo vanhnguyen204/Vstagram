@@ -1,4 +1,4 @@
-import React, {memo, useCallback} from 'react';
+import React, {memo, useCallback, useEffect} from 'react';
 import {StyleSheet} from 'react-native';
 import {AppInfor} from '../../../constants/AppInfor.ts';
 import {musicStore} from '../../../hooks';
@@ -6,7 +6,11 @@ import MusicItem from './MusicItem.tsx';
 import {Music} from '../../../models';
 import {getMusics} from '../../../services/apis/musicServices.ts';
 import ModalScrollable from '../../../components/ModalScrollable.tsx';
-import TrackPlayer from 'react-native-track-player';
+import TrackPlayer, {
+  useTrackPlayerEvents,
+  Event,
+} from 'react-native-track-player';
+import {startTrackPlayer, stopTrack} from '../../../../service';
 
 interface ModalMusicProps {
   visible: boolean;
@@ -18,21 +22,28 @@ const ModalMusic = (props: ModalMusicProps) => {
 
   const {musicPlaying, setMusics, musics, setMusicPlaying, clearMusicPlaying} =
     musicStore();
-  const playMusic = async (music: Music) => {
-    await TrackPlayer.reset();
-    setMusicPlaying(music);
-    await TrackPlayer.add({
-      id: music._id,
-      url: music.urlMedia,
-      artwork: music.image,
-      title: music.title,
-      artist: music.artist,
-    });
-    await TrackPlayer.play();
-  };
+  const playMusic = useCallback(
+    async (music: Music) => {
+      await startTrackPlayer(music);
+      setMusicPlaying(music);
+    },
+    [setMusicPlaying],
+  );
+  const isPlaying = useCallback(
+    (item: Music): boolean => {
+      return item._id === musicPlaying._id;
+    },
+    [musicPlaying._id],
+  );
   const stopMusic = useCallback(async () => {
     try {
-      await TrackPlayer.reset();
+      stopTrack()
+        .then(res => {
+          console.log('Stop track player: ', res);
+        })
+        .catch(e => {
+          console.log(e);
+        });
       clearMusicPlaying();
     } catch (error) {
       console.error('Error stopping music:', error);
@@ -54,7 +65,7 @@ const ModalMusic = (props: ModalMusicProps) => {
     ({item, index}: {item: Music; index: number}) => {
       return (
         <MusicItem
-          isPlaying={musicPlaying._id === item._id}
+          isPlaying={isPlaying(item)}
           onMusicSelected={onMusicSelected}
           onPlay={() => playMusic(item)}
           onStop={stopMusic}
@@ -63,8 +74,23 @@ const ModalMusic = (props: ModalMusicProps) => {
         />
       );
     },
-    [musicPlaying._id, onMusicSelected, playMusic, stopMusic],
+    [isPlaying, onMusicSelected, playMusic, stopMusic],
   );
+  useEffect(() => {}, [clearMusicPlaying]);
+  const events = [
+    Event.PlaybackState,
+    Event.PlaybackError,
+    Event.PlaybackQueueEnded,
+  ];
+  useTrackPlayerEvents(events, event => {
+    if (event.type === Event.PlaybackError) {
+      console.warn('An error occured while playing the current track.');
+    }
+    if (event.type === Event.PlaybackQueueEnded) {
+      clearMusicPlaying();
+    }
+  });
+
   return (
     <ModalScrollable<Music>
       data={musics.data}

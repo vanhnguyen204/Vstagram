@@ -1,13 +1,22 @@
 import {create} from 'zustand';
 
 interface AppStoreType {
-  isLoading: boolean;
+  visibleModalLoading: boolean;
 }
 
 interface AppStoreActions extends AppStoreType {
   setIsLoading: (value: boolean) => void;
 }
-export const useAppStore = create<AppStoreActions>(set => ({
-  isLoading: false,
-  setIsLoading: (value: boolean) => set({isLoading: value}),
+const useAppStore = create<AppStoreActions>(set => ({
+  visibleModalLoading: false,
+  setIsLoading: (value: boolean) => set({visibleModalLoading: value}),
 }));
+
+const showModalLoading = () => {
+  useAppStore.getState().setIsLoading(true);
+};
+const hiddenModalLoading = () => {
+  useAppStore.getState().setIsLoading(false);
+};
+
+export {useAppStore, showModalLoading, hiddenModalLoading};

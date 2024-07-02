@@ -340,7 +340,6 @@ export const mockPost: Post[] = [
     avatar:
       'https://img.freepik.com/premium-photo/animal-icon-hd-8k-wallpaper-stock-photographic-image_915071-38615.jpg',
     description: 'Description',
-    videoURL: '',
     comment: [
       {
         _id: '10',
@@ -377,12 +376,14 @@ export const mockPost: Post[] = [
     name: 'vanh204',
     isLike: false,
     music: '',
-    type: PostType.PHOTO,
-    images: [
-      'https://s2.dmcdn.net/v/TEiDz1XDEBPm6gXPG/x480',
-      'https://free4kwallpapers.com/uploads/originals/2019/03/09/colors-of-chameleon-wallpaper.jpg',
-      'https://img.freepik.com/premium-photo/red-deer-animal-hd-8k-wallpaper-stock-photographic-image_949228-11302.jpg',
-    ],
+    postType: {
+      type: PostType.PHOTO,
+      images: [
+        'https://s2.dmcdn.net/v/TEiDz1XDEBPm6gXPG/x480',
+        'https://free4kwallpapers.com/uploads/originals/2019/03/09/colors-of-chameleon-wallpaper.jpg',
+        'https://img.freepik.com/premium-photo/red-deer-animal-hd-8k-wallpaper-stock-photographic-image_949228-11302.jpg',
+      ],
+    },
     timeCreate: '2024-06-28 9:00:00',
   },
   {
@@ -392,7 +393,6 @@ export const mockPost: Post[] = [
     avatar:
       'https://img.freepik.com/premium-photo/animal-icon-hd-8k-wallpaper-stock-photographic-image_915071-38615.jpg',
     description: 'Description',
-    videoURL: '',
     comment: [
       {
         _id: '10',
@@ -429,8 +429,10 @@ export const mockPost: Post[] = [
     name: 'vanh204',
     isLike: false,
     music: '',
-    type: PostType.PHOTO,
-    images: ['https://s2.dmcdn.net/v/TEiDz1XDEBPm6gXPG/x480'],
+    postType: {
+      type: PostType.PHOTO,
+      images: ['https://s2.dmcdn.net/v/TEiDz1XDEBPm6gXPG/x480'],
+    },
     timeCreate: '2024-06-10 9:00:00',
   },
   {
@@ -440,8 +442,6 @@ export const mockPost: Post[] = [
     avatar:
       'https://img.freepik.com/premium-photo/animal-icon-hd-8k-wallpaper-stock-photographic-image_915071-38615.jpg',
     description: 'Description',
-    videoURL:
-      'https://nodejs-vstagram-aws-s3.s3.ap-southeast-2.amazonaws.com/posts/post_vstagram_test1.mp4',
     comment: [
       {
         _id: '10',
@@ -478,8 +478,12 @@ export const mockPost: Post[] = [
     name: 'vanh204',
     isLike: false,
     music: '',
-    type: PostType.VIDEO,
-    images: [],
+
+    postType: {
+      type: PostType.VIDEO,
+      videoURL:
+        'https://nodejs-vstagram-aws-s3.s3.ap-southeast-2.amazonaws.com/posts/post_vstagram_test1.mp4',
+    },
     timeCreate: '2024-06-26 9:00:00',
   },
   {
@@ -489,7 +493,6 @@ export const mockPost: Post[] = [
     avatar:
       'https://img.freepik.com/premium-photo/animal-icon-hd-8k-wallpaper-stock-photographic-image_915071-38615.jpg',
     description: 'Description',
-    videoURL: '',
     comment: [
       {
         _id: '10',
@@ -526,10 +529,12 @@ export const mockPost: Post[] = [
     name: 'vanh204',
     isLike: false,
     music: '',
-    type: PostType.PHOTO,
-    images: [
-      'https://images.unsplash.com/photo-1621615578530-cbf3c443165f?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8c3VwZXIlMjBjYXJ8ZW58MHx8MHx8fDA%3D',
-    ],
+    postType: {
+      type: PostType.PHOTO,
+      images: [
+        'https://images.unsplash.com/photo-1621615578530-cbf3c443165f?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8c3VwZXIlMjBjYXJ8ZW58MHx8MHx8fDA%3D',
+      ],
+    },
     timeCreate: '2024-06-27 9:00:00',
   },
   {
@@ -539,8 +544,6 @@ export const mockPost: Post[] = [
     avatar:
       'https://img.freepik.com/premium-photo/animal-icon-hd-8k-wallpaper-stock-photographic-image_915071-38615.jpg',
     description: 'Description',
-    videoURL:
-      'https://nodejs-vstagram-aws-s3.s3.ap-southeast-2.amazonaws.com/reels/rogri_on_fire.mp4',
     comment: [
       {
         _id: '10',
@@ -577,8 +580,11 @@ export const mockPost: Post[] = [
     name: 'vanh204',
     isLike: false,
     music: '',
-    type: PostType.VIDEO,
-    images: [],
+    postType: {
+      type: PostType.VIDEO,
+      videoURL:
+        'https://nodejs-vstagram-aws-s3.s3.ap-southeast-2.amazonaws.com/reels/rogri_on_fire.mp4',
+    },
     timeCreate: '2024-06-28 9:00:00',
   },
 ];

@@ -13,25 +13,24 @@ import {useStoryEditor} from '../../../hooks';
 interface MusicProps {
   item: Music;
   index: number;
-  onPlay: (music: Music) => void;
+  onPlay: () => void;
   onStop: () => void;
   onMusicSelected: (music: Music) => void;
   isPlaying: boolean;
 }
 const MusicItem = (props: MusicProps) => {
   const {item, isPlaying, index, onMusicSelected, onPlay, onStop} = props;
-  const playMusic = useCallback(() => {
-    onPlay(item);
-  }, [item, onPlay]);
 
   const handleTogglePlayback = useCallback(() => {
     if (isPlaying) {
       onStop();
     } else {
-      playMusic();
+      onPlay();
     }
-  }, [isPlaying, onStop, playMusic]);
-  console.log('render item: ', index);
+  }, [isPlaying, onPlay, onStop]);
+  const onSelectMusic = useCallback(() => {
+    onMusicSelected(item);
+  }, [item, onMusicSelected]);
   return (
     <Box
       flexDirection="row"
@@ -41,31 +40,39 @@ const MusicItem = (props: MusicProps) => {
       justifyContent={'space-between'}
       alignItems={'center'}
       alignSelf="stretch">
-      <Box flexDirection={'row'}>
-        <ImageComponent
-          width={50}
-          height={50}
-          resizeMode="cover"
-          borderRadius={90}
-          src={{uri: item.image}}
-        />
-        <Box marginHorizontal={10}>
-          <Box alignItems="flex-start" justifyContent="flex-start">
-            <TextComponent
-              alignSelf="flex-start"
-              value={item.title}
-              style={{position: 'absolute', left: 0}}
-              fontSize={14}
-            />
-            <TextComponent
-              alignSelf="flex-start"
-              value={item.artist}
-              style={{position: 'absolute', left: 0}}
-              fontSize={12}
-              color={appColors.gray}
-            />
+      <Box flex={1}>
+        <ButtonComponent
+          activeOpacity={1}
+          scaleAnimated={true}
+          scaleInValue={0.9}
+          onPress={onSelectMusic}
+          flexDirection={'row'}
+          flex={1}>
+          <ImageComponent
+            width={50}
+            height={50}
+            resizeMode="cover"
+            borderRadius={90}
+            src={{uri: item.image}}
+          />
+          <Box marginHorizontal={10}>
+            <Box alignItems="flex-start" justifyContent="flex-start">
+              <TextComponent
+                alignSelf="flex-start"
+                value={item.title}
+                style={{position: 'absolute', left: 0}}
+                fontSize={14}
+              />
+              <TextComponent
+                alignSelf="flex-start"
+                value={item.artist}
+                style={{position: 'absolute', left: 0}}
+                fontSize={12}
+                color={appColors.gray}
+              />
+            </Box>
           </Box>
-        </Box>
+        </ButtonComponent>
       </Box>
       <ButtonComponent name="play music" onPress={handleTogglePlayback}>
         <ImageComponent

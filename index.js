@@ -13,3 +13,5 @@ TrackPlayer.setupPlayer().then(() => {
   // The player is ready to be used
   console.log('TrackPlayer is ready');
 });
+
+// TrackPlayer.registerPlaybackService(() => require('./service'));

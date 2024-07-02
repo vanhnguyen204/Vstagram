@@ -2,29 +2,31 @@ import TrackPlayer, {
   TrackPlayerEvents,
   STATE_PLAYING,
   State,
+  AppKilledPlaybackBehavior,
+  Capability,
 } from 'react-native-track-player';
 
-async function setupTrackPlayer() {
-  await TrackPlayer.setupPlayer();
+export async function setupPlayer() {
+  let isSetup = false;
+  try {
+    await TrackPlayer.getCurrentTrack();
+    isSetup = true;
+  } catch {
+    await TrackPlayer.setupPlayer();
+    await TrackPlayer.updateOptions({
+      android: {
+        appKilledPlaybackBehavior:
+          AppKilledPlaybackBehavior.StopPlaybackAndRemoveNotification,
+      },
+      capabilities: [Capability.Play, Capability.Pause],
+      compactCapabilities: [Capability.Play, Capability.Pause],
+      progressUpdateEventInterval: 2,
+    });
 
-  TrackPlayer.addEventListener(TrackPlayerEvents.PLAYBACK_STATE, ({state}) => {
-    console.log('Playback state changed:', state);
-  });
-
-  TrackPlayer.addEventListener(TrackPlayerEvents.REMOTE_STOP, () => {
-    console.log('Remote stop event received');
-    TrackPlayer.destroy(); // Xóa player khi cần thiết
-  });
-
-  TrackPlayer.addEventListener(TrackPlayerEvents.REMOTE_PLAY, () => {
-    console.log('Remote play event received');
-    TrackPlayer.play(); // Play khi nhận được lệnh từ remote
-  });
-
-  TrackPlayer.addEventListener(TrackPlayerEvents.REMOTE_PAUSE, () => {
-    console.log('Remote pause event received');
-    TrackPlayer.pause(); // Pause khi nhận được lệnh từ remote
-  });
+    isSetup = true;
+  } finally {
+    return isSetup;
+  }
 }
 
 // Hàm play track từ một URL
@@ -50,7 +52,28 @@ async function playTrack(url) {
     ],
   });
 }
+async function startTrackPlayer(music) {
+  console.log(music);
+  await TrackPlayer.reset();
+  await TrackPlayer.add({
+    id: music._id,
+    url: music.urlMedia,
+    title: music.title,
+    artist: music.artist,
+    artwork: music.image,
+  });
 
+  await TrackPlayer.play(); // Phát track
+
+  await TrackPlayer.updateOptions({
+    stopWithApp: true, // Dừng player khi ứng dụng bị dừng
+    capabilities: [
+      TrackPlayer.CAPABILITY_PLAY,
+      TrackPlayer.CAPABILITY_PAUSE,
+      TrackPlayer.CAPABILITY_STOP,
+    ],
+  });
+}
 // Hàm pause track
 async function pauseTrack() {
   await TrackPlayer.pause();
@@ -67,4 +90,4 @@ async function stopTrack() {
   await TrackPlayer.reset();
 }
 
-export {setupTrackPlayer, playTrack, pauseTrack, stopTrack, resumeTrack};
+export {playTrack, pauseTrack, stopTrack, resumeTrack, startTrackPlayer};

@@ -6,7 +6,7 @@ export const appColors = {
   white: '#ffffff',
   backgroundApp: '#000000',
   gray: 'rgba(255,255,255,0.5)',
-  darkBlur: 'rgba(0,0,0, 0.5)',
+  darkBlur: 'rgba(0,0,0, 0.6)',
   red: '#D32F2F',
   blue500: '#2196F3',
   transparent: 'transparent',

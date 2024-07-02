@@ -1,12 +1,9 @@
 import React, {useMemo} from 'react';
 import Box from '../../../../components/Box.tsx';
 import ButtonComponent from '../../../../components/ButtonComponent.tsx';
-import {Post} from '../../../../models/Post.ts';
 import ImageComponent from '../../../../components/ImageComponent.tsx';
-import HeartSvg from '../../../../assets/svg/public/HeartSvg.tsx';
-import CommentSvg from '../../../../assets/svg/media/CommentSvg.tsx';
 import {appColors} from '../../../../assets/colors/appColors.ts';
-import ShareSvg from '../../../../assets/svg/media/ShareSvg.tsx';
+
 interface PostActionsProps {}
 const PostActions = (props: PostActionsProps) => {
   const buttonProps = useMemo(() => {

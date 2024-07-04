@@ -1,4 +1,4 @@
-import React, {memo, useCallback} from 'react';
+import React, {memo, useCallback, useState} from 'react';
 import Box from '../../../../components/Box.tsx';
 import {Post, PostType} from '../../../../models/Post.ts';
 import TextComponent from '../../../../components/TextComponent.tsx';
@@ -11,35 +11,51 @@ import MultipleImage from './MultipleImage.tsx';
 import FastImage from 'react-native-fast-image';
 import ButtonComponent from '../../../../components/ButtonComponent.tsx';
 import {calculateTimeDifference} from '../../../../utils/DateTime.ts';
+import useAudioControl from '../../../../hooks/TrackPlayer/useAudioControl.ts';
 
 interface PostCardProps {
   item: Post;
-  paused: boolean;
+  pauseVideo: boolean;
+  toggleMute?: () => void;
+  isMuted?: boolean;
 }
 
 const PostCard = (props: PostCardProps) => {
-  const {item, paused} = props;
-
+  const {item, pauseVideo, toggleMute, isMuted} = props;
+  console.log('re-render: ', item._id);
   const renderPhotos = useCallback(() => {
     if (item.postType.type === PostType.PHOTO) {
+      const hasMusic = item.music !== '';
       if (item.postType.images.length > 1) {
-        return <MultipleImage images={item.postType.images} />;
+        return (
+          <MultipleImage
+            {...(item.music && {toggleMute, isMuted})}
+            hasMusic={hasMusic}
+            images={item.postType.images}
+          />
+        );
       } else {
-        return <SingleImage item={item.postType.images[0]} />;
+        return (
+          <SingleImage
+            {...(item.music && {toggleMute, isMuted})}
+            hasMusic={hasMusic}
+            imageURL={item.postType.images[0]}
+          />
+        );
       }
     }
-  }, [item]);
+  }, [item, isMuted, toggleMute]);
 
   const renderContent = useCallback(() => {
     switch (item.postType.type) {
       case PostType.PHOTO:
         return renderPhotos();
       case PostType.VIDEO:
-        return <VideoRender paused={paused} item={item} />;
+        return <VideoRender paused={pauseVideo} item={item} />;
       default:
         return null;
     }
-  }, [item, renderPhotos, paused]);
+  }, [item, renderPhotos, pauseVideo]);
 
   return (
     <Box flex={1} marginVertical={5}>
@@ -50,6 +66,7 @@ const PostCard = (props: PostCardProps) => {
       />
       {item.postType.type === PostType.PHOTO && (
         <ButtonComponent
+          name={'See more user information'}
           marginTop={5}
           alignSelf={'flex-start'}
           flexDirection={'row'}
@@ -64,11 +81,10 @@ const PostCard = (props: PostCardProps) => {
         </ButtonComponent>
       )}
       {renderContent()}
-
       <TextComponent value={item.description} />
       <TextComponent
         fontSize={12}
-        value={calculateTimeDifference(item.timeCreate ?? '')}
+        value={calculateTimeDifference(item.timeCreated ?? '')}
       />
     </Box>
   );

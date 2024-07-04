@@ -4,6 +4,7 @@ import TrackPlayer, {
   State,
   AppKilledPlaybackBehavior,
   Capability,
+  RepeatMode,
 } from 'react-native-track-player';
 
 export async function setupPlayer() {
@@ -30,27 +31,32 @@ export async function setupPlayer() {
 }
 
 // Hàm play track từ một URL
-async function playTrack(url) {
-  await TrackPlayer.reset(); // Đặt lại player trước khi phát track mới
+async function playTrack(url, repeat = false) {
+  await TrackPlayer.reset();
 
   await TrackPlayer.add({
-    id: 'trackId', // ID của track
-    url: url, // URL của track
-    title: 'Track Title', // Tiêu đề của track
-    artist: 'Artist Name', // Tên nghệ sĩ (tùy chọn)
+    id: 'trackId',
+    url: url,
+    title: 'Track Title',
+    artist: 'Artist Name',
     artwork: '',
   });
 
-  await TrackPlayer.play(); // Phát track
+  await TrackPlayer.play();
 
   await TrackPlayer.updateOptions({
-    stopWithApp: true, // Dừng player khi ứng dụng bị dừng
+    stopWithApp: true,
     capabilities: [
       TrackPlayer.CAPABILITY_PLAY,
       TrackPlayer.CAPABILITY_PAUSE,
       TrackPlayer.CAPABILITY_STOP,
     ],
   });
+  if (repeat) {
+    await TrackPlayer.setRepeatMode(RepeatMode.Track);
+  } else {
+    await TrackPlayer.setRepeatMode(RepeatMode.Off);
+  }
 }
 async function startTrackPlayer(music) {
   console.log(music);
@@ -84,10 +90,18 @@ async function resumeTrack() {
     await TrackPlayer.play();
   }
 }
-
+async function toggleMute () {
+  const state = await TrackPlayer.getState();
+  if (state === State.Playing) {
+    await TrackPlayer.setVolume(0);
+  }
+}
 // Hàm xóa track
 async function stopTrack() {
-  await TrackPlayer.reset();
+  const state = await TrackPlayer.getState();
+  if (state === State.Playing) {
+    await TrackPlayer.reset();
+  }
 }
 
 export {playTrack, pauseTrack, stopTrack, resumeTrack, startTrackPlayer};

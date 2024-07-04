@@ -31,7 +31,7 @@ export const musicStore = create<MusicActions>(set => ({
   setMusics: (musics: MusicResponse) =>
     set(state => ({
       musics: {
-        ...state.musics,
+        // ...state.musics,
         data: state.musics.data.concat(...musics.data),
         limit: musics.limit,
         nextPage: musics.nextPage,

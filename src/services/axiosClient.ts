@@ -2,6 +2,7 @@ import axios from 'axios';
 import {ProdConfig} from '../config/AxiosConfig.ts';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {ACCESS_TOKEN} from '../constants/AsyncStorage.ts';
+import {hiddenModalLoading, showModalLoading} from '../hooks';
 
 const axiosClient = axios.create({
   baseURL: ProdConfig.BASE_URL,
@@ -21,7 +22,6 @@ axiosClient.interceptors.request.use(async config => {
 });
 axiosClient.interceptors.response.use(
   response => {
-    // Check if the response has a data property
     if (response.data) {
       return response.data;
     }
@@ -55,9 +55,11 @@ export const request = async <T>(
         Authorization: `Bear ${token}`,
       },
     });
+
     return dataResponse;
   } catch (error: any) {
     handleLogError(error, url, method);
+
     throw error;
   }
 };

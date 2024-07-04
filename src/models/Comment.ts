@@ -5,5 +5,5 @@ export interface Comment {
   name: string;
   like: number;
   comment: string;
-  timeCreate: string;
+  timeCreated: string;
 }

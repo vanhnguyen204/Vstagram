@@ -67,7 +67,7 @@ const NewPost = (props: Props) => {
   );
   const handleCreatePost = useCallback(() => {
     const formData = new FormData();
-    formData.append('music', musicSelected);
+    musicSelected && formData.append('music', musicSelected);
     formData.append('description', 'description');
     formData.append('type', 'POST');
     for (const value of imageSelected) {
@@ -80,7 +80,7 @@ const NewPost = (props: Props) => {
     createPost(formData)
       .then(res => {
         console.log(res);
-        if (res.code === 201) {
+        if (res?.code === 201) {
           navigateAndReset([{name: ROUTES.BottomTab}]);
         }
       })

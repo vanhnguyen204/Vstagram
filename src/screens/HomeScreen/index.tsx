@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import Container from '../../components/Container';
 import Header from './Components/Header.tsx';
 import Box from '../../components/Box.tsx';
@@ -14,6 +14,10 @@ import {Post} from '../../models/Post.ts';
 import PostCard from './Components/Post/PostCard.tsx';
 import {mockPost} from '../../models/Mockup.ts';
 import {usePostStore} from '../../hooks/usePostStore.ts';
+import {getPosts} from '../../services/apis/postServices.ts';
+import {playTrack, stopTrack} from '../../../service';
+import {useFocusEffect, useIsFocused} from '@react-navigation/native';
+import useAudioControl from '../../hooks/TrackPlayer/useAudioControl.ts';
 
 export interface TestStory {
   id: string;
@@ -21,9 +25,11 @@ export interface TestStory {
 }
 const HomeScreen = () => {
   const {information} = useUserInformation();
+  const {toggleMute, isMuted} = useAudioControl();
+  const isScreenFocus = useIsFocused();
   const {stories} = useStoryStore();
-  const {posts} = usePostStore();
-  const [viewableVideoPosts, setViewableVideoPosts] = useState<string[]>([]);
+  const {posts, setPosts} = usePostStore();
+  const [viewablePosts, setViewablePosts] = useState<Post[]>([]);
   const navigateToCreatePost = useCallback(() => {
     navigatePush(ROUTES.PostEditorScreen);
   }, []);
@@ -34,20 +40,73 @@ const HomeScreen = () => {
 
   const renderPost = useCallback(
     ({item}: {item: Post}) => {
-      const isPaused = !viewableVideoPosts.includes(item._id);
-      return <PostCard item={item} paused={isPaused} />;
+      const isPaused = !viewablePosts.includes(item) || !isScreenFocus;
+      return (
+        <PostCard
+          {...(item.music && {toggleMute, isMuted})}
+          item={item}
+          pauseVideo={isPaused}
+        />
+      );
     },
-    [viewableVideoPosts],
+    [isMuted, isScreenFocus, toggleMute, viewablePosts],
   );
 
   const onViewableItemsChanged = useCallback(
     ({viewableItems}: {viewableItems: ViewToken[]}) => {
-      console.log('Viewable: ', viewableItems);
-      const viewableIds = viewableItems.map(item => item.item._id);
-      setViewableVideoPosts(viewableIds);
+      const viewableRes: Post[] = viewableItems.map(item => {
+        return item.item;
+      });
+      setViewablePosts(viewableRes);
     },
     [],
   );
+  const handleGetPosts = useCallback(() => {
+    if (posts.nextPage) {
+      getPosts(5, posts.nextPage)
+        .then(res => {
+          if (res) {
+            setPosts(res);
+          }
+        })
+        .catch(e => {
+          console.log('Error get post: ', e);
+        });
+    }
+  }, [posts.nextPage, setPosts]);
+  useEffect(() => {
+    handleGetPosts();
+  }, [handleGetPosts]);
+
+  const filterPostHasMusic = useCallback((data: Post[]) => {
+    return data.filter(
+      item => item.postType.type === 'PHOTO' && item?.music !== '',
+    );
+  }, []);
+  useEffect(() => {
+    const playMusicForVisiblePosts = async () => {
+      const filteredMusicPosts = filterPostHasMusic(viewablePosts);
+
+      if (filteredMusicPosts.length === 0) {
+        await stopTrack();
+        return;
+      }
+
+      const firstMusicPost = filteredMusicPosts[0];
+      if (viewablePosts.includes(firstMusicPost) || !isScreenFocus) {
+        try {
+          await playTrack(firstMusicPost.music, true);
+          console.log('Music is playing');
+        } catch (e) {
+          console.error('Error playing music: ', e);
+        }
+      }
+    };
+    playMusicForVisiblePosts();
+    return () => {
+      stopTrack();
+    };
+  }, [filterPostHasMusic, isScreenFocus, viewablePosts]);
   return (
     <Container justifyContent={'flex-start'}>
       <Header
@@ -69,10 +128,18 @@ const HomeScreen = () => {
           </Box>
         }
         showsVerticalScrollIndicator={false}
-        data={posts}
+        data={posts.data}
         renderItem={renderPost}
         viewabilityConfig={{
-          itemVisiblePercentThreshold: 70,
+          itemVisiblePercentThreshold: 80,
+        }}
+        onEndReachedThreshold={0.5}
+        onEndReached={({distanceFromEnd}) => {
+          console.log(distanceFromEnd);
+          if (distanceFromEnd <= 0) {
+            return;
+          }
+          handleGetPosts();
         }}
         onViewableItemsChanged={onViewableItemsChanged}
       />

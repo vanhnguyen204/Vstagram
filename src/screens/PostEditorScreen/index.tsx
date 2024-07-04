@@ -340,7 +340,6 @@ const PostEditorScreen = () => {
       keyboardVerticalOffset={Platform.select({ios: 0, android: 500})}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <Container justifyContent={'flex-start'} alignItems={'flex-start'}>
-          <ModalLoading visible={isModalLoading} />
           <AnimatedReanimated.View style={[animatedStyleImageBackground]}>
             {/* Modal show sticker */}
             <ModalSticker />

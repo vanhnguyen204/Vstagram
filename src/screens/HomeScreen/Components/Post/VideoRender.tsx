@@ -1,5 +1,5 @@
 import React, {memo, useState} from 'react';
-import {Post} from '../../../../models/Post.ts';
+import {Post, PostType, PostVideo} from '../../../../models/Post.ts';
 import Box from '../../../../components/Box.tsx';
 import {appColors} from '../../../../assets/colors/appColors.ts';
 import ButtonComponent from '../../../../components/ButtonComponent.tsx';
@@ -9,7 +9,6 @@ import TextComponent from '../../../../components/TextComponent.tsx';
 import Video from 'react-native-video';
 import {AppInfor} from '../../../../constants/AppInfor.ts';
 import ImageComponent from '../../../../components/ImageComponent.tsx';
-import {View} from 'react-native';
 import PostActions from './PostActions.tsx';
 
 interface VideoRenderProps {
@@ -20,7 +19,7 @@ interface VideoRenderProps {
 const VideoRender = (props: VideoRenderProps) => {
   const {item, paused} = props;
   const [muted, setMuted] = useState(false);
-
+  const postType = item.postType as PostVideo;
   return (
     <Box>
       <Box>
@@ -42,7 +41,9 @@ const VideoRender = (props: VideoRenderProps) => {
           paused={paused}
           muted={muted}
           repeat={true}
-          source={{uri: item.videoURL}}
+          source={{
+            uri: postType.videoURL,
+          }}
           style={{width: AppInfor.width, height: AppInfor.width}}
           resizeMode="cover"
         />

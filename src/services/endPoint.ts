@@ -17,6 +17,7 @@ export default () => {
     getStories: `${baseURL}/api/media/story`,
 
     //post
-    createPost: `${baseURL}/api/media/post`,
+    createPost: `${baseURL}/api/media/posts`,
+    getPosts: `${baseURL}/api/media/posts`,
   };
 };

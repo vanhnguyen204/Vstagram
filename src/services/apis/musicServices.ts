@@ -4,6 +4,6 @@ import {MusicResponse} from '../../models/MusicResponse.ts';
 
 export const getMusics = (limit?: number, page?: number) =>
   request<MusicResponse>(endPoint().getListMusic, Method.GET, {
-    limit: limit,
-    page: page,
+    limit,
+    page,
   });

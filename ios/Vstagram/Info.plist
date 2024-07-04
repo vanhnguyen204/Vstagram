@@ -2,8 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key/>
-	<string/>
+	<key></key>
+	<string></string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
@@ -32,19 +32,13 @@
 		<false/>
 		<key>NSAllowsLocalNetworking</key>
 		<true/>
-
 	</dict>
-            <key>NSCameraUsageDescription</key>
-            <string>Vstagram needs access to your Camera.</string>
-
-            <!-- optionally, if you want to record audio: -->
-            <key>NSMicrophoneUsageDescription</key>
-            <string>Vstagram needs access to your Microphone.</string>
-
 	<key>NSCameraUsageDescription</key>
 	<string>Vstagram muốn truy cập vào camera để sử dụng chức năng này</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string/>
+	<string></string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Vstagram needs access to your Microphone.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Vstagram muốn truy cập đầy đủ ảnh, video để sử dụng tính năng này</string>
 	<key>UIAppFonts</key>
@@ -72,6 +66,11 @@
 		<string>Briem Hand.ttf</string>
 		<string>Dancing Script.ttf</string>
 		<string>Jaro.ttf</string>
+	</array>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>push-to-talk</string>
+		<string>remote-notification</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen.storyboard</string>

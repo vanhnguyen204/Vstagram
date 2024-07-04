@@ -4,25 +4,35 @@ import {FlatList} from 'react-native';
 import {AppInfor} from '../../../../constants/AppInfor.ts';
 import Box from '../../../../components/Box.tsx';
 import PostActions from './PostActions.tsx';
+import useAudioControl from '../../../../hooks/TrackPlayer/useAudioControl.ts';
+import {MuteButton} from '../../../../components/MuteButton.tsx';
 
 interface MultipleImageProps {
   images: string[];
+
+  isMuted?: boolean;
+  toggleMute?: () => void;
+  hasMusic: boolean;
 }
 const MultipleImage = (props: MultipleImageProps) => {
-  const {images} = props;
+  const {images, hasMusic, isMuted, toggleMute} = props;
+  console.log('re-render multiple image: ', hasMusic);
+  console.log('---------------------------------');
   return (
     <Box>
-      <FlatList
-        snapToAlignment={'center'}
-        snapToInterval={AppInfor.width}
-        decelerationRate={'fast'}
-        showsHorizontalScrollIndicator={false}
-        data={images}
-        renderItem={({item}) => <MultipleImageCard imageUrl={item} />}
-        keyExtractor={image => image}
-        horizontal
-      />
-
+      <Box>
+        <FlatList
+          snapToAlignment={'center'}
+          snapToInterval={AppInfor.width}
+          decelerationRate={'fast'}
+          showsHorizontalScrollIndicator={false}
+          data={images}
+          renderItem={({item}) => <MultipleImageCard imageUrl={item} />}
+          keyExtractor={image => image}
+          horizontal
+        />
+        {hasMusic && <MuteButton isMuted={isMuted} toggleMute={toggleMute} />}
+      </Box>
       <PostActions />
     </Box>
   );
@@ -37,10 +47,11 @@ const MultipleImageCard = memo((props: MultipleImageCardProps) => {
       style={{
         width: AppInfor.width,
         height: AppInfor.width,
+        marginVertical: 10,
       }}
       resizeMode={FastImage.resizeMode.contain}
       source={{uri: imageUrl}}
     />
   );
 });
-export default MultipleImage;
+export default memo(MultipleImage);

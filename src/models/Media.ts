@@ -9,7 +9,7 @@ export interface Media {
   like: number;
   comment: Comment[];
   isLike: boolean;
-  music?: string;
+  music: string;
   isFollowed: boolean;
-  timeCreate?: string;
+  timeCreated?: string;
 }

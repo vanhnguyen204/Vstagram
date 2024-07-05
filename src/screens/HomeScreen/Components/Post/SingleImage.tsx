@@ -34,7 +34,11 @@ const SingleImage = (props: SingleImageProps) => {
           style={styles.imageStyle}
           resizeMode={FastImage.resizeMode.cover}
         />
-        {hasMusic &&  <MuteButton isMuted={isMuted} toggleMute={toggleMute} />}
+        {hasMusic && (
+          <Box position={'absolute'} bottom={10} right={10} zIndex={99}>
+            <MuteButton isMuted={isMuted} toggleMute={toggleMute} />
+          </Box>
+        )}
       </Box>
       <PostActions />
     </Box>

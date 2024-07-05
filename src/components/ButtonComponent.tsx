@@ -6,7 +6,7 @@ import {appColors} from '../assets/colors/appColors';
 
 interface ButtonComponentProps extends FlexBoxProp {
   name?: string;
-  onPress: () => void;
+  onPress?: () => void;
   style?: ViewStyle;
   backgroundColor?: string;
   nameColor?: string;

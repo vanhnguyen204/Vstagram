@@ -334,6 +334,21 @@ export const mockReels: Reel[] = [
     name: 'vanh204',
     isLike: false,
   },
+  {
+    _id: '5',
+    userId: '1',
+    isFollowed: true,
+    music: '',
+    avatar:
+      'https://img.freepik.com/premium-photo/animal-icon-hd-8k-wallpaper-stock-photographic-image_915071-38615.jpg',
+    description: 'Description',
+    videoURL:
+      'https://nodejs-vstagram-aws-s3.s3.ap-southeast-2.amazonaws.com/reels/transformer_test_reels_vstagram.mp4',
+    comment: [],
+    like: 999,
+    name: 'vanh204',
+    isLike: false,
+  },
 ];
 
 export const mockPost: Post[] = [

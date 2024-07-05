@@ -16,6 +16,7 @@ import Box from '../../../components/Box.tsx';
 import Spacer from '../../../components/Spacer.tsx';
 import {likesFormat} from '../../../utils/Media.ts';
 import {useComment} from '../../../hooks/useComment.ts';
+import {AppInfor} from '../../../constants/AppInfor.ts';
 interface ReelControllerProps {
   onPause: () => void;
   onLikePress: () => void;
@@ -23,6 +24,7 @@ interface ReelControllerProps {
   paused: boolean;
   onShare: () => void;
   item: Reel;
+  index: number;
 }
 export interface ReelControllerHandle {
   isLike: boolean;
@@ -30,7 +32,8 @@ export interface ReelControllerHandle {
 }
 const ReelController = forwardRef<ReelControllerHandle, ReelControllerProps>(
   (props, ref) => {
-    const {onPause, paused, onCommentPress, onLikePress, item, onShare} = props;
+    const {onPause, paused, onCommentPress, onLikePress, item, index, onShare} =
+      props;
     const [isLike, setIsLike] = useState<boolean>(item.isLike);
     const [hiddenDescription, setHiddenDescription] = useState(false);
     useImperativeHandle(ref, () => ({
@@ -39,24 +42,22 @@ const ReelController = forwardRef<ReelControllerHandle, ReelControllerProps>(
         setIsLike(prevState => !prevState);
       },
     }));
+
     return (
       <SafeAreaView style={styles.containerController}>
-        <Box flexDirection={'row'} flex={1} justifyContent={'flex-end'}>
+        <Box
+          position={'absolute'}
+          top={0}
+          left={0}
+          flexDirection={'row'}
+          bottom={0}
+          right={0}>
           <ButtonComponent
+            flex={1}
+            style={{width: AppInfor.width}}
+            justifyContent={'center'}
             activeOpacity={1}
-            onPress={() => {
-              onPause();
-            }}
-            style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              flex: 1,
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}>
+            onLongPress={onPause}>
             {paused && (
               <ImageComponent
                 alignSelf={'center'}
@@ -66,7 +67,20 @@ const ReelController = forwardRef<ReelControllerHandle, ReelControllerProps>(
               />
             )}
           </ButtonComponent>
+        </Box>
+
+        <Box
+          zIndex={99}
+          flexDirection={'row'}
+          flex={1}
+          position={'absolute'}
+          top={0}
+          right={0}
+          bottom={0}
+          justifyContent={'flex-end'}>
+          {/* Comment, like, share*/}
           <Box alignItems={'center'} justifyContent={'flex-end'} padding={15}>
+            {/*----Like----*/}
             <ButtonComponent
               scaleInValue={0.7}
               scaleAnimated={true}
@@ -82,8 +96,10 @@ const ReelController = forwardRef<ReelControllerHandle, ReelControllerProps>(
               <TextComponent value={likesFormat(item.like)} />
             </ButtonComponent>
             <Spacer height={15} />
+            {/*----Comment----*/}
             <ButtonComponent
               activeOpacity={1}
+              alignItems={'center'}
               scaleInValue={0.7}
               scaleAnimated={true}
               onPress={onCommentPress}>
@@ -96,6 +112,7 @@ const ReelController = forwardRef<ReelControllerHandle, ReelControllerProps>(
             </ButtonComponent>
 
             <Spacer height={15} />
+            {/*----Share----*/}
             <ButtonComponent onPress={onShare}>
               <ImageComponent
                 tintColor={appColors.white}
@@ -105,7 +122,14 @@ const ReelController = forwardRef<ReelControllerHandle, ReelControllerProps>(
             </ButtonComponent>
           </Box>
         </Box>
-        <Box padding={10} flexDirection={'row'}>
+        {/*User infor, description*/}
+        <Box
+          padding={10}
+          zIndex={1}
+          flexDirection={'row'}
+          position={'absolute'}
+          bottom={0}
+          left={0}>
           <ButtonComponent
             name={'See more about account'}
             activeOpacity={1}

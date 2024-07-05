@@ -1,71 +1,79 @@
-import {SafeAreaView, StatusBar} from 'react-native';
-import React, {useState} from 'react';
-
+import React, {useCallback, useRef, useState} from 'react';
+import {FlatList, SafeAreaView, StatusBar, View, ViewToken} from 'react-native';
+import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
+import ReelCard, {ReelCardHandle} from './components/ReelCard.tsx';
 import {mockReels} from '../../models/Mockup.ts';
 import {AppInfor} from '../../constants/AppInfor.ts';
-import ReelCard from './components/ReelCard.tsx';
-import Carousel from 'react-native-reanimated-carousel';
-import Container from '../../components/Container.tsx';
-import {SafeAreaProvider} from 'react-native-safe-area-context';
-import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
-import ModalComment from '../../components/ModalComment.tsx';
+import {appColors} from '../../assets/colors/appColors.ts';
 import Header from './components/Header.tsx';
 import {navigatePush} from '../../utils/NavigationUtils.ts';
-import {RootStackParams, ROUTES} from '../../navigators';
-import {RouteProp, useIsFocused} from '@react-navigation/native';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import { BottomTabParams } from "../../navigators/BottomTabParams.ts";
+import {ROUTES} from '../../navigators';
+import {Reel} from '../../models/Reel.ts';
+import {useIsFocused} from '@react-navigation/native';
 
-type ReelProps = RouteProp<BottomTabParams, 'Reels'>;
-type ReelNavigationProp = NativeStackNavigationProp<BottomTabParams, 'Reels'>;
-
-type Props = {
-  route: ReelProps;
-  navigation: ReelNavigationProp;
-};
-
-const ReelsScreen  = (props: Props) => {
-  const {navigation} = props;
-  const isFocusedScreen = useIsFocused();
-  const [activeVideo, setActiveVideo] = useState<number>(0);
+const ReelsScreen = () => {
+  const bottomTabHeight = useBottomTabBarHeight();
   const statusBarHeight = StatusBar.currentHeight ?? 44;
-  const bottomBarHeight = useBottomTabBarHeight();
+  const [viewableReels, setViewableReels] = useState<Reel | null>(null);
+  const reelsRefs = useRef<(ReelCardHandle | null)[]>([]);
+  const isScreenFocus = useIsFocused();
+  const renderItemReels = useCallback(
+    ({item, index}: {item: Reel; index: number}) => {
+      return (
+        <ReelCard
+          ref={ref => (reelsRefs.current[index] = ref)}
+          index={index}
+          item={item}
+          isFocused={item._id === viewableReels?._id && isScreenFocus}
+        />
+      );
+    },
+    [isScreenFocus, viewableReels?._id],
+  );
+
+  const onViewableItemsChanged = useCallback(
+    ({viewableItems}: {viewableItems: ViewToken[]}) => {
+      const viewableRes: Reel[] = viewableItems.map(item => item.item);
+      if (viewableRes.length > 0) {
+        const currentlyViewable = viewableRes[0];
+        if (viewableReels?._id !== currentlyViewable._id) {
+          setViewableReels(currentlyViewable);
+        }
+      }
+    },
+    [viewableReels?._id],
+  );
 
   return (
-    <SafeAreaProvider>
-      <Container justifyContent={'center'} alignItems={'center'}>
-        <ModalComment />
-        <SafeAreaView
-          style={{
-            position: 'absolute',
-            left: 0,
-            right: 0,
-            top: statusBarHeight,
-            zIndex: 99,
-          }}>
-          <Header
-            onCameraOpen={() => {
-              navigatePush(ROUTES.Capture);
-            }}
-          />
-        </SafeAreaView>
-        <Carousel
-          style={{flex: 1}}
-          height={AppInfor.height - statusBarHeight - bottomBarHeight - 20}
-          width={AppInfor.width}
-          data={mockReels}
-          vertical={true}
-          onSnapToItem={index => setActiveVideo(index)}
-          loop={false}
-          renderItem={({item, index}) => (
-            <ReelCard
-              item={item}
-              isFocused={index === activeVideo && isFocusedScreen}
-            />
-          )}
+    <View style={{backgroundColor: appColors.backgroundApp}}>
+      <SafeAreaView
+        style={{
+          position: 'absolute',
+          left: 0,
+          right: 0,
+          top: statusBarHeight,
+          zIndex: 99,
+        }}>
+        <Header
+          onCameraOpen={() => {
+            navigatePush(ROUTES.Capture);
+          }}
         />
-      </Container>
-    </SafeAreaProvider>
+      </SafeAreaView>
+      <FlatList
+        data={mockReels}
+        renderItem={renderItemReels}
+        viewabilityConfig={{
+          itemVisiblePercentThreshold: 70,
+        }}
+        decelerationRate={'fast'}
+        snapToInterval={AppInfor.height - bottomTabHeight}
+        snapToAlignment={'center'}
+        onViewableItemsChanged={onViewableItemsChanged}
+        keyExtractor={item => item._id.toString()}
+        showsVerticalScrollIndicator={false}
+      />
+    </View>
   );
 };
 

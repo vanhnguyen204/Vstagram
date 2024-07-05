@@ -93,7 +93,7 @@ const HomeScreen = () => {
       }
 
       const firstMusicPost = filteredMusicPosts[0];
-      if (viewablePosts.includes(firstMusicPost) || !isScreenFocus) {
+      if (viewablePosts.includes(firstMusicPost) && isScreenFocus) {
         try {
           await playTrack(firstMusicPost.music, true);
           console.log('Music is playing');

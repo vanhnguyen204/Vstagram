@@ -67,7 +67,7 @@ const PostCard = (props: PostCardProps) => {
       {item.postType.type === PostType.PHOTO && (
         <ButtonComponent
           name={'See more user information'}
-          marginTop={5}
+          marginTop={7}
           alignSelf={'flex-start'}
           flexDirection={'row'}
           onPress={() => {}}>

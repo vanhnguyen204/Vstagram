@@ -31,7 +31,11 @@ const MultipleImage = (props: MultipleImageProps) => {
           keyExtractor={image => image}
           horizontal
         />
-        {hasMusic && <MuteButton isMuted={isMuted} toggleMute={toggleMute} />}
+        {hasMusic && (
+          <Box position={'absolute'} bottom={10} right={10} zIndex={99}>
+            <MuteButton isMuted={isMuted} toggleMute={toggleMute} />
+          </Box>
+        )}
       </Box>
       <PostActions />
     </Box>

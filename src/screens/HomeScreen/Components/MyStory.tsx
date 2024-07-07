@@ -6,6 +6,7 @@ import ImageComponent from '../../../components/ImageComponent.tsx';
 import ButtonComponent from '../../../components/ButtonComponent.tsx';
 import Box from '../../../components/Box.tsx';
 import TextComponent from '../../../components/TextComponent.tsx';
+import {useUserInformation} from '../../../hooks';
 interface MyStoryProps {
   item?: object;
   marginHorizontal?: number;
@@ -14,7 +15,7 @@ interface MyStoryProps {
 }
 const MyStory = (props: MyStoryProps) => {
   const {item, marginHorizontal, onStoryPress, onIconAddPress} = props;
-
+  const {information} = useUserInformation();
   return (
     <Box alignItems={'center'}>
       <Box style={{overflow: 'visible'}}>
@@ -36,7 +37,13 @@ const MyStory = (props: MyStoryProps) => {
               margin={2}
               width={70}
               height={70}
-              src={require('../../../assets/icons/user-avatar.png')}
+              resizeMode={'cover'}
+              borderRadius={99}
+              src={
+                information.avatar
+                  ? {uri: information.avatar}
+                  : require('../../../assets/icons/user-avatar.png')
+              }
             />
           </TouchableOpacity>
         </LinearGradient>

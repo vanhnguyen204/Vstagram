@@ -21,7 +21,7 @@ const VideoRender = (props: VideoRenderProps) => {
   const {item, paused} = props;
   const [muted, setMuted] = useState(false);
   const postType = item.postType as PostVideo;
-  console.log('Re-render Video');
+  // console.log('Re-render Video');
   const toggleMute = useCallback(() => {
     setMuted(prevState => !prevState);
   }, []);

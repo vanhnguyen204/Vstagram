@@ -10,6 +10,8 @@ export const appColors = {
   red: '#D32F2F',
   blue500: '#2196F3',
   transparent: 'transparent',
+  //text, TextInput
+  placeholderTextColor: '#757575',
   grays: {
     gray100: '#F5F5F5',
     gray200: '#EEEEEE',

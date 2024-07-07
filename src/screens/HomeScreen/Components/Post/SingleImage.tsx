@@ -22,9 +22,9 @@ const SingleImage = (props: SingleImageProps) => {
       height: AppInfor.width,
     },
   });
-
-  console.log('re-render single image: ', hasMusic);
-  console.log('---------------------------------');
+  //
+  // console.log('re-render single image: ', hasMusic);
+  // console.log('---------------------------------');
 
   return (
     <Box flex={1} marginVertical={10}>

@@ -13,12 +13,15 @@ import TextComponent from '../../components/TextComponent';
 import {login} from '../../services/apis';
 import {useUserInformation} from '../../hooks';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {ACCESS_TOKEN} from '../../constants/AsyncStorage';
+import {ACCESS_TOKEN, ACCESS_USER_ID} from '../../constants/AsyncStorage';
 import {ROUTES} from '../../navigators';
+import {User} from '../../models';
+import {useChatStore} from '../../hooks/useChatStore.ts';
 
 const Login = () => {
   const loginStore = useLoginStore();
   const {setInformation} = useUserInformation();
+  const {socket, initialSocketIO} = useChatStore();
   const [isLoading, setIsLoading] = useState(false);
   const goToRegister = useCallback(() => {
     navigatePush(ROUTES.Register);
@@ -37,30 +40,25 @@ const Login = () => {
     },
     [loginStore],
   );
-  const handleLogin = useCallback(() => {
-    setIsLoading(true);
-    login(loginStore.email, loginStore.passWord)
-      .then(response => {
-        setIsLoading(false);
-        console.log('Login success', response);
-        setInformation(response);
-        // @ts-ignore
-        AsyncStorage.setItem(ACCESS_TOKEN, response.token)
-          .then(() => {
-            navigateReplace(ROUTES.BottomTab);
-          })
-          .catch(e => {
-            console.log(e);
-          });
-      })
-      .catch(e => {
-        console.log(e);
-        Alert.alert(
-          'Lỗi đăng nhập',
-          'Tài khoản hoặc mật khẩu không chính xác!',
-        );
-        setIsLoading(false);
-      });
+  const handleLogin = useCallback(async () => {
+    try {
+      setIsLoading(true);
+      const loginResponse: User = await login(
+        loginStore.email,
+        loginStore.passWord,
+      );
+
+      setIsLoading(false);
+      console.log('Login success', loginResponse);
+      setInformation(loginResponse);
+      initialSocketIO(socket, loginResponse._id);
+      await AsyncStorage.setItem(ACCESS_TOKEN, loginResponse.token);
+      await AsyncStorage.setItem(ACCESS_USER_ID, loginResponse._id);
+      navigateReplace(ROUTES.BottomTab);
+    } catch (e) {
+      Alert.alert('Lỗi đăng nhập', 'Tài khoản hoặc mật khẩu không chính xác!');
+      setIsLoading(false);
+    }
   }, [loginStore.email, loginStore.passWord, setInformation]);
   return (
     <Container justifyContent="space-around">

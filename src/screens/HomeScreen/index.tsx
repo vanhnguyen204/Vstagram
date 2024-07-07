@@ -18,6 +18,7 @@ import {getPosts} from '../../services/apis/postServices.ts';
 import {playTrack, stopTrack} from '../../../service';
 import {useFocusEffect, useIsFocused} from '@react-navigation/native';
 import useAudioControl from '../../hooks/TrackPlayer/useAudioControl.ts';
+import { useChatStore } from "../../hooks/useChatStore.ts";
 
 export interface TestStory {
   id: string;
@@ -29,6 +30,7 @@ const HomeScreen = () => {
   const isScreenFocus = useIsFocused();
   const {stories} = useStoryStore();
   const {posts, setPosts} = usePostStore();
+
   const [viewablePosts, setViewablePosts] = useState<Post[]>([]);
   const navigateToCreatePost = useCallback(() => {
     navigatePush(ROUTES.PostEditorScreen);
@@ -107,10 +109,13 @@ const HomeScreen = () => {
       stopTrack();
     };
   }, [filterPostHasMusic, isScreenFocus, viewablePosts]);
+  const navigateToChatStore = useCallback(() => {
+    navigatePush(ROUTES.ChatStore)
+  }, [])
   return (
     <Container justifyContent={'flex-start'}>
       <Header
-        onChatPress={() => {}}
+        onChatPress={navigateToChatStore}
         onLogoPress={() => {}}
         onNotificationPress={() => {}}
       />

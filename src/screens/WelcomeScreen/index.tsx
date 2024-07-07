@@ -6,13 +6,13 @@ import TextComponent from '../../components/TextComponent';
 import ImageComponent from '../../components/ImageComponent';
 import Box from '../../components/Box';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {ACCESS_TOKEN} from '../../constants/AsyncStorage';
+import {ACCESS_TOKEN, ACCESS_USER_ID} from '../../constants/AsyncStorage';
 import {navigateReplace} from '../../utils/NavigationUtils';
 
-import {getStories, getUserInformation} from '../../services/apis';
+import {getAllUser, getStories, getUserInformation} from '../../services/apis';
 import {ROUTES} from '../../navigators';
 import {musicStore, useStoryStore, useUserInformation} from '../../hooks';
-import {User} from '../../models/User.ts';
+import {User, UserConversation} from '../../models/User.ts';
 import {getMusics} from '../../services/apis/musicServices.ts';
 import {
   CameraRoll,
@@ -21,6 +21,9 @@ import {
   PhotoIdentifiersPage,
 } from '@react-native-camera-roll/camera-roll';
 import {usePhotos} from '../../hooks/Media/usePhotos.ts';
+import {useChatStore} from '../../hooks/useChatStore.ts';
+import {getConversations} from '../../services/apis/chatServices.ts';
+import {getDataAsyncStorage} from '../../utils/AsyncStorage.ts';
 export interface GetPhotosReturnType {
   edges: PhotoIdentifier[];
   page_info: {
@@ -33,6 +36,24 @@ const WelcomeScreen = () => {
   const {setMusics} = musicStore();
   const {setListStory} = useStoryStore();
   const {setInformation} = useUserInformation();
+  const {setAllUser, setConversations} = useChatStore();
+  const getUsers = useCallback(async () => {
+    try {
+      const response: UserConversation[] = await getAllUser();
+      setAllUser(response);
+      const filterId = response.map(item => {
+        return item._id;
+      });
+      const getUserIdStorage = await getDataAsyncStorage(ACCESS_USER_ID);
+      const conversationRes = await getConversations(
+        getUserIdStorage,
+        filterId,
+      );
+      setConversations(conversationRes);
+    } catch (e) {
+      console.log(e);
+    }
+  }, []);
   const getUserInfor = useCallback(async () => {
     try {
       const user: User = await getUserInformation();
@@ -63,7 +84,12 @@ const WelcomeScreen = () => {
       .then(res => {
         if (res) {
           navigateReplace(ROUTES.BottomTab);
-          Promise.allSettled([getMusicsAxios(), getMyStories(), getUserInfor()])
+          Promise.allSettled([
+            getMusicsAxios(),
+            getMyStories(),
+            getUserInfor(),
+            getUsers(),
+          ])
             .then(() => {})
             .catch(e => {
               console.log(e);
@@ -84,7 +110,7 @@ const WelcomeScreen = () => {
           PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
           {
             title: 'Permission Explanation',
-            message: 'This app needs access to your photos.',
+            message: 'Vstagram needs access to your photos.',
             buttonPositive: 'OK',
           },
         );
@@ -151,7 +177,6 @@ const WelcomeScreen = () => {
       if (permissionGranted) {
         Promise.all([getVideos(), getImages()])
           .then(res => {
-            console.log('Get album success!');
             setVideos(res[0]);
             setImages(res[1]);
           })

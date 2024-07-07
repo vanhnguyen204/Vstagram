@@ -16,8 +16,8 @@ interface MultipleImageProps {
 }
 const MultipleImage = (props: MultipleImageProps) => {
   const {images, hasMusic, isMuted, toggleMute} = props;
-  console.log('re-render multiple image: ', hasMusic);
-  console.log('---------------------------------');
+  // console.log('re-render multiple image: ', hasMusic);
+  // console.log('---------------------------------');
   return (
     <Box>
       <Box>

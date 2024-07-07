@@ -9,6 +9,13 @@ interface UserInforActions extends UserInforType {
 }
 
 export const useUserInformation = create<UserInforActions>(set => ({
-  information: new User('', '', '', ''),
+  information: {
+    _id: '',
+    token: '',
+    avatar: '',
+    email: '',
+    fullName: '',
+    activity: ''
+  },
   setInformation: (information: User): void => set({information}),
 }));

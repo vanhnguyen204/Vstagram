@@ -2,6 +2,7 @@ import {Story} from './Story.ts';
 import {Reel} from './Reel.ts';
 import {Post, PostType} from './Post.ts';
 
+
 export interface SetStory {
   userId: string;
   dataStories: Story[];

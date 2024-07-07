@@ -16,15 +16,25 @@ import Animated, {
 import ButtonComponent from '../../components/ButtonComponent.tsx';
 import {appColors} from '../../assets/colors/appColors.ts';
 import {useFocusEffect} from '@react-navigation/native';
-import TextComponent from "../../components/TextComponent.tsx";
-
+import TextComponent from '../../components/TextComponent.tsx';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {ACCESS_TOKEN, ACCESS_USER_ID} from '../../constants/AsyncStorage.ts';
+import {navigateAndReset} from '../../utils/NavigationUtils.ts';
+import {ROUTES} from '../../navigators';
 
 const SettingScreen = () => {
-
-
   return (
     <View style={styles.container}>
-     <TextComponent value={'Setting'}/>
+      <TextComponent value={'Setting'} />
+      <ButtonComponent
+        name={'Đăng xuất'}
+        onPress={async () => {
+          await AsyncStorage.setItem(ACCESS_USER_ID, '');
+          await AsyncStorage.setItem(ACCESS_TOKEN, '');
+
+          navigateAndReset([{name: ROUTES.Login}]);
+        }}
+      />
     </View>
   );
 };

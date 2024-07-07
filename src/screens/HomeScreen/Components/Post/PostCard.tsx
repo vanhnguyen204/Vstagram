@@ -22,7 +22,6 @@ interface PostCardProps {
 
 const PostCard = (props: PostCardProps) => {
   const {item, pauseVideo, toggleMute, isMuted} = props;
-  console.log('re-render: ', item._id);
   const renderPhotos = useCallback(() => {
     if (item.postType.type === PostType.PHOTO) {
       const hasMusic = item.music !== '';

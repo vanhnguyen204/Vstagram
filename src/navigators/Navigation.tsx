@@ -15,6 +15,8 @@ import Capture from '../screens/Capture';
 import PreviewReel from '../screens/PreviewReel';
 import Album from '../screens/Album';
 import NewPost from '../screens/NewPost';
+import ChatStore from '../screens/ChatStore';
+import ConversationDetails from "../screens/ConversationDetails";
 
 const Stack = createNativeStackNavigator<RootStackParams>();
 const Navigation = () => {
@@ -43,7 +45,11 @@ const Navigation = () => {
       <Stack.Screen name={ROUTES.PreviewReel} component={PreviewReel} />
       {/*@ts-ignore*/}
       <Stack.Screen name={ROUTES.Album} component={Album} />
+        {/*@ts-ignore*/}
       <Stack.Screen name={ROUTES.NewPost} component={NewPost} />
+      <Stack.Screen name={ROUTES.ChatStore} component={ChatStore} />
+        {/*@ts-ignore*/}
+        <Stack.Screen name={ROUTES.ConversationDetails} component={ConversationDetails} />
     </Stack.Navigator>
   );
 };

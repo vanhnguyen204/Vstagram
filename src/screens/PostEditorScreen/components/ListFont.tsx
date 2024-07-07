@@ -4,7 +4,7 @@ import ButtonComponent from '../../../components/ButtonComponent.tsx';
 import TextComponent from '../../../components/TextComponent.tsx';
 import {appColors} from '../../../assets/colors/appColors.ts';
 import Box from '../../../components/Box.tsx';
-import {useStoryEditor} from '../../../hooks/useStoryEditor.ts';
+import {useStoryEditor} from "../../../hooks";
 
 interface ListFontProps {
   fonts: string[];

@@ -14,6 +14,8 @@ export const ROUTES = {
   PreviewReel: 'PreviewReel' as keyof RootStackParams,
   NewPost: 'NewPost' as keyof RootStackParams,
   Album: 'Album' as keyof RootStackParams,
+  ChatStore: 'ChatStore' as keyof RootStackParams,
+  ConversationDetails: 'ConversationDetails' as keyof RootStackParams,
   Home: 'Home' as keyof BottomTabParams,
   Search: 'Search' as keyof BottomTabParams,
   Reels: 'Reels' as keyof BottomTabParams,

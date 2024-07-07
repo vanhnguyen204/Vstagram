@@ -1,4 +1,4 @@
-import {Music} from './../models/Music';
+import {Music} from "../models";
 import {create} from 'zustand';
 import {MusicResponse} from '../models/MusicResponse.ts';
 

@@ -20,6 +20,9 @@ export interface ConversationType {
   page: number;
   limit: number;
 }
+export interface ChatNotification extends Chat {
+  userName: string;
+}
 interface ChatStoreTypes {
   socket: Socket;
   isConnected: boolean;
@@ -31,7 +34,7 @@ interface ChatStoreTypes {
 
 interface ChatStoreActions extends ChatStoreTypes {
   initialSocketIO: (socket: Socket, userId: string) => void;
-  sendMessage: (chat: Chat, socket: Socket) => void;
+  sendMessage: (chat: Chat, userName: string, socket: Socket) => void;
   setConversations: (conversations: ConversationType[]) => void;
   setAllUser: (allUser: UserConversation[]) => void;
   setConversationDetails: (conversation: ConversationType) => void;
@@ -60,20 +63,21 @@ export const useChatStore = create<ChatStoreActions>(set => ({
     set(state => ({
       conversationDetails: {
         ...state.conversationDetails,
-        data: state.conversationDetails.data.concat(chat),
+        data: [chat, ...state.conversationDetails.data],
       },
     })),
   conversations: [],
   setConversations: (conversations: ConversationType[]) => set({conversations}),
-  sendMessage: async (chat: Chat, socket: Socket) => {
+  sendMessage: async (chat: Chat, userName: string, socket: Socket) => {
     const userId = await getDataAsyncStorage(ACCESS_USER_ID);
     socket.emit('sendMessage', {
       ...chat,
       userIdSent: userId,
+      userName,
     });
-    useChatStore.getState().addNewConversation(chat)
   },
-  initialSocketIO: (socket: Socket, userId: string) => {
+  initialSocketIO: async (socket: Socket, userId: string) => {
+    const getUserId = await getDataAsyncStorage(ACCESS_USER_ID);
     // Event listeners
     socket.on('connect', () => {
       console.log('User connected to socket.io server');
@@ -90,24 +94,20 @@ export const useChatStore = create<ChatStoreActions>(set => ({
     socket.emit('register', userId);
 
     socket.on('onlineUsers', (onlineUsers: OnlineUserType[]) => {
-      getDataAsyncStorage(ACCESS_USER_ID)
-        .then(res => {
-          const filterUser = onlineUsers.filter(item => {
-            return item.userId !== res;
-          });
-          set({onlineUsers: filterUser});
-        })
-        .catch(e => {
-          console.log(e);
-        });
+      const filterUser = onlineUsers.filter(item => {
+        return item.userId !== getUserId;
+      });
+      set({onlineUsers: filterUser});
     });
     socket.on('newMessage', (message: Chat) => {
-      console.log('New message received:', message);
-      useChatStore.getState().addNewConversation(message)
-      showNotification(
-        message.userIdSent,
-        typeof message.message === 'string' ? message.message : 'hello',
-      );
+      console.log('New message received:', message.message);
+      useChatStore.getState().addNewConversation(message);
+      if (message.userIdReceived === getUserId) {
+        showNotification(
+          'userName',
+          typeof message.message === 'string' ? message.message : 'hello',
+        );
+      }
     });
     socket.on('disconnect', () => {
       // console.log('User disconnected from socket.io server');

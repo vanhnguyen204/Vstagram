@@ -1,30 +1,32 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
-  Button,
   Dimensions,
-  ImageBackground,
   Keyboard,
   KeyboardAvoidingView,
-  Platform,
-  SafeAreaView,
-  ScrollView,
+  Platform, SafeAreaView,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
   TouchableWithoutFeedback,
-  View,
-} from 'react-native';
-import Container from '../../components/Container.tsx';
+  View
+} from "react-native";
 import {appColors} from '../../assets/colors/appColors.ts';
-import Carousel from 'react-native-reanimated-carousel';
-import {mockStories} from '../../models/Mockup.ts';
-import Box from '../../components/Box.tsx';
+import ButtonComponent from '../../components/ButtonComponent.tsx';
+import LongPressButtonWithPopup from './LongPressButton.tsx';
+import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import TextComponent from '../../components/TextComponent.tsx';
-import ProgressBar from '../../components/ProgressBar.tsx';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import Icon from 'react-native-vector-icons/AntDesign';
-import {globalStyle} from '../../styles/globalStyle.ts';
+import ListFont from "../ImageEditorScreen/components/ListFont.tsx";
+import fonts from "../../assets/fonts";
+import Spacer from "../../components/Spacer.tsx";
+import Box from "../../components/Box.tsx";
+import ImageComponent from "../../components/ImageComponent.tsx";
+import InputComponent from "../../components/InputComponent.tsx";
+import { AppInfor } from "../../constants/AppInfor.ts";
+import SliderComponent from "../../components/SliderComponent.tsx";
+import { TextElement } from "../../hooks";
+import ListColor from "../ImageEditorScreen/components/ListColor.tsx";
+import TextEditorLayer from "../ImageEditorScreen/components/TextEditorLayer.tsx";
 
 const SearchScreen = () => {
   const currentStoryFocus = useRef<number>(0);
@@ -55,6 +57,7 @@ export function CommentInput() {
         maxHeight: 100,
         padding: 5,
         width,
+        backgroundColor: appColors.grays.gray500,
       }}>
       <View
         style={{
@@ -88,27 +91,20 @@ export function CommentInput() {
     </View>
   );
 }
+
 const KeyboardAvoidingComponent = () => {
+
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      style={styles.container}>
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View style={styles.inner}>
-          <Text style={styles.header}>Header</Text>
-          <TextInput placeholder="Username" style={styles.textInput} />
-          {/*<View style={styles.btnContainer}>*/}
-          {/*  <Button title="Submit" onPress={() => null} />*/}
-          {/*</View>*/}
-        </View>
-      </TouchableWithoutFeedback>
-    </KeyboardAvoidingView>
+    <SafeAreaView style={styles.container}>
+      <TextEditorLayer onDone={ () => {}} />
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: appColors.grays.gray500,
   },
   inner: {
     padding: 24,
@@ -123,7 +119,6 @@ const styles = StyleSheet.create({
     height: 40,
     borderColor: '#000000',
     borderBottomWidth: 1,
-
   },
   btnContainer: {
     backgroundColor: 'white',

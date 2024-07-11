@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { memo, useState } from "react";
 import Box from '../../../components/Box.tsx';
 import {Chat} from '../../../models/Chat.ts';
 import FastImage from 'react-native-fast-image';
@@ -11,14 +11,17 @@ interface ConversationItemProps {
   item: Chat;
   image: string;
   containerStyle: ViewStyle;
-  positionShowTimestamp: 'flex-start' | 'flex-end'
+  positionShowTimestamp: 'flex-start' | 'flex-end';
+
 }
 const ConversationItem = (props: ConversationItemProps) => {
-  const {item, image, containerStyle, positionShowTimestamp} = props;
+  const {item, image, containerStyle,  positionShowTimestamp} = props;
   const [showTimeChat, setShowTimeChat] = useState(false);
+  // console.log('Render item: ', item._id);
+  // console.log('+++++++----------+++++++++++');
   return (
-    <Box  alignItems={positionShowTimestamp}>
-      <Box marginVertical={10} flexDirection={'row'} >
+    <Box alignItems={positionShowTimestamp}>
+      <Box marginVertical={10} flexDirection={'row'}>
         {image !== '' && (
           <>
             <FastImage
@@ -45,5 +48,4 @@ const ConversationItem = (props: ConversationItemProps) => {
     </Box>
   );
 };
-
-export default ConversationItem;
+export default memo(ConversationItem);

@@ -1,4 +1,4 @@
-import React, { forwardRef, memo, ReactNode } from "react";
+import React, {forwardRef, memo, ReactNode} from 'react';
 import {
   StyleProp,
   StyleSheet,
@@ -22,9 +22,9 @@ const InputComponentV2 = forwardRef(
     const {leadingIcon, trailingIcon, containerStyle, textInputStyle, ...rest} =
       props;
     return (
-      <View style={[containerStyle, styles.containerInput]}>
+      <View style={[styles.containerInput, containerStyle]}>
         {leadingIcon && leadingIcon}
-        <TextInput {...rest} style={[textInputStyle, styles.inputBase]} />
+        <TextInput ref={ref} {...rest} style={[textInputStyle, styles.inputBase]} />
         {trailingIcon && trailingIcon}
       </View>
     );
@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
     borderRadius: 20,
     backgroundColor: appColors.grays.gray800,
-    marginBottom: 5,
+
   },
   inputBase: {
     flex: 1,

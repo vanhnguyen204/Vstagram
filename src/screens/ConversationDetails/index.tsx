@@ -32,6 +32,7 @@ import {ConversationType, useChatStore} from '../../hooks/useChatStore.ts';
 import {getDataAsyncStorage} from '../../utils/AsyncStorage.ts';
 import Console from '../../utils/Console.ts';
 import {getConversationDetails} from '../../services/apis/chatServices.ts';
+import { useUserInformation } from "../../hooks";
 
 type ConversationDetailsProps = RouteProp<
   RootStackParams,
@@ -48,11 +49,13 @@ type Props = {
 };
 const ConversationDetails = (props: Props) => {
   const {userInfor} = props.route.params;
-  const {conversationDetails,addNewConversation, setConversationDetails} = useChatStore();
+  const {information} = useUserInformation()
+  const {conversationDetails, addNewConversation, setConversationDetails} =
+    useChatStore();
   const {sendMessage, socket} = useChatStore();
   const listConversationRef = useRef<FlatList>(null);
   const [message, setMessage] = useState<string>('');
-
+  const [extraData, setExtraData] = useState(0);
   const handleGetConversationDetails = useCallback(async () => {
     try {
       const userId = await getDataAsyncStorage(ACCESS_USER_ID);
@@ -71,16 +74,25 @@ const ConversationDetails = (props: Props) => {
         timeChat: '',
         _id: '',
       };
-      sendMessage(newMessage, socket);
+      sendMessage(newMessage,information.fullName, socket);
       setMessage('');
+    }else {
+      const newMessage = {
+        userIdReceived: userInfor._id,
+        message: '🍋',
+        userIdSent: '',
+        timeChat: '',
+        _id: '',
+      };
+      sendMessage(newMessage,information.fullName, socket);
+
     }
   };
-  const reversedData = useMemo(() => [...conversationDetails.data].reverse(), [conversationDetails.data]);
 
   useEffect(() => {
     handleGetConversationDetails().then(() => {});
-  }, [userInfor._id]);
-  console.log(conversationDetails.data.length);
+  }, [handleGetConversationDetails, userInfor._id]);
+  // console.log('Conversation: ', conversationDetails.data.length);
   const renderConversationItem = useCallback(
     ({item, index}: {item: Chat; index: number}) => {
       return (
@@ -159,33 +171,38 @@ const ConversationDetails = (props: Props) => {
           />
           <View style={{flex: 1}}>
             <FlatList
+              extraData={extraData}
               inverted={true}
-              keyExtractor={(item, index) => index.toString()}
+              keyExtractor={(item, index) => item._id}
               ref={listConversationRef}
-              data={reversedData}
+              data={conversationDetails.data}
               renderItem={renderConversationItem}
             />
             <Spacer height={20} />
-            <InputComponentV2
-              value={message}
-              multiline={true}
-              onChangeText={setMessage}
-              containerStyle={{backgroundColor: 'green'}}
-              placeholder={'Soạn tin nhắn'}
-              placeholderTextColor={appColors.placeholderTextColor}
-              trailingIcon={
-                message.trim().length > 0 && (
-                  <ButtonComponent
-                    marginHorizontal={5}
-                    onPress={handleSendMessage}>
-                    <ImageComponent
-                      tintColor={appColors.white}
-                      src={require('../../assets/icons/share-2.png')}
-                    />
-                  </ButtonComponent>
-                )
-              }
-            />
+            <Box
+              paddingHorizontal={10}
+              flexDirection={'row'}
+              alignItems={'center'}
+              >
+              <InputComponentV2
+                value={message}
+                multiline={true}
+                onChangeText={setMessage}
+                containerStyle={{flex: 1, marginHorizontal: 5}}
+                placeholder={'Soạn tin nhắn'}
+                placeholderTextColor={appColors.placeholderTextColor}
+              />
+              <ButtonComponent onPress={handleSendMessage}>
+                {message.trim().length > 0 ? (
+                  <ImageComponent
+                    tintColor={appColors.white}
+                    src={require('../../assets/icons/share-2.png')}
+                  />
+                ) : (
+                  <TextComponent value={'🍋'} fontSize={28} />
+                )}
+              </ButtonComponent>
+            </Box>
           </View>
         </Container>
       </TouchableWithoutFeedback>

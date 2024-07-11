@@ -8,7 +8,7 @@ export const ROUTES = {
   VerifyRegister: 'VerifyRegister' as keyof RootStackParams,
   CreatePasswordScreen: 'CreatePasswordScreen' as keyof RootStackParams,
   BottomTab: 'BottomTab' as keyof RootStackParams,
-  PostEditorScreen: 'PostEditorScreen' as keyof RootStackParams,
+  ImageEditorScreen: 'ImageEditorScreen' as keyof RootStackParams,
   CompleteStoryScreen: 'CompleteStoryScreen' as keyof RootStackParams,
   Capture: 'Capture' as keyof RootStackParams,
   PreviewReel: 'PreviewReel' as keyof RootStackParams,

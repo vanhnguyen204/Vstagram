@@ -26,7 +26,7 @@ interface UsePhotosActions extends UsePhotosType {
   setPhotos: (photos: PhotoIdentifier[]) => void;
   setImages: (images: PhotoIdentifier[]) => void;
   setVideos: (videos: PhotoIdentifier[]) => void;
-  onImageSelected: (photo: ImageType) => void;
+  onImageSelected: (photo: ImageType, multiple: boolean) => void;
   onImageUnSelected: (photoId: string) => void;
   clearImageSelected: () => void;
   onVideoSelected: (video: VideoType) => void;
@@ -66,9 +66,12 @@ export const usePhotos = create<UsePhotosActions>(setState => ({
     setState(state => ({
       imageSelected: state.imageSelected.filter(item => item.id !== photoId),
     })),
-  clearImageSelected: () => setState({photos: []}),
-  onImageSelected: (photo: ImageType) =>
+  clearImageSelected: () =>
+    setState({
+      imageSelected: [],
+    }),
+  onImageSelected: (photo: ImageType,multiple: boolean ) =>
     setState(state => ({
-      imageSelected: state.imageSelected.concat(photo),
+      imageSelected: multiple ? state.imageSelected.concat(photo) : [photo],
     })),
 }));

@@ -1,65 +1,60 @@
-import React, {memo} from 'react';
-import {StyleSheet} from 'react-native';
+import React, {memo, useCallback} from 'react';
+import {FlatList, StyleSheet} from 'react-native';
 import Carousel from 'react-native-snap-carousel';
 import {AppInfor} from '../../../constants/AppInfor';
 import {appColors} from '../../../assets/colors/appColors';
 
 import ButtonComponent from '../../../components/ButtonComponent';
 import Box from '../../../components/Box';
-import {useStoryEditor} from '../../../hooks';
+import {useTextEditor} from './TextEditorLayer';
 
 interface ListColorProps {
   colors: string[][];
 }
-
 const ListColor: React.FC<ListColorProps> = ({colors}) => {
-  const {setTextColor} = useStoryEditor();
   return (
-    <Carousel
+    <FlatList
       keyboardShouldPersistTaps={'always'}
-      containerCustomStyle={styles.carouselContainer}
-      firstItem={1}
-      itemWidth={AppInfor.width}
-      sliderWidth={AppInfor.width}
-      itemHeight={AppInfor.height}
-      activeAnimationType={'spring'}
+      snapToAlignment={'center'}
+      snapToInterval={AppInfor.width}
+      decelerationRate={'fast'}
+      showsHorizontalScrollIndicator={false}
+      horizontal={true}
       data={colors}
-      renderItem={({item, index}) => (
-        <Box key={index} flexDirection="row" alignSelf={'center'}>
-          {item.map((item, index) => (
-            <ButtonComponent
-              key={index}
-              padding={10}
-              marginHorizontal={5}
-              borderWidth={2}
-              borderColor={appColors.white}
-              onPress={() => {
-                setTextColor(item);
-              }}
-              name=""
-              backgroundColor={item}
-              radius={999}
-            />
-          ))}
-          {/*<FlatList*/}
-          {/*  keyboardDismissMode={'none'}*/}
-          {/*  keyboardShouldPersistTaps={'always'}*/}
-          {/*  horizontal={true}*/}
-          {/*  data={item}*/}
-          {/*  keyExtractor={(indexChild: string) => indexChild.toString()}*/}
-          {/*  style={[styles.listColorStyle]}*/}
-          {/*  renderItem={({item}) => {*/}
-          {/*    return (*/}
-          {/*     */}
-          {/*    );*/}
-          {/*  }}*/}
-          {/*/>*/}
-        </Box>
-      )}
+      renderItem={({item}) => <ColorItem item={item} />}
     />
   );
 };
 
+interface ColorItemProps {
+  item: string[];
+}
+const ColorItem = memo((props: ColorItemProps) => {
+  const {item} = props;
+  const {textElement, setTextElement} = useTextEditor();
+  return (
+    <Box
+      flexDirection="row"
+      justifyContent={'center'}
+      style={{width: AppInfor.width}}>
+      {item.map((color, index) => (
+        <ButtonComponent
+          key={index}
+          padding={10}
+          marginHorizontal={5}
+          borderWidth={2}
+          borderColor={appColors.white}
+          onPress={() => {
+            setTextElement({...textElement, color: color});
+          }}
+          name=""
+          backgroundColor={color}
+          radius={999}
+        />
+      ))}
+    </Box>
+  );
+});
 const styles = StyleSheet.create({
   carouselContainer: {
     overflow: 'visible',

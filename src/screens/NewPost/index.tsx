@@ -18,7 +18,7 @@ import {AppInfor} from '../../constants/AppInfor.ts';
 import Box from '../../components/Box.tsx';
 import FastImage from 'react-native-fast-image';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
-import ModalMusic from '../PostEditorScreen/components/ModalMusic.tsx';
+import ModalMusic from '../ImageEditorScreen/components/ModalMusic.tsx';
 import {Music} from '../../models';
 import LinearGradient from 'react-native-linear-gradient';
 import ImageCard from './components/ImageCard.tsx';

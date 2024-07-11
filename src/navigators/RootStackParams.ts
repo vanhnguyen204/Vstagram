@@ -1,6 +1,7 @@
 import {VideoFile} from 'react-native-vision-camera';
-import { ConversationType, OnlineUserType } from "../hooks/useChatStore.ts";
-import { UserConversation } from "../models/User.ts";
+import {UserConversation} from '../models/User.ts';
+import {MediaParams} from '../models/Media.ts';
+import { ImageType } from "../hooks/Media/usePhotos.ts";
 
 export type RootStackParams = {
   WelcomeScreen: undefined;
@@ -10,13 +11,13 @@ export type RootStackParams = {
   CreatePasswordScreen: {email: string};
   BottomTab: undefined;
   Setting: undefined;
-  PostEditorScreen: undefined;
+  ImageEditorScreen: {image: ImageType};
   CompleteStoryScreen: undefined;
   Capture: undefined;
   Reels: undefined;
   NewPost: {mediaType: string};
   PreviewReel: {video: VideoFile};
-  Album: {mediaType: string};
+  Album: {mediaType: MediaParams};
   ChatStore: undefined;
-  ConversationDetails: {userInfor: UserConversation}
+  ConversationDetails: {userInfor: UserConversation};
 };

@@ -7,7 +7,7 @@ import VerifyRegister from '../screens/Auth/VerifyRegister.tsx';
 import CreatePasswordScreen from '../screens/Auth/CreatePasswordScreen.tsx';
 import Login from '../screens/Auth/Login.tsx';
 import BottomTab from './BottomTab.tsx';
-import PostEditorScreen from '../screens/PostEditorScreen';
+
 import CompleteStoryScreen from '../screens/CompleteStoryScreen/index.tsx';
 import {RootStackParams} from './RootStackParams.ts';
 import {ROUTES} from './Routes.ts';
@@ -16,7 +16,8 @@ import PreviewReel from '../screens/PreviewReel';
 import Album from '../screens/Album';
 import NewPost from '../screens/NewPost';
 import ChatStore from '../screens/ChatStore';
-import ConversationDetails from "../screens/ConversationDetails";
+import ConversationDetails from '../screens/ConversationDetails';
+import ImageEditorScreen from '../screens/ImageEditorScreen';
 
 const Stack = createNativeStackNavigator<RootStackParams>();
 const Navigation = () => {
@@ -33,8 +34,8 @@ const Navigation = () => {
       />
       <Stack.Screen name={ROUTES.BottomTab} component={BottomTab} />
       <Stack.Screen
-        name={ROUTES.PostEditorScreen}
-        component={PostEditorScreen}
+        name={ROUTES.ImageEditorScreen}
+        component={ImageEditorScreen}
       />
       <Stack.Screen
         name={ROUTES.CompleteStoryScreen}
@@ -45,11 +46,12 @@ const Navigation = () => {
       <Stack.Screen name={ROUTES.PreviewReel} component={PreviewReel} />
       {/*@ts-ignore*/}
       <Stack.Screen name={ROUTES.Album} component={Album} />
-        {/*@ts-ignore*/}
+      {/*@ts-ignore*/}
       <Stack.Screen name={ROUTES.NewPost} component={NewPost} />
       <Stack.Screen name={ROUTES.ChatStore} component={ChatStore} />
-        {/*@ts-ignore*/}
-        <Stack.Screen name={ROUTES.ConversationDetails} component={ConversationDetails} />
+      {/*@ts-ignore*/}
+      <Stack.Screen name={ROUTES.ConversationDetails} component={ConversationDetails}
+      />
     </Stack.Navigator>
   );
 };

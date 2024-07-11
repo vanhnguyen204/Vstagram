@@ -1,12 +1,10 @@
-import {View, TextInput, TextInputProps, ViewStyle} from 'react-native';
+import { View, TextInput, TextInputProps, ViewStyle, StyleProp, TextStyle } from "react-native";
 import React, {memo, Ref} from 'react';
 import {appColors} from '../assets/colors/appColors';
 interface InputProps extends TextInputProps {
   value: string;
   onChangeText: (value: string) => void;
   flex?: number;
-  placeholder?: string;
-  placeholderTextColor?: string;
   borderRadius?: number;
   padding?: number;
   margin?: number;
@@ -17,7 +15,7 @@ interface InputProps extends TextInputProps {
   marginTop?: number;
   marginBottom?: number;
   textColor?: string;
-  style?: ViewStyle;
+  style?: StyleProp<TextStyle>;
   autoCapitalize?: 'none' | 'sentences' | 'words' | 'characters' | undefined;
   ref?: Ref<TextInput>;
 }
@@ -25,8 +23,6 @@ const InputComponent = (props: InputProps) => {
   const {
     value,
     onChangeText,
-    placeholder,
-    placeholderTextColor,
     textColor,
     style,
     flex,
@@ -40,8 +36,6 @@ const InputComponent = (props: InputProps) => {
       {...resProps}
       style={[{color: textColor ?? appColors.white, flex: flex}, style]}
       value={value}
-      placeholder={placeholder}
-      placeholderTextColor={placeholderTextColor}
       onChangeText={onChangeText}
       autoCapitalize={autoCapitalize}
     />

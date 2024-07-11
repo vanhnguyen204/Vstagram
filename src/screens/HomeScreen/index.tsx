@@ -9,16 +9,14 @@ import {useStoryStore, useUserInformation} from '../../hooks';
 import {FlatList, StyleSheet, ViewToken} from 'react-native';
 import ModalStory from './Components/ModalStory.tsx';
 import {Story} from '../../models/Story.ts';
-import {usePhotos} from '../../hooks/Media/usePhotos.ts';
 import {Post} from '../../models/Post.ts';
 import PostCard from './Components/Post/PostCard.tsx';
-import {mockPost} from '../../models/Mockup.ts';
 import {usePostStore} from '../../hooks/usePostStore.ts';
 import {getPosts} from '../../services/apis/postServices.ts';
 import {playTrack, stopTrack} from '../../../service';
-import {useFocusEffect, useIsFocused} from '@react-navigation/native';
+import {useIsFocused} from '@react-navigation/native';
 import useAudioControl from '../../hooks/TrackPlayer/useAudioControl.ts';
-import { useChatStore } from "../../hooks/useChatStore.ts";
+import {MediaType} from '../../models/Enum.ts';
 
 export interface TestStory {
   id: string;
@@ -33,7 +31,13 @@ const HomeScreen = () => {
 
   const [viewablePosts, setViewablePosts] = useState<Post[]>([]);
   const navigateToCreatePost = useCallback(() => {
-    navigatePush(ROUTES.PostEditorScreen);
+    navigatePush(ROUTES.Album, {
+      mediaType: {
+        type: MediaType.STORY,
+        multipleImage: false,
+        title: 'Thêm vào tin',
+      },
+    });
   }, []);
   const [isVisible, setIsVisible] = useState(false);
   const toggle = () => {
@@ -110,8 +114,8 @@ const HomeScreen = () => {
     };
   }, [filterPostHasMusic, isScreenFocus, viewablePosts]);
   const navigateToChatStore = useCallback(() => {
-    navigatePush(ROUTES.ChatStore)
-  }, [])
+    navigatePush(ROUTES.ChatStore);
+  }, []);
   return (
     <Container justifyContent={'flex-start'}>
       <Header

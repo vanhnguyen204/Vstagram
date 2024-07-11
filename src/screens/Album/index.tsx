@@ -1,27 +1,23 @@
-import React, {memo, useCallback, useState} from 'react';
-import Container from '../../components/Container.tsx';
-import TextComponent from '../../components/TextComponent.tsx';
-import {
-  NavigationProp,
-  RouteProp,
-  useFocusEffect,
-  useIsFocused,
-} from '@react-navigation/native';
-import {RootStackParams, ROUTES} from '../../navigators';
-import {usePhotos} from '../../hooks/Media/usePhotos.ts';
-import {FlatList, View} from 'react-native';
-import Header from '../../components/Header.tsx';
-import ButtonComponent from '../../components/ButtonComponent.tsx';
-import CloseSvg from '../../assets/svg/public/CloseSvg.tsx';
-import {goBackNavigation, navigatePush} from '../../utils/NavigationUtils.ts';
+import React, { memo, useCallback, useState } from "react";
+import Container from "../../components/Container.tsx";
+import TextComponent from "../../components/TextComponent.tsx";
+import { NavigationProp, RouteProp, useFocusEffect, useIsFocused } from "@react-navigation/native";
+import { RootStackParams, ROUTES } from "../../navigators";
+import { usePhotos } from "../../hooks/Media/usePhotos.ts";
+import { FlatList, View } from "react-native";
+import Header from "../../components/Header.tsx";
+import ButtonComponent from "../../components/ButtonComponent.tsx";
+import CloseSvg from "../../assets/svg/public/CloseSvg.tsx";
+import { goBackNavigation, navigatePush } from "../../utils/NavigationUtils.ts";
 
-import {appColors} from '../../assets/colors/appColors.ts';
-import AlbumImageCard from './components/AlbumImageCard.tsx';
-import {PhotoIdentifier} from '@react-native-camera-roll/camera-roll';
-import Box from '../../components/Box.tsx';
-import Spacer from '../../components/Spacer.tsx';
-import AlbumVideoCard from './components/AlbumVideoCard.tsx';
-import {globalStyle} from '../../styles/globalStyle.ts';
+import { appColors } from "../../assets/colors/appColors.ts";
+import AlbumImageCard from "./components/AlbumImageCard.tsx";
+import { PhotoIdentifier } from "@react-native-camera-roll/camera-roll";
+import Box from "../../components/Box.tsx";
+import Spacer from "../../components/Spacer.tsx";
+import AlbumVideoCard from "./components/AlbumVideoCard.tsx";
+import { globalStyle } from "../../styles/globalStyle.ts";
+import { MediaType } from "../../models/Enum.ts";
 
 type AlbumRouteProp = RouteProp<RootStackParams, 'Album'>;
 type AlbumNavigationProp = NavigationProp<RootStackParams, 'Album'>;
@@ -35,7 +31,8 @@ interface Category {
   type: string;
 }
 const Album = (props: Props) => {
-  const {mediaType} = props.route.params ?? 'post';
+  const isOpen = useIsFocused();
+  const {mediaType} = props.route.params;
   const {images, videos} = usePhotos();
   const [categoryOpened, setCategoryOpened] = useState('image');
 
@@ -60,13 +57,12 @@ const Album = (props: Props) => {
     onVideoSelected,
     clearVideoSelected,
   } = usePhotos();
-  const isOpen = useIsFocused();
+
   useFocusEffect(
     useCallback(() => {
       return () => {
-        if (!isOpen) {
+        if (!isOpen && imageSelected.length > 0) {
           clearImageSelected();
-          console.log('Un focus');
         }
       };
     }, [clearImageSelected, isOpen]),
@@ -94,7 +90,7 @@ const Album = (props: Props) => {
           uri: item.node.image.uri,
           type: item.node.type,
           name: item.node.image.filename ?? '',
-        });
+        }, mediaType.multipleImage);
       }
     },
     [isImageSelected, onImageSelected, onImageUnSelected],
@@ -164,18 +160,18 @@ const Album = (props: Props) => {
           </ButtonComponent>
         }
         componentCenter={
-          mediaType === 'post' && (
-            <TextComponent
-              fontSize={18}
-              color={appColors.white}
-              value={'Bài viết mới'}
-            />
-          )
+          <TextComponent
+            fontSize={18}
+            color={appColors.white}
+            value={mediaType.title}
+          />
         }
         componentRight={
           <ButtonComponent
             onPress={() => {
-              navigatePush(ROUTES.NewPost, {mediaType});
+             if (mediaType.type === MediaType.STORY) {
+             navigatePush(ROUTES.ImageEditorScreen, {image: imageSelected[0]})
+             }
             }}>
             <TextComponent
               value={'Tiếp'}

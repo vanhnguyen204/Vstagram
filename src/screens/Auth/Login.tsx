@@ -59,7 +59,13 @@ const Login = () => {
       Alert.alert('Lỗi đăng nhập', 'Tài khoản hoặc mật khẩu không chính xác!');
       setIsLoading(false);
     }
-  }, [loginStore.email, loginStore.passWord, setInformation]);
+  }, [
+    initialSocketIO,
+    loginStore.email,
+    loginStore.passWord,
+    setInformation,
+    socket,
+  ]);
   return (
     <Container justifyContent="space-around">
       <ImageComponent

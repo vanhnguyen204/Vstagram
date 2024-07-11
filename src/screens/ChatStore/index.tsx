@@ -14,7 +14,7 @@ import {UserConversation} from '../../models/User.ts';
 import {ROUTES} from '../../navigators';
 
 const ChatStore = () => {
-  const {onlineUsers, conversations, allUser} = useChatStore();
+  const {onlineUsers, allUser} = useChatStore();
 
   const renderOnlineUsers = useCallback(
     ({item, index}: {item: UserConversation; index: number}) => {

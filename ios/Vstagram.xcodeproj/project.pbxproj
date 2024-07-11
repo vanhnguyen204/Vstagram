@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* VstagramTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* VstagramTests.m */; };
+		02523FAD9319BF8A01542C70 /* Pods_VstagramTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 10FDF9B174270FEB37CA45F6 /* Pods_VstagramTests.framework */; };
 		07666BA55D05471885458DED /* FontAwesome5_Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 150AED088F024E06AEAB79C5 /* FontAwesome5_Regular.ttf */; };
 		09F24D5DFA3B4F85A6A09D16 /* FontAwesome6_Solid.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C998B81A8BF84DA38F1E717F /* FontAwesome6_Solid.ttf */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
@@ -20,7 +21,6 @@
 		36CB222E105C477C94985B9E /* Foundation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5FA9DE1A2BB74182B5561452 /* Foundation.ttf */; };
 		3AD83AFEA71A4761B36096AA /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A942DA05E9BF49BA8B720C69 /* MaterialIcons.ttf */; };
 		3F7932ED8F5248978CB3BF8D /* index.ts in Resources */ = {isa = PBXBuildFile; fileRef = 6A2D936E5C1F4B078C6C0EE7 /* index.ts */; };
-		426032A56FD625D4A1AEBB0C /* Pods_Vstagram_VstagramTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76370870384B2C827F70F54B /* Pods_Vstagram_VstagramTests.framework */; };
 		4CEB22446DB94201996ECA2A /* FontAwesome5_Solid.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 52556492E3D948B187098DED /* FontAwesome5_Solid.ttf */; };
 		58B1CD9E9A3D4844852BDD17 /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7BDE4EF0C7234E31B591E7BE /* FontAwesome.ttf */; };
 		5E3FFB9D2C27FDEF0078690B /* keyboardcontroller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E3FFB9C2C27FDEF0078690B /* keyboardcontroller.swift */; };
@@ -53,6 +53,16 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		5E1A94252C3B7E3100E1C9CF /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		5E3FFB932C27FB690078690B /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -70,6 +80,7 @@
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* VstagramTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VstagramTests.m; sourceTree = "<group>"; };
 		02C37F0E74D34B02B3CC25F2 /* AntDesign.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = AntDesign.ttf; path = ../src/assets/fonts/AntDesign.ttf; sourceTree = "<group>"; };
+		10FDF9B174270FEB37CA45F6 /* Pods_VstagramTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_VstagramTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		12982D0DD2DF4007B48D39FA /* EvilIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = EvilIcons.ttf; path = ../src/assets/fonts/EvilIcons.ttf; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* Vstagram.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Vstagram.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = Vstagram/AppDelegate.h; sourceTree = "<group>"; };
@@ -84,8 +95,10 @@
 		28AEADB378CC448B9D23A41B /* FontAwesome6_Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome6_Regular.ttf; path = ../src/assets/fonts/FontAwesome6_Regular.ttf; sourceTree = "<group>"; };
 		3E5763C47FAD4496AF66996B /* FontAwesome6_Brands.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome6_Brands.ttf; path = ../src/assets/fonts/FontAwesome6_Brands.ttf; sourceTree = "<group>"; };
 		4112715E6AC441BD8CB64485 /* FontAwesome5_Brands.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Brands.ttf; path = ../src/assets/fonts/FontAwesome5_Brands.ttf; sourceTree = "<group>"; };
+		468FB8F58C6DD5D26E516758 /* Pods-OneSignalNotificationServiceExtension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OneSignalNotificationServiceExtension.release.xcconfig"; path = "Target Support Files/Pods-OneSignalNotificationServiceExtension/Pods-OneSignalNotificationServiceExtension.release.xcconfig"; sourceTree = "<group>"; };
 		4C397829128A49E3BBF2DC29 /* Briem Hand.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Briem Hand.ttf"; path = "../src/assets/fonts/Briem Hand.ttf"; sourceTree = "<group>"; };
 		52556492E3D948B187098DED /* FontAwesome5_Solid.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Solid.ttf; path = ../src/assets/fonts/FontAwesome5_Solid.ttf; sourceTree = "<group>"; };
+		56857B15FD3D3E49A09879EA /* Pods-OneSignalNotificationServiceExtension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OneSignalNotificationServiceExtension.debug.xcconfig"; path = "Target Support Files/Pods-OneSignalNotificationServiceExtension/Pods-OneSignalNotificationServiceExtension.debug.xcconfig"; sourceTree = "<group>"; };
 		5B3700045399400F9A25E8C2 /* Jaro.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Jaro.ttf; path = ../src/assets/fonts/Jaro.ttf; sourceTree = "<group>"; };
 		5E3FFB7E2C27FB690078690B /* videoplayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = videoplayer.h; sourceTree = "<group>"; };
 		5E3FFB7F2C27FB690078690B /* videoplayer.docc */ = {isa = PBXFileReference; lastKnownFileType = folder.documentationcatalog; path = videoplayer.docc; sourceTree = "<group>"; };
@@ -95,6 +108,7 @@
 		5E9EEAEB2C2880F100FECB92 /* videoplayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = videoplayer.h; sourceTree = "<group>"; };
 		5E9EEAEC2C2880F100FECB92 /* videoplayer.docc */ = {isa = PBXFileReference; lastKnownFileType = folder.documentationcatalog; path = videoplayer.docc; sourceTree = "<group>"; };
 		5E9EEAF92C2880F100FECB92 /* videoplayerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = videoplayerTests.swift; sourceTree = "<group>"; };
+		5EC7D33B2C3B7F03006B4286 /* Vstagram.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = Vstagram.entitlements; path = Vstagram/Vstagram.entitlements; sourceTree = "<group>"; };
 		5EF8F0042BDA48B100DC4B0E /* Vstagram-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Vstagram-Bridging-Header.h"; sourceTree = "<group>"; };
 		5EF8F0052BDA48B200DC4B0E /* dummy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = dummy.swift; sourceTree = "<group>"; };
 		5FA9DE1A2BB74182B5561452 /* Foundation.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Foundation.ttf; path = ../src/assets/fonts/Foundation.ttf; sourceTree = "<group>"; };
@@ -103,11 +117,11 @@
 		6A2D936E5C1F4B078C6C0EE7 /* index.ts */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = index.ts; path = ../src/assets/fonts/index.ts; sourceTree = "<group>"; };
 		6E85395D1489440B82775916 /* Octicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Octicons.ttf; path = ../src/assets/fonts/Octicons.ttf; sourceTree = "<group>"; };
 		7386E9F258937541AF790149 /* Pods-Vstagram-VstagramTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Vstagram-VstagramTests.debug.xcconfig"; path = "Target Support Files/Pods-Vstagram-VstagramTests/Pods-Vstagram-VstagramTests.debug.xcconfig"; sourceTree = "<group>"; };
-		76370870384B2C827F70F54B /* Pods_Vstagram_VstagramTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Vstagram_VstagramTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		76D14E8AEFEA48F08EF898F3 /* Dancing Script.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Dancing Script.ttf"; path = "../src/assets/fonts/Dancing Script.ttf"; sourceTree = "<group>"; };
 		7BDE4EF0C7234E31B591E7BE /* FontAwesome.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome.ttf; path = ../src/assets/fonts/FontAwesome.ttf; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = Vstagram/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		92C148698F210A1B7A112687 /* Pods-videoplayer-videoplayerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-videoplayer-videoplayerTests.release.xcconfig"; path = "Target Support Files/Pods-videoplayer-videoplayerTests/Pods-videoplayer-videoplayerTests.release.xcconfig"; sourceTree = "<group>"; };
+		92C4336058505AF9530DF56B /* Pods-VstagramTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VstagramTests.release.xcconfig"; path = "Target Support Files/Pods-VstagramTests/Pods-VstagramTests.release.xcconfig"; sourceTree = "<group>"; };
 		94B3705291DACF411640E0AD /* Pods-Vstagram.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Vstagram.debug.xcconfig"; path = "Target Support Files/Pods-Vstagram/Pods-Vstagram.debug.xcconfig"; sourceTree = "<group>"; };
 		A14DAD3D1D2E4930B0DF7EDD /* Feather.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Feather.ttf; path = ../src/assets/fonts/Feather.ttf; sourceTree = "<group>"; };
 		A942DA05E9BF49BA8B720C69 /* MaterialIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialIcons.ttf; path = ../src/assets/fonts/MaterialIcons.ttf; sourceTree = "<group>"; };
@@ -116,9 +130,11 @@
 		B64FC16F135AD2841C15DDAE /* Pods-videoplayer.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-videoplayer.debug.xcconfig"; path = "Target Support Files/Pods-videoplayer/Pods-videoplayer.debug.xcconfig"; sourceTree = "<group>"; };
 		B8A20EEEFA50425C931753E2 /* Pods_videoplayer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_videoplayer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B92236F0670647DAB3E1FAA2 /* Zocial.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Zocial.ttf; path = ../src/assets/fonts/Zocial.ttf; sourceTree = "<group>"; };
+		BF95DFFEB9CC3777C5D4BF41 /* Pods-VstagramTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VstagramTests.debug.xcconfig"; path = "Target Support Files/Pods-VstagramTests/Pods-VstagramTests.debug.xcconfig"; sourceTree = "<group>"; };
 		C998B81A8BF84DA38F1E717F /* FontAwesome6_Solid.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome6_Solid.ttf; path = ../src/assets/fonts/FontAwesome6_Solid.ttf; sourceTree = "<group>"; };
 		D2676DDE71E546E5A3CD1894 /* Entypo.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Entypo.ttf; path = ../src/assets/fonts/Entypo.ttf; sourceTree = "<group>"; };
 		DCA74BBFB5A159F801A4D0B0 /* Pods-Vstagram.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Vstagram.release.xcconfig"; path = "Target Support Files/Pods-Vstagram/Pods-Vstagram.release.xcconfig"; sourceTree = "<group>"; };
+		EB801EDF6AD229973533451D /* Pods_OneSignalNotificationServiceExtension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_OneSignalNotificationServiceExtension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		F4276EFC28845FC0997233B1 /* Pods-Vstagram-VstagramTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Vstagram-VstagramTests.release.xcconfig"; path = "Target Support Files/Pods-Vstagram-VstagramTests/Pods-Vstagram-VstagramTests.release.xcconfig"; sourceTree = "<group>"; };
 		F42D0C8F4ED1BE4568A6CCDE /* Pods_videoplayer_videoplayerTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_videoplayer_videoplayerTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -130,7 +146,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				426032A56FD625D4A1AEBB0C /* Pods_Vstagram_VstagramTests.framework in Frameworks */,
+				02523FAD9319BF8A01542C70 /* Pods_VstagramTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -165,6 +181,7 @@
 		13B07FAE1A68108700A75B9A /* Vstagram */ = {
 			isa = PBXGroup;
 			children = (
+				5EC7D33B2C3B7F03006B4286 /* Vstagram.entitlements */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
@@ -181,9 +198,10 @@
 				5E3FFB9A2C27FB840078690B /* libreact-native-video.a */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				6A255B15E507A3546F9F52F1 /* Pods_Vstagram.framework */,
-				76370870384B2C827F70F54B /* Pods_Vstagram_VstagramTests.framework */,
 				B8A20EEEFA50425C931753E2 /* Pods_videoplayer.framework */,
 				F42D0C8F4ED1BE4568A6CCDE /* Pods_videoplayer_videoplayerTests.framework */,
+				EB801EDF6AD229973533451D /* Pods_OneSignalNotificationServiceExtension.framework */,
+				10FDF9B174270FEB37CA45F6 /* Pods_VstagramTests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -303,6 +321,10 @@
 				17DD147948006FA0D91F56CD /* Pods-videoplayer.release.xcconfig */,
 				1FBC60A341FFB8CDC79131CB /* Pods-videoplayer-videoplayerTests.debug.xcconfig */,
 				92C148698F210A1B7A112687 /* Pods-videoplayer-videoplayerTests.release.xcconfig */,
+				56857B15FD3D3E49A09879EA /* Pods-OneSignalNotificationServiceExtension.debug.xcconfig */,
+				468FB8F58C6DD5D26E516758 /* Pods-OneSignalNotificationServiceExtension.release.xcconfig */,
+				BF95DFFEB9CC3777C5D4BF41 /* Pods-VstagramTests.debug.xcconfig */,
+				92C4336058505AF9530DF56B /* Pods-VstagramTests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -318,8 +340,6 @@
 				00E356EA1AD99517003FC87E /* Sources */,
 				00E356EB1AD99517003FC87E /* Frameworks */,
 				00E356EC1AD99517003FC87E /* Resources */,
-				D46FB67C85620DA7A7127AAD /* [CP] Embed Pods Frameworks */,
-				FAE442C632B8C6758DFA12C3 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -343,6 +363,7 @@
 				4C2EC5A9CC825D811A8A7C33 /* [CP] Embed Pods Frameworks */,
 				4FA68E0257DE46158CE94570 /* [CP] Copy Pods Resources */,
 				5E3FFB932C27FB690078690B /* Embed Frameworks */,
+				5E1A94252C3B7E3100E1C9CF /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
@@ -523,45 +544,11 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-Vstagram-VstagramTests-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-VstagramTests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		D46FB67C85620DA7A7127AAD /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Vstagram-VstagramTests/Pods-Vstagram-VstagramTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Vstagram-VstagramTests/Pods-Vstagram-VstagramTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Vstagram-VstagramTests/Pods-Vstagram-VstagramTests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		FAE442C632B8C6758DFA12C3 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Vstagram-VstagramTests/Pods-Vstagram-VstagramTests-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Vstagram-VstagramTests/Pods-Vstagram-VstagramTests-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Vstagram-VstagramTests/Pods-Vstagram-VstagramTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -599,7 +586,7 @@
 /* Begin XCBuildConfiguration section */
 		00E356F61AD99517003FC87E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7386E9F258937541AF790149 /* Pods-Vstagram-VstagramTests.debug.xcconfig */;
+			baseConfigurationReference = BF95DFFEB9CC3777C5D4BF41 /* Pods-VstagramTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -628,7 +615,7 @@
 		};
 		00E356F71AD99517003FC87E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = F4276EFC28845FC0997233B1 /* Pods-Vstagram-VstagramTests.release.xcconfig */;
+			baseConfigurationReference = 92C4336058505AF9530DF56B /* Pods-VstagramTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -660,6 +647,7 @@
 				"ASSETCATALOG_COMPILER_APPICON_NAME[sdk=iphoneos*]" = AppIcon;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = Vstagram/Vstagram.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 4Z4TBJT872;
 				ENABLE_BITCODE = NO;
@@ -694,6 +682,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = Vstagram/Vstagram.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 4Z4TBJT872;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
@@ -800,10 +789,7 @@
 					"-DFOLLY_USE_LIBCPP=1",
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 				);
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				USE_HERMES = true;
@@ -883,10 +869,7 @@
 					"-DFOLLY_USE_LIBCPP=1",
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 				);
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;

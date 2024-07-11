@@ -26,9 +26,29 @@ if linkage != nil
   use_frameworks! :linkage => linkage.to_sym
 end
 
+# target 'Vstagram' do
+#   config = use_native_modules!
+#   use_frameworks! :linkage => :static
+#   use_react_native!(
+#     :path => config[:reactNativePath],
+#     :flipper_configuration => flipper_config,
+#     :app_path => "#{Pod::Config.instance.installation_root}/.."
+#   )
+#
+#   target 'VstagramTests' do
+#     inherit! :complete
+#     # Pods for testing
+#   end
+# end
+#
+# target 'OneSignalNotificationServiceExtension' do
+# use_frameworks! :linkage => :static
+#   pod 'OneSignalXCFramework', '>= 5.0.0', '< 6.0'
+# end
 target 'Vstagram' do
   config = use_native_modules!
   use_frameworks! :linkage => :static
+
   use_react_native!(
     :path => config[:reactNativePath],
     :flipper_configuration => flipper_config,
@@ -36,10 +56,16 @@ target 'Vstagram' do
   )
 
   target 'VstagramTests' do
-    inherit! :complete
+    inherit! :search_paths
     # Pods for testing
   end
 end
+
+# target 'OneSignalNotificationServiceExtension' do
+#   use_frameworks! :linkage => :static
+#   pod 'OneSignalXCFramework', '>= 5.0.0', '< 6.0'
+# end
+
 #
 # target 'videoplayer' do
 #   config = use_native_modules!

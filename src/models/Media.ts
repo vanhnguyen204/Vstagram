@@ -1,6 +1,7 @@
 import {Comment} from './Comment.ts';
+import {MediaType} from './Enum.ts';
 
-export interface Media {
+interface Media {
   _id: string;
   userId: string;
   avatar: string;
@@ -13,3 +14,11 @@ export interface Media {
   isFollowed: boolean;
   timeCreated?: string;
 }
+
+type MediaParams = {
+  title: string;
+  multipleImage: boolean;
+  type: MediaType;
+};
+
+export type {Media, MediaParams};

@@ -33,7 +33,6 @@ const App = () => {
           // do something when active the app
         } else {
           activeUserActivity('offline');
-          showNotification('Vstagram', 'Đừng bỏ tôi ở đây chứ!?');
         }
       });
     } catch (e) {
@@ -43,7 +42,7 @@ const App = () => {
   useEffect(() => {
     handleConnectSocket();
     handleAppStateChange();
-  }, []);
+  }, [handleAppStateChange, handleConnectSocket]);
 
   return (
     <View style={{flex: 1}}>

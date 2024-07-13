@@ -1,7 +1,7 @@
 import {VideoFile} from 'react-native-vision-camera';
 import {UserConversation} from '../models/User.ts';
 import {MediaParams} from '../models/Media.ts';
-import { ImageType } from "../hooks/Media/usePhotos.ts";
+import {ImageType} from '../hooks/Media/usePhotos.ts';
 
 export type RootStackParams = {
   WelcomeScreen: undefined;
@@ -11,7 +11,7 @@ export type RootStackParams = {
   CreatePasswordScreen: {email: string};
   BottomTab: undefined;
   Setting: undefined;
-  ImageEditorScreen: {image: ImageType};
+  ImageEditorScreen: {image: ImageType; type: 'CREATE_STORY' | 'EDIT_IMAGE'};
   CompleteStoryScreen: undefined;
   Capture: undefined;
   Reels: undefined;

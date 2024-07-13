@@ -6,4 +6,4 @@ const {height: deviceHeight} = Dimensions.get('screen');
 const statusBarHeight = StatusBar.currentHeight ?? 0;
 
 const screenHeightIncludeNavBar = deviceHeight - statusBarHeight;
-export {screenHeightIncludeNavBar};
+export {screenHeightIncludeNavBar, statusBarHeight};

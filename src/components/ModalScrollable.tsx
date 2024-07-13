@@ -82,6 +82,7 @@ class ModalScrollable<T> extends Component<Props<T>, State> {
         scrollTo={(params: {x: number; y: number; animated?: boolean}) =>
           this.handleScrollTo(params)
         }
+        onBackdropPress={onClose}
         scrollOffset={this.state.scrollOffset ?? 0}
         scrollOffsetMax={100}
         propagateSwipe={true}

@@ -2,7 +2,6 @@ import {Story} from './Story.ts';
 import {Reel} from './Reel.ts';
 import {Post, PostType} from './Post.ts';
 
-
 export interface SetStory {
   userId: string;
   dataStories: Story[];
@@ -14,35 +13,73 @@ export const mockStories: SetStory[] = [
       {
         _id: '1',
         userId: '2004',
-        type: 'photo',
+        type: 'PHOTO',
         video: '',
         timeCreated: '2024-06-18 14:56:45',
         image:
-          'https://t3.ftcdn.net/jpg/05/73/49/60/360_F_573496040_espwS8zXDWLPlqNQNGSDjwbsFb5w0h0P.jpg',
-        duration: 2,
-        music: '',
+          'https://nodejs-vstagram-aws-s3.s3.amazonaws.com/stories/b2b037bd-9d9e-43f5-a985-1b3738a2a0fb-C403F284-DF32-429F-AE77-3787CE8FF14C.png',
+        duration: 3,
+        music: undefined,
       },
       {
         _id: '2',
         userId: '2004',
-        type: 'photo',
+        type: 'PHOTO',
         video: '',
         timeCreated: '2024-06-18 14:56:45',
         image:
-          'https://nodejs-vstagram-aws-s3.s3.amazonaws.com/stories/94198823-b3ff-4685-b2d1-0dbc358df413-E1FF43DD-B6B3-4250-8A34-C3E88AC8771D.png',
-        duration: 2,
-        music: '',
+          'https://nodejs-vstagram-aws-s3.s3.amazonaws.com/stories/94aea498-94aa-4e22-ab5b-e0fe614d934f-51D49468-353A-4689-889F-CD146FA2FB65.png',
+        duration: 3,
+        music: undefined,
       },
       {
         _id: '3',
         userId: '2004',
-        type: 'photo',
+        type: 'PHOTO',
         video: '',
         timeCreated: '2024-06-18 14:56:45',
         image:
-          'https://nodejs-vstagram-aws-s3.s3.amazonaws.com/stories/94198823-b3ff-4685-b2d1-0dbc358df413-E1FF43DD-B6B3-4250-8A34-C3E88AC8771D.png',
-        duration: 2,
-        music: '',
+          'https://nodejs-vstagram-aws-s3.s3.amazonaws.com/stories/531f9409-d955-4552-9b32-e404476c6f65-5CE0A110-25E7-4849-9813-B984B1755520.png',
+        duration: 3,
+        music: undefined,
+      },
+    ],
+  },
+  {
+    userId: '1976',
+    dataStories: [
+      {
+        _id: '1',
+        userId: '2004',
+        type: 'PHOTO',
+        video: '',
+        timeCreated: '2024-06-18 14:56:45',
+        image:
+          'https://nodejs-vstagram-aws-s3.s3.amazonaws.com/stories/94aea498-94aa-4e22-ab5b-e0fe614d934f-51D49468-353A-4689-889F-CD146FA2FB65.png',
+        duration: 3,
+        music: undefined,
+      },
+      {
+        _id: '2',
+        userId: '2004',
+        type: 'PHOTO',
+        video: '',
+        timeCreated: '2024-06-18 14:56:45',
+        image:
+          'https://nodejs-vstagram-aws-s3.s3.amazonaws.com/stories/b2b037bd-9d9e-43f5-a985-1b3738a2a0fb-C403F284-DF32-429F-AE77-3787CE8FF14C.png',
+        duration: 3,
+        music: undefined,
+      },
+      {
+        _id: '3',
+        userId: '2004',
+        type: 'PHOTO',
+        video: '',
+        timeCreated: '2024-06-18 14:56:45',
+        image:
+          'https://nodejs-vstagram-aws-s3.s3.amazonaws.com/stories/531f9409-d955-4552-9b32-e404476c6f65-5CE0A110-25E7-4849-9813-B984B1755520.png',
+        duration: 3,
+        music: undefined,
       },
     ],
   },

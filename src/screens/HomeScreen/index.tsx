@@ -6,7 +6,7 @@ import MyStory from './Components/MyStory.tsx';
 import {navigatePush} from '../../utils/NavigationUtils.ts';
 import {ROUTES} from '../../navigators';
 import {useStoryStore, useUserInformation} from '../../hooks';
-import {FlatList, StyleSheet, ViewToken} from 'react-native';
+import {FlatList, StyleSheet, View, ViewToken} from 'react-native';
 import ModalStory from './Components/ModalStory.tsx';
 import {Story} from '../../models/Story.ts';
 import {Post} from '../../models/Post.ts';
@@ -17,6 +17,10 @@ import {playTrack, stopTrack} from '../../../service';
 import {useIsFocused} from '@react-navigation/native';
 import useAudioControl from '../../hooks/TrackPlayer/useAudioControl.ts';
 import {MediaType} from '../../models/Enum.ts';
+import ModalSwipeAble from '../../components/ModalSwipeAble.tsx';
+import TextComponent from '../../components/TextComponent.tsx';
+import {appColors} from '../../assets/colors/appColors.ts';
+import {GestureHandlerRootView} from 'react-native-gesture-handler';
 
 export interface TestStory {
   id: string;
@@ -117,42 +121,58 @@ const HomeScreen = () => {
     navigatePush(ROUTES.ChatStore);
   }, []);
   return (
-    <Container justifyContent={'flex-start'}>
-      <Header
-        onChatPress={navigateToChatStore}
-        onLogoPress={() => {}}
-        onNotificationPress={() => {}}
-      />
-      <ModalStory isVisible={isVisible} onClose={toggle} stories={stories} />
-      <FlatList
-        ListHeaderComponent={
-          <Box
-            alignSelf="stretch"
-            flexDirection={'row'}
-            justifyContent="flex-start">
-            <MyStory
-              onIconAddPress={navigateToCreatePost}
-              onStoryPress={toggle}
-            />
-          </Box>
-        }
-        showsVerticalScrollIndicator={false}
-        data={posts.data}
-        renderItem={renderPost}
-        viewabilityConfig={{
-          itemVisiblePercentThreshold: 80,
-        }}
-        onEndReachedThreshold={0.5}
-        onEndReached={({distanceFromEnd}) => {
-          console.log(distanceFromEnd);
-          if (distanceFromEnd <= 0) {
-            return;
+    <GestureHandlerRootView>
+      <Container justifyContent={'flex-start'}>
+        <Header
+          onChatPress={navigateToChatStore}
+          onLogoPress={() => {}}
+          onNotificationPress={() => {}}
+        />
+        <ModalStory isVisible={isVisible} onClose={toggle} stories={stories} />
+        {/*<ModalSwipeAble*/}
+        {/*  visible={isVisible}*/}
+        {/*  onClose={toggle}*/}
+        {/*  containerStyle={{}}>*/}
+        {/*  <View*/}
+        {/*    style={{*/}
+        {/*      flex: 1,*/}
+        {/*      backgroundColor: 'purple',*/}
+        {/*      alignItems: 'center',*/}
+        {/*      justifyContent: 'center',*/}
+        {/*    }}>*/}
+        {/*    <TextComponent value={'hello'} />*/}
+        {/*  </View>*/}
+        {/*</ModalSwipeAble>*/}
+        <FlatList
+          ListHeaderComponent={
+            <Box
+              alignSelf="stretch"
+              flexDirection={'row'}
+              justifyContent="flex-start">
+              <MyStory
+                onIconAddPress={navigateToCreatePost}
+                onStoryPress={toggle}
+              />
+            </Box>
           }
-          handleGetPosts();
-        }}
-        onViewableItemsChanged={onViewableItemsChanged}
-      />
-    </Container>
+          showsVerticalScrollIndicator={false}
+          data={posts.data}
+          renderItem={renderPost}
+          viewabilityConfig={{
+            itemVisiblePercentThreshold: 80,
+          }}
+          onEndReachedThreshold={0.5}
+          onEndReached={({distanceFromEnd}) => {
+            console.log(distanceFromEnd);
+            if (distanceFromEnd <= 0) {
+              return;
+            }
+            handleGetPosts();
+          }}
+          onViewableItemsChanged={onViewableItemsChanged}
+        />
+      </Container>
+    </GestureHandlerRootView>
   );
 };
 

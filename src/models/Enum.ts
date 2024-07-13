@@ -4,8 +4,12 @@ enum ImageEditorScreen {
 }
 
 enum MediaType {
-  POSTS ='POSTS',
-  REELS ='REELS',
-  STORY = 'STORY'
+  POSTS = 'POSTS',
+  REELS = 'REELS',
+  STORY = 'STORY',
 }
-export {ImageEditorScreen, MediaType};
+enum StoryType {
+  PHOTO = 'PHOTO',
+  VIDEO = 'VIDEO',
+}
+export {ImageEditorScreen, MediaType, StoryType};

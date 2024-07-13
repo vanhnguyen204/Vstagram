@@ -4,15 +4,21 @@ import {appColors} from '../../../assets/colors/appColors';
 import TextComponent from '../../../components/TextComponent';
 import Box from '../../../components/Box';
 import ImageComponent from '../../../components/ImageComponent';
-import {StyleSheet} from 'react-native';
+import {StyleSheet, Text} from 'react-native';
+
+import {Music} from '../../../models';
+import Spacer from '../../../components/Spacer';
+import ButtonWithPopup from '../../SearchScreen/LongPressButton';
 interface StoryBarEditorProps {
   onCloseStoryEditor: () => void;
   toggleInput: () => void;
   toggleShowListColor: () => void;
   toggleModalSticker: (isVisible: boolean) => void;
-  toggleModalMusic: (isVisible: boolean) => void;
+  toggleModalMusic: () => void;
   onCapture: () => void;
   opacity?: number;
+  musicSelected: Music;
+  removeMusic: () => void;
 }
 
 const StoryBarEditor = (props: StoryBarEditorProps) => {
@@ -24,6 +30,8 @@ const StoryBarEditor = (props: StoryBarEditorProps) => {
     toggleModalMusic,
     onCapture,
     opacity = 1,
+    musicSelected,
+    removeMusic,
   } = props;
   return (
     <Box
@@ -38,9 +46,6 @@ const StoryBarEditor = (props: StoryBarEditorProps) => {
       {/* Close story editor */}
       <ButtonComponent
         style={styles.btnEditor}
-        backgroundColor={appColors.black900}
-        padding={3}
-        alignSelf={'center'}
         name={'Close'}
         onPress={() => {
           onCloseStoryEditor();
@@ -49,18 +54,70 @@ const StoryBarEditor = (props: StoryBarEditorProps) => {
           resizeMode={'contain'}
           tintColor={appColors.white}
           src={require('../../../assets/icons/close.png')}
-          width={30}
-          height={30}
+          width={25}
+          height={25}
         />
       </ButtonComponent>
 
       <Box flexDirection={'row'}>
+        {musicSelected.image ? (
+          <ButtonWithPopup
+            popupStyle={styles.popupStyle}
+            popupContent={
+              <ButtonComponent onPress={removeMusic}>
+                <ImageComponent
+                  width={20}
+                  height={20}
+                  src={require('../../../assets/icons/trash-bin.png')}
+                />
+              </ButtonComponent>
+            }
+            buttonContent={
+              <ButtonComponent
+                activeOpacity={1}
+                scaleAnimated
+                scaleInValue={0.9}
+                onPress={toggleModalMusic}
+                flexDirection="row"
+                padding={5}
+                backgroundColor={appColors.black900}
+                radius={5}>
+                <ImageComponent
+                  resizeMode="cover"
+                  borderRadius={99}
+                  src={{uri: musicSelected.image}}
+                  width={25}
+                  height={25}
+                />
+                <Spacer width={10} />
+                <Box>
+                  <Text numberOfLines={1} style={styles.musicText}>
+                    {musicSelected.title}
+                  </Text>
+                  <Text numberOfLines={1} style={styles.musicText}>
+                    {musicSelected.artist}
+                  </Text>
+                </Box>
+              </ButtonComponent>
+            }
+          />
+        ) : (
+          <ButtonComponent
+            style={styles.btnEditor}
+            name={'Music'}
+            onPress={toggleModalMusic}>
+            <ImageComponent
+              tintColor={appColors.white}
+              src={require('../../../assets/icons/musical-note.png')}
+              width={25}
+              height={25}
+            />
+          </ButtonComponent>
+        )}
+
         {/*Button show text input */}
         <ButtonComponent
           style={styles.btnEditor}
-          backgroundColor={appColors.black900}
-          padding={6}
-          alignSelf={'center'}
           name={'Show Input'}
           onPress={() => {
             toggleInput();
@@ -71,10 +128,6 @@ const StoryBarEditor = (props: StoryBarEditorProps) => {
         {/* Button show modal sticker */}
         <ButtonComponent
           style={styles.btnEditor}
-          backgroundColor={appColors.black900}
-          padding={6}
-          alignSelf={'center'}
-          marginHorizontal={10}
           name={'Select sticker'}
           onPress={() => {
             toggleModalSticker(true);
@@ -86,42 +139,17 @@ const StoryBarEditor = (props: StoryBarEditorProps) => {
             height={25}
           />
         </ButtonComponent>
-        {/* Button show list music */}
         <ButtonComponent
           style={styles.btnEditor}
-          backgroundColor={appColors.black900}
-          padding={6}
-          alignSelf={'center'}
-          name={'Music'}
-          onPress={() => {
-            toggleModalMusic(true);
-          }}>
-          <ImageComponent
-            tintColor={appColors.white}
-            src={require('../../../assets/icons/musical-note.png')}
-            width={25}
-            height={25}
-          />
-        </ButtonComponent>
-
-        <ButtonComponent
-          marginLeft={5}
-          flexDirection={'row'}
-          radius={20}
-          padding={7}
-          backgroundColor={appColors.black900}
-          alignSelf={'stretch'}
           name={'Continue'}
           onPress={() => {
             onCapture();
           }}>
-          <TextComponent value="Tiếp" />
           <ImageComponent
             alignSelf={'center'}
-            marginLeft={8}
             tintColor={appColors.secondary}
-            width={20}
-            height={20}
+            width={25}
+            height={25}
             src={require('../../../assets/icons/right-arrow.png')}
           />
         </ButtonComponent>
@@ -132,7 +160,19 @@ const StoryBarEditor = (props: StoryBarEditorProps) => {
 
 const styles = StyleSheet.create({
   btnEditor: {
-    borderRadius: 50,
+    borderRadius: 99,
+    alignSelf: 'center',
+    backgroundColor: appColors.black900,
+    padding: 10,
+    marginHorizontal: 3,
+  },
+  popupStyle: {
+    marginTop: 5,
+  },
+  musicText: {
+    maxWidth: 70,
+    color: appColors.white,
+    fontSize: 12,
   },
 });
 export default memo(StoryBarEditor);

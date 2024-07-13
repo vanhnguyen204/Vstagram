@@ -108,7 +108,6 @@ const ButtonComponent = (props: ButtonComponentProps) => {
   };
   return (
     <TouchableOpacity
-
       activeOpacity={activeOpacity}
       onPressIn={() => {
         if (onPressIn) {

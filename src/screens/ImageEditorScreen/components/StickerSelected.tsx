@@ -3,23 +3,22 @@ import React, {memo, useCallback, useRef} from 'react';
 import ImageComponent from '../../../components/ImageComponent';
 import {AppInfor} from '../../../constants/AppInfor';
 import {appColors} from '../../../assets/colors/appColors';
-import LongPressButtonWithPopup from '../../SearchScreen/LongPressButton.tsx';
+
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
 } from 'react-native-reanimated';
 import {Gesture, GestureDetector} from 'react-native-gesture-handler';
 import ButtonComponent from '../../../components/ButtonComponent.tsx';
+import ButtonWithPopup from '../../SearchScreen/LongPressButton.tsx';
 interface StickerSelectedProps {
   item: string;
-  index: number;
-
   opacity?: number;
   onRemove: (item: string) => void;
 }
 
 const StickerSelected = (props: StickerSelectedProps) => {
-  const {item, index, onRemove, opacity = 1} = props;
+  const {item, onRemove, opacity = 1} = props;
   const popupRef = useRef<any>(null);
 
   const handleClosePopup = () => {
@@ -59,15 +58,10 @@ const StickerSelected = (props: StickerSelectedProps) => {
     <GestureDetector gesture={pan}>
       <Animated.View
         style={[animatedStyles, styles.renderStickerStyle, {opacity: opacity}]}>
-        <LongPressButtonWithPopup
+        <ButtonWithPopup
           ref={popupRef}
           buttonContent={
-            <ImageComponent
-              key={index}
-              src={{uri: item}}
-              width={100}
-              height={100}
-            />
+            <ImageComponent src={{uri: item}} width={100} height={100} />
           }
           popupStyle={{backgroundColor: appColors.grays.gray600}}
           popupContent={

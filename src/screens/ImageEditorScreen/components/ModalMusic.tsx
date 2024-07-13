@@ -60,7 +60,7 @@ const ModalMusic = (props: ModalMusicProps) => {
           console.log(e);
         });
     }
-  }, [musics.nextPage, setMusics]);
+  }, [musics.nextPage]);
   const renderMusicItem = useCallback(
     ({item, index}: {item: Music; index: number}) => {
       return (
@@ -95,7 +95,7 @@ const ModalMusic = (props: ModalMusicProps) => {
     <ModalScrollable<Music>
       data={musics.data}
       renderItem={renderMusicItem}
-      keyExtractor={(item, index) => item._id.toString()}
+      keyExtractor={item => item._id.toString()}
       visible={visible}
       onClose={onClose}
       onEndReached={distance => {

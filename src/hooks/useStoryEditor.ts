@@ -10,7 +10,7 @@ export interface TextElement {
 }
 interface StoryEditorType {
   stickerSelected: string[];
-  texts: TextElement[]
+  texts: TextElement[];
   isModalStickerShow: boolean;
   isModalMusicShow: boolean;
   textColor: string;

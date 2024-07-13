@@ -53,7 +53,7 @@ const WelcomeScreen = () => {
     } catch (e) {
       console.log(e);
     }
-  }, []);
+  }, [setAllUser, setConversations]);
   const getUserInfor = useCallback(async () => {
     try {
       const user: User = await getUserInformation();

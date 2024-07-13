@@ -1,17 +1,6 @@
-import {
-  Pressable,
-  StyleProp,
-  StyleSheet,
-  Text,
-  View,
-  ViewStyle,
-} from 'react-native';
 import React, {memo, useCallback, useRef, useState} from 'react';
-import {
-  Gesture,
-  GestureDetector,
-  PanGestureHandler,
-} from 'react-native-gesture-handler';
+import {Pressable, StyleProp, StyleSheet, ViewStyle} from 'react-native';
+import {Gesture, GestureDetector} from 'react-native-gesture-handler';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -31,7 +20,8 @@ interface DraggableProps {
   spring?: boolean;
   longPressDuration?: number;
 }
-const Draggable = ({
+
+const Draggable: React.FC<DraggableProps> = ({
   children,
   minX = 0,
   maxX = AppInfor.width,
@@ -107,6 +97,7 @@ const Draggable = ({
   const positionStyle = useAnimatedStyle(() => ({
     transform: [{translateX: posX.value}, {translateY: posY.value}],
   }));
+
   const startLongPressTimer = useCallback(() => {
     longPressTimer.current = setTimeout(() => {
       setEnableDrag(true);
@@ -116,9 +107,10 @@ const Draggable = ({
   const cancelLongPressTimer = useCallback(() => {
     if (longPressTimer.current) {
       clearTimeout(longPressTimer.current);
-      setEnableDrag(false)
+      setEnableDrag(false);
     }
   }, []);
+
   return (
     <GestureDetector gesture={gesture}>
       <Pressable

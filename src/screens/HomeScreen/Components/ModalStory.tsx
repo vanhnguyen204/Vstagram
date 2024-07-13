@@ -1,17 +1,11 @@
-import React, {useEffect, useRef} from 'react';
-import Modal from 'react-native-modal';
-import {Story} from '../../../models/Story.ts';
-import {appColors} from '../../../assets/colors/appColors.ts';
-import {Event, State, useTrackPlayerEvents} from 'react-native-track-player';
-import Carousel, {ICarouselInstance} from 'react-native-reanimated-carousel';
-import {AppInfor} from '../../../constants/AppInfor.ts';
+import React, {memo, useCallback, useMemo, useRef, useState} from 'react';
+import {FlatList, View, ViewToken} from 'react-native';
+import ModalSwipeAble from '../../../components/ModalSwipeAble.tsx';
 import StoryDetails from './StoryDetails.tsx';
-import {stopTrack} from '../../../../service';
-import {TestStory} from '../index.tsx';
-
-import Box from '../../../components/Box.tsx';
-import Container from '../../../components/Container.tsx';
 import {mockStories} from '../../../models/Mockup.ts';
+import {AppInfor} from '../../../constants/AppInfor.ts';
+import {appColors} from '../../../assets/colors/appColors.ts';
+import {Story} from '../../../models/Story.ts';
 
 interface ModalStoryProps {
   isVisible: boolean;
@@ -19,89 +13,84 @@ interface ModalStoryProps {
   stories: Story[];
 }
 
-const ModalStory = (props: ModalStoryProps) => {
-  const {isVisible, onClose, stories} = props;
-  useTrackPlayerEvents([Event.PlaybackState], event => {
-    switch (event.state) {
-      case State.Playing:
-      case State.Buffering:
-      case State.Error:
-      case State.Loading:
-      case State.Ended:
-      case State.Ready:
-      case State.Stopped:
-      case State.Paused:
-    }
-  });
-
-  const carouselRef = useRef<ICarouselInstance>(null);
-  const currentStoryFocus = useRef<number>(0);
-  return (
-    <Modal
-      onSwipeComplete={() => {
+const ModalStory: React.FC<ModalStoryProps> = ({isVisible, onClose}) => {
+  const listStoryRef = useRef<FlatList>(null);
+  const [storyViewable, setStoryViewable] = useState<ViewToken[]>([]);
+  const onNextPage = useCallback(() => {
+    if (storyViewable.length !== 0) {
+      const currentIndex = storyViewable[0].index ?? 0;
+      if (listStoryRef.current && currentIndex + 1 < mockStories.length) {
+        listStoryRef.current.scrollToIndex({
+          index: currentIndex + 1,
+          animated: true,
+        });
+      } else {
         onClose();
-        stopTrack();
-      }}
-      swipeDirection={['down']}
-      animationIn={'slideInUp'}
-      animationOut={'fadeOut'}
-      avoidKeyboard={true}
-      scrollHorizontal={true}
-      style={{margin: 0}}
-      propagateSwipe={true}
-      backdropTransitionOutTiming={0}
-      swipeThreshold={250}
-      isVisible={isVisible}>
-      <Container justifyContent={'flex-start'}>
-        <Carousel
-          overscrollEnabled={true}
-          ref={carouselRef}
-          width={AppInfor.width}
-          height={AppInfor.height}
-          vertical={false}
-          loop={false}
-          maxScrollDistancePerSwipe={200}
-          data={mockStories}
-          onSnapToItem={index => (currentStoryFocus.current = index)}
-          renderItem={({item, index}) => (
-            <StoryDetails
-              onProgressFinish={currentIndex => {
-                if (currentIndex + 1 >= item.dataStories.length) {
-                  if (carouselRef.current) {
-                    console.log('current index: ' + currentIndex);
-                    carouselRef.current.next();
-                  }
-                }
-              }}
-              itemStory={item}
-              currentIndexFocus={currentStoryFocus.current}
-              indexStories={index}
-              carouselRef={carouselRef}
-              onNext={currentIndex => {
-                console.log('On Next Page, current index: ' + currentIndex);
-                if (currentIndex === item.dataStories.length - 1) {
-                  if (carouselRef.current) {
-                    console.log('current index: ' + currentIndex);
-                    carouselRef.current.scrollTo({index: currentIndex + 1});
-                  }
-                }
-              }}
-              onPrev={currentIndex => {
-                console.log(currentIndex);
-                if (currentIndex === 0) {
-                  if (carouselRef.current) {
-                    carouselRef.current.prev({count: 1});
-                  }
-                }
-              }}
-              onClose={onClose}
-              visible={isVisible}
-            />
-          )}
-        />
-      </Container>
-    </Modal>
+      }
+      console.log('currentIndex: ', currentIndex);
+    }
+  }, [onClose, storyViewable]);
+
+  const onPrevPage = useCallback(() => {
+    if (listStoryRef.current) {
+      // @ts-ignore
+      const currentIndex = listStoryRef.current.index;
+      if (currentIndex !== undefined && currentIndex > 0) {
+        listStoryRef.current.scrollToIndex({index: currentIndex - 1});
+      }
+    }
+  }, []);
+
+  const onViewableItemsChanged = useCallback(
+    ({
+      viewableItems,
+      changed,
+    }: {
+      viewableItems: ViewToken[];
+      changed: ViewToken[];
+    }) => {
+      if (viewableItems.length > 0) {
+        setStoryViewable(viewableItems);
+      }
+      console.log('Viewable: ', viewableItems);
+      console.log('Viewable changed: ', changed);
+    },
+    [],
+  );
+  const enablePlayStory = useMemo(() => {
+    return storyViewable[0]?.item.userId;
+  }, [storyViewable]);
+  // console.log('Active play: ', enablePlayStory);
+  return (
+    <ModalSwipeAble
+      visible={isVisible}
+      onClose={onClose}
+      containerStyle={{backgroundColor: appColors.backgroundApp}}>
+      <FlatList
+        ref={listStoryRef}
+        showsHorizontalScrollIndicator={false}
+        snapToInterval={AppInfor.width}
+        decelerationRate={'fast'}
+        snapToAlignment={'center'}
+        horizontal={true}
+        viewabilityConfig={{
+          itemVisiblePercentThreshold: 100,
+        }}
+        data={mockStories}
+        onViewableItemsChanged={onViewableItemsChanged}
+        renderItem={({item, index}) => (
+          <StoryDetails
+            enablePlay={enablePlayStory === item.userId}
+            visible={isVisible}
+            onClose={onClose}
+            onNext={onNextPage}
+            onPrev={onPrevPage}
+            itemStory={item}
+          />
+        )}
+      />
+    </ModalSwipeAble>
   );
 };
 
-export default ModalStory;
+export default memo(ModalStory);

@@ -1,27 +1,17 @@
-import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import Container from '../../components/Container.tsx';
 import {
   ActivityIndicator,
-  Animated,
   FlatList,
-  Image,
   ImageBackground,
-  Keyboard,
-  KeyboardAvoidingView,
-  PanResponder,
-  Platform,
   StyleSheet,
-  TextInput,
-  TouchableWithoutFeedback,
   View,
 } from 'react-native';
+import {RouteProp} from '@react-navigation/native';
 import {
-  NavigationProp,
-  RouteProp,
-  useNavigation,
-} from '@react-navigation/native';
-import {launchImageLibrary} from 'react-native-image-picker';
-import {goBackNavigation} from '../../utils/NavigationUtils.ts';
+  goBackNavigation,
+  navigateAndReset,
+} from '../../utils/NavigationUtils.ts';
 import {AppInfor} from '../../constants/AppInfor.ts';
 import ButtonComponent from '../../components/ButtonComponent.tsx';
 import ImageComponent from '../../components/ImageComponent.tsx';
@@ -30,7 +20,7 @@ import Box from '../../components/Box.tsx';
 
 import TextComponent from '../../components/TextComponent.tsx';
 import ModalSticker from './components/ModalSticker.tsx';
-import {musicStore, TextElement, useStoryEditor} from '../../hooks';
+import {TextElement, useStoryEditor} from '../../hooks';
 import StickerSelected from './components/StickerSelected.tsx';
 import AnimatedReanimated, {
   useAnimatedStyle,
@@ -39,23 +29,18 @@ import AnimatedReanimated, {
 } from 'react-native-reanimated';
 import ViewShot from 'react-native-view-shot';
 import ModalMusic from './components/ModalMusic.tsx';
-import TrackPlayer from 'react-native-track-player';
-import {globalStyle} from '../../styles/globalStyle.ts';
-import ListColor from './components/ListColor.tsx';
 import StoryBarEditor from './components/StoryBarEditor.tsx';
-import ListFont from './components/ListFont.tsx';
-import fonts from '../../assets/fonts';
-import SliderComponent from '../../components/SliderComponent.tsx';
 import Modal from 'react-native-modal';
 import {handleUpStory} from '../../services/apis';
-import ModalLoading from '../../components/ModalLoading.tsx';
 import FastImage from 'react-native-fast-image';
 import {Music} from '../../models';
-import {RootStackParams} from '../../navigators';
+import {RootStackParams, ROUTES} from '../../navigators';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import TextEditorLayer from './components/TextEditorLayer.tsx';
 import InputDraggable from '../../components/InputDraggable.tsx';
+import {StoryType} from '../../models/Enum.ts';
+
 type ImageEditorProps = RouteProp<RootStackParams, 'ImageEditorScreen'>;
 type ImageEditorNavigationProp = NativeStackNavigationProp<
   RootStackParams,
@@ -68,22 +53,17 @@ type Props = {
 };
 export type InputEditorTypeCreate = {
   visible: boolean;
+  listColorVisible: boolean;
   type: 'CREATE';
 };
 export type InputEditorTypeEdit = {
   visible: boolean;
+  listColorVisible: boolean;
   type: 'EDIT';
   element: TextElement;
 };
 const ImageEditorScreen = (props: Props) => {
-  const {image} = props.route.params;
-  const [inputEditor, setInputEditor] = useState<
-    InputEditorTypeCreate | InputEditorTypeEdit
-  >({
-    visible: false,
-    type: 'CREATE',
-  });
-  const {setMusicPlaying} = musicStore();
+  const {image, type} = props.route.params;
 
   const {
     texts,
@@ -93,14 +73,47 @@ const ImageEditorScreen = (props: Props) => {
     stickerSelected,
     clearStickerStory,
     toggleModalSticker,
-    toggleModalMusic,
-    textColor,
-    font,
-    fontSize,
-    setFontSize,
     handleRemoveSticker,
-    musicSelected,
   } = useStoryEditor();
+  const [inputEditor, setInputEditor] = useState<
+    InputEditorTypeCreate | InputEditorTypeEdit
+  >({
+    visible: false,
+    type: 'CREATE',
+    listColorVisible: false,
+  });
+  const [modalMusic, setModalMusic] = useState<{
+    visible: boolean;
+    musicSelected: Music;
+  }>({
+    visible: false,
+    musicSelected: {
+      _id: '',
+      artist: '',
+      image: '',
+      title: '',
+      urlMedia: '',
+    },
+  });
+  //handle music
+  const toggleModalMusic = useCallback(() => {
+    setModalMusic(pre => ({...pre, visible: !pre.visible}));
+  }, []);
+  const onMusicSelected = useCallback((music: Music) => {
+    setModalMusic({visible: false, musicSelected: music});
+  }, []);
+  const removeMusic = useCallback(() => {
+    setModalMusic(pre => ({
+      ...pre,
+      musicSelected: {
+        _id: '',
+        artist: '',
+        image: '',
+        title: '',
+        urlMedia: '',
+      },
+    }));
+  }, []);
   const viewShotRef = useRef<ViewShot>(null);
 
   const toggleInput = useCallback(() => {
@@ -115,7 +128,6 @@ const ImageEditorScreen = (props: Props) => {
     scaleImageBackground.value = imageCapture.uriCap === '' ? 0.6 : 1;
   }, [imageCapture?.uriCap, scaleImageBackground]);
   const onCapture = useCallback(() => {
-    toggleImageBackgroundSale();
     if (viewShotRef.current?.capture) {
       viewShotRef.current
         .capture()
@@ -131,7 +143,7 @@ const ImageEditorScreen = (props: Props) => {
     } else {
       console.error('Capture function is not available');
     }
-  }, [image.uri, toggleImageBackgroundSale]);
+  }, [image.uri]);
 
   //Cancel edit story
   const onCloseStoryEditor = useCallback(() => {
@@ -213,6 +225,7 @@ const ImageEditorScreen = (props: Props) => {
       visible: true,
       type: 'EDIT',
       element: value,
+      listColorVisible: true,
     });
   }, []);
   const handleRemoveText = useCallback(
@@ -222,6 +235,13 @@ const ImageEditorScreen = (props: Props) => {
     },
     [removeText, toggleInput],
   );
+
+  const handleDoneEditor = useCallback(() => {
+    onCapture();
+    if (type === 'CREATE_STORY') {
+      toggleImageBackgroundSale();
+    }
+  }, [onCapture, toggleImageBackgroundSale, type]);
   return (
     <GestureHandlerRootView>
       <Container justifyContent={'flex-start'} alignItems={'flex-start'}>
@@ -230,13 +250,9 @@ const ImageEditorScreen = (props: Props) => {
           <ModalSticker />
           {/* Modal show list music */}
           <ModalMusic
-            visible={false}
-            onClose={function (): void {
-              throw new Error('Function not implemented.');
-            }}
-            onMusicSelected={function (music: Music): void {
-              throw new Error('Function not implemented.');
-            }}
+            visible={modalMusic.visible}
+            onClose={toggleModalMusic}
+            onMusicSelected={onMusicSelected}
           />
 
           {/* Capture this view and export image that's includes text and
@@ -256,17 +272,16 @@ const ImageEditorScreen = (props: Props) => {
                       ? imageCapture.uriCap
                       : image.uri,
                 }}
-                style={{width: AppInfor.width, flex: 1}}
+                style={styles.mainImage}
                 resizeMode={FastImage.resizeMode.contain}
               />
               {/*Render sticker*/}
-              {stickerSelected.map((item, index) => {
+              {stickerSelected.map(item => {
                 return (
                   //sticker has been selected
                   <StickerSelected
-                    onRemove={item => handleRemoveSticker(item)}
-                    key={index}
-                    index={index}
+                    onRemove={it => handleRemoveSticker(it)}
+                    key={item}
                     item={item}
                   />
                 );
@@ -281,20 +296,19 @@ const ImageEditorScreen = (props: Props) => {
                   return (
                     <InputDraggable
                       onFocus={() => handleTextElementFocus(item)}
+                      // eslint-disable-next-line react-native/no-inline-styles
                       textInputStyle={{
                         fontFamily: item.font,
                         color: item.color ? item.color : appColors.white,
                         fontSize: item.size,
                         opacity:
                           inputEditor.type === 'EDIT' &&
-                          inputEditor.element.id == item.id
+                          inputEditor.element.id === item.id
                             ? 0
                             : 1,
                       }}
                       value={item.value}
                       key={item.id}
-                      onPanResponderMove={() => {}}
-                      onPanResponderRelease={() => {}}
                       id={item.id}
                     />
                   );
@@ -312,13 +326,15 @@ const ImageEditorScreen = (props: Props) => {
             />
           ) : (
             <StoryBarEditor
+              removeMusic={removeMusic}
+              musicSelected={modalMusic.musicSelected}
               opacity={imageCapture.uriCap !== '' ? 0 : 1}
               onCloseStoryEditor={onCloseStoryEditor}
               toggleInput={toggleInput}
               toggleShowListColor={toggleShowListColor}
               toggleModalSticker={toggleModalSticker}
               toggleModalMusic={toggleModalMusic}
-              onCapture={onCapture}
+              onCapture={handleDoneEditor}
             />
           )}
         </AnimatedReanimated.View>
@@ -386,8 +402,8 @@ const ImageEditorScreen = (props: Props) => {
                   onPress={async () => {
                     setIsModalLoading(true);
                     const formData = new FormData();
-                    formData.append('music', '');
-                    formData.append('type', 'photo');
+                    formData.append('musicId', modalMusic.musicSelected._id);
+                    formData.append('type', StoryType.PHOTO);
                     formData.append('duration', 15);
                     formData.append('file', {
                       uri: imageCapture?.uriCap,
@@ -397,9 +413,8 @@ const ImageEditorScreen = (props: Props) => {
                     handleUpStory(formData)
                       .then(response => {
                         if (response.code === 201) {
-                          setIsModalLoading(false);
-                          goBackNavigation();
                           clearStickerStory();
+                          goBackNavigation();
                         }
                       })
                       .catch(e => {
@@ -433,6 +448,10 @@ const ImageEditorScreen = (props: Props) => {
 };
 
 const styles = StyleSheet.create({
+  mainImage: {
+    width: AppInfor.width,
+    flex: 1,
+  },
   videoStyle: {
     height: 500,
     width: AppInfor.width,

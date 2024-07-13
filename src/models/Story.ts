@@ -1,8 +1,9 @@
 import {Media} from './Media.ts';
+import {Music} from './Music.ts';
 
 export interface Story {
   _id: string;
-  music: string;
+  music?: Music;
   duration: number;
   video: string;
   userId: string;

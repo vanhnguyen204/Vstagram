@@ -1,39 +1,21 @@
-import React, {
-  memo,
-  Ref,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
-import Box from '../../../components/Box.tsx';
-import ProgressBar from '../../../components/ProgressBar.tsx';
-import {appColors} from '../../../assets/colors/appColors.ts';
+import React, {memo, useCallback, useEffect, useMemo, useState} from 'react';
+import {View, SafeAreaView} from 'react-native';
 import FastImage from 'react-native-fast-image';
+import ProgressBar from '../../../components/ProgressBar.tsx';
 import ButtonComponent from '../../../components/ButtonComponent.tsx';
-import {AppInfor} from '../../../constants/AppInfor.ts';
-
-import {
-  pauseTrack,
-  playTrack,
-  resumeTrack,
-  stopTrack,
-} from '../../../../service';
-import {View} from 'react-native';
-import {mockStories, SetStory} from '../../../models/Mockup.ts';
-import {ICarouselInstance} from 'react-native-reanimated-carousel';
 import ImageComponent from '../../../components/ImageComponent.tsx';
+import {appColors} from '../../../assets/colors/appColors.ts';
+import {AppInfor} from '../../../constants/AppInfor.ts';
+import {SetStory} from '../../../models/Mockup.ts';
+import {stopTrack} from '../../../../service';
 
 interface StoryDetailsProps {
   visible: boolean;
   onClose: () => void;
-  onNext: (currentIndex: number) => void;
-  onPrev: (currentIndex: number) => void;
-  carouselRef: Ref<ICarouselInstance>;
-  indexStories: number;
-  currentIndexFocus: number;
+  onNext: () => void;
+  onPrev: () => void;
   itemStory: SetStory;
-  onProgressFinish: (currentIndex: number) => void;
+  enablePlay: boolean;
 }
 
 export interface ProgressBarType {
@@ -44,118 +26,80 @@ export interface ProgressBarType {
   paused: boolean;
 }
 
-const StoryDetails: React.FC<StoryDetailsProps> = (
-  props: StoryDetailsProps,
-) => {
-  const {
-    visible,
-    indexStories,
-    itemStory,
-    onClose,
-    carouselRef,
-    onNext,
-    onPrev,
-    currentIndexFocus,
-    onProgressFinish,
-  } = props;
-
-  const [progresses, setProgresses] = useState<ProgressBarType[]>(() =>
-    itemStory.dataStories.map(item => ({
-      id: item._id,
-      duration: item.duration,
-      started: false,
-      completed: false,
-      paused: false,
-    })),
-  );
-  const [activeProgressIndex, setActiveProgressIndex] = useState<number>(0);
+const StoryDetails: React.FC<StoryDetailsProps> = ({
+  visible,
+  itemStory,
+  onClose,
+  onNext,
+  enablePlay,
+  onPrev,
+}) => {
+  const [progresses, setProgresses] = useState<ProgressBarType[]>([]);
   useEffect(() => {
     setProgresses(
-      itemStory.dataStories.map(item => ({
+      itemStory.dataStories.map((item, index) => ({
         id: item._id,
         duration: item.duration,
-        started: false,
+        started: index === 0 && enablePlay,
         completed: false,
         paused: false,
       })),
     );
-    setActiveProgressIndex(0);
-  }, [currentIndexFocus, itemStory.dataStories, visible]);
+  }, [enablePlay, itemStory, visible]);
 
-  const currentProgressIndex = useMemo(() => {
+  const currentIndex = useMemo(() => {
     const index = progresses.findIndex(
       progress => progress.started && !progress.completed,
     );
     return index !== -1 ? index : 0;
   }, [progresses]);
 
-  const startNextProgress = useCallback(
-    (index: number) => {
-      setProgresses(prevProgresses =>
-        prevProgresses.map((progress, i) =>
-          i === index ? {...progress, started: true} : progress,
-        ),
-      );
-      if (itemStory.dataStories[index].music) {
-        playTrack(itemStory.dataStories[index].music);
-      }
-    },
-    [itemStory.dataStories],
-  );
-
-  useEffect(() => {
-    if (
-      activeProgressIndex < progresses.length &&
-      indexStories === currentIndexFocus
-    ) {
-      startNextProgress(activeProgressIndex);
-    }
-  }, [
-    activeProgressIndex,
-    currentIndexFocus,
-    indexStories,
-    progresses.length,
-    startNextProgress,
-  ]);
-
   const handleProgressEnd = useCallback(
     (index: number) => {
       setProgresses(prevProgresses =>
-        prevProgresses.map((progress, i) =>
-          i === index ? {...progress, completed: true} : progress,
-        ),
+        prevProgresses.map((progress, i) => {
+          if (index === i) {
+            return {...progress, completed: true};
+          } else if (index + 1 === i) {
+            return {...progress, started: true};
+          } else {
+            return progress;
+          }
+        }),
       );
+      // startNextProgress(index + 1);
+      console.log('index: ', index, ' ---------');
       if (index + 1 < progresses.length) {
-        setActiveProgressIndex(index + 1);
       } else {
-        onClose();
-        stopTrack();
+        // Bắt đầu tiến trình tiếp theo
+        onNext(); // Chuyển sang story tiếp theo
       }
     },
-    [onClose, progresses.length],
+    [onNext, progresses.length],
   );
-
   return (
-    <Box flex={1}>
-      <Box
-        position={'relative'}
-        flexDirection={'row'}
-        radius={5}
-        top={60}
-        zIndex={99}
-        paddingHorizontal={10}>
+    <View style={{flex: 1}}>
+      <SafeAreaView
+        style={{
+          position: 'absolute',
+          flexDirection: 'row',
+          top: 10,
+          left: 0,
+          right: 0,
+          zIndex: 999,
+          alignItems: 'center',
+        }}>
         {progresses.map((item, index) => (
           <ProgressBar
-            pause={progresses[index].paused}
+            pause={item.paused}
             completed={item.completed}
             sizeOfListProgress={progresses.length}
             key={index}
             start={item.started}
             duration={item.duration * 1000}
-            color={appColors.red}
+            color={appColors.white}
             onEnd={() => {
               handleProgressEnd(index);
-              onProgressFinish(activeProgressIndex);
             }}
           />
         ))}
@@ -166,36 +110,19 @@ const StoryDetails: React.FC<StoryDetailsProps> = (
             height={20}
           />
         </ButtonComponent>
-      </Box>
+      </SafeAreaView>
       <FastImage
-        resizeMode={FastImage.resizeMode.cover}
-        style={{flex: 1, zIndex: 0}}
-        source={{uri: itemStory.dataStories[currentProgressIndex]?.image}}
+        source={{
+          uri: itemStory.dataStories[currentIndex]?.image,
+        }} // Hiển thị ảnh của story hiện tại
+        style={{
+          flex: 1,
+          width: AppInfor.width,
+          height: AppInfor.height - 100, // Giảm đi 100 để tránh che phủ phần bottom bar
+        }}
+        resizeMode={FastImage.resizeMode.contain}
       />
-      <Box position={'absolute'} flexDirection={'row'} alignSelf={'center'}>
-        <ButtonComponent
-          onPress={() => {}}
-          activeOpacity={1}
-          onLongPress={() => {}}
-          onPressIn={() => {}}
-          onPressOut={() => {}}
-          style={{flex: 1, height: AppInfor.height}}
-          name={'OnPrevious'}
-        />
-        <View style={{flex: 1}} />
-        <ButtonComponent
-          onLongPress={() => {}}
-          onPressIn={() => {}}
-          onPressOut={() => {}}
-          activeOpacity={1}
-          style={{flex: 1}}
-          onPress={() => {
-            onNext(currentProgressIndex);
-          }}
-          name={'OnNext'}
-        />
-      </Box>
-    </Box>
+    </View>
   );
 };
 

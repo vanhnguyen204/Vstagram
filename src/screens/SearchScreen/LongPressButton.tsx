@@ -7,26 +7,22 @@ import React, {
 } from 'react';
 import {
   View,
-  Button,
-  Text,
   StyleSheet,
   Vibration,
-  ButtonProps,
   TouchableOpacityProps,
   StyleProp,
   ViewStyle,
-  TouchableOpacity,
 } from 'react-native';
 import Modal from 'react-native-modal';
 import {LongPressGestureHandler, State} from 'react-native-gesture-handler';
 import TextComponent from '../../components/TextComponent.tsx';
 import {appColors} from '../../assets/colors/appColors.ts';
 interface ButtonComponentV2 extends TouchableOpacityProps {
-  buttonContent: ReactNode;
+  buttonContent: React.ReactNode;
   popupContent?: ReactNode;
   popupStyle?: StyleProp<ViewStyle>;
 }
-const LongPressButtonWithPopup = forwardRef(
+const ButtonWithPopup = forwardRef(
   (props: ButtonComponentV2, ref: React.ForwardedRef<any>) => {
     const {buttonContent, popupStyle, popupContent} = props;
 
@@ -101,7 +97,7 @@ const LongPressButtonWithPopup = forwardRef(
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    // flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -125,4 +121,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LongPressButtonWithPopup;
+export default ButtonWithPopup;

@@ -1,4 +1,4 @@
-import React, {memo, useCallback, useState} from 'react';
+import React, {memo, useCallback, useMemo, useState} from 'react';
 import Container from '../../components/Container.tsx';
 import TextComponent from '../../components/TextComponent.tsx';
 import {
@@ -23,6 +23,8 @@ import Spacer from '../../components/Spacer.tsx';
 import AlbumVideoCard from './components/AlbumVideoCard.tsx';
 import {globalStyle} from '../../styles/globalStyle.ts';
 import {MediaType} from '../../models/Enum.ts';
+import {PostType} from '../../models/Post.ts';
+import {useMediaEditor} from '../../hooks/Media/useMediaEditor.ts';
 
 type AlbumRouteProp = RouteProp<RootStackParams, 'Album'>;
 type AlbumNavigationProp = NavigationProp<RootStackParams, 'Album'>;
@@ -33,24 +35,26 @@ type Props = {
 interface Category {
   id: number;
   name: string;
-  type: string;
+  type: PostType;
 }
 const Album = (props: Props) => {
   const isOpen = useIsFocused();
   const {mediaType} = props.route.params;
   const {images, videos} = usePhotos();
-  const [categoryOpened, setCategoryOpened] = useState('image');
+  const [categoryOpened, setCategoryOpened] = useState<PostType>(
+    PostType.PHOTO,
+  );
 
   const [categories, _] = useState<Category[]>([
     {
       id: 1,
       name: 'Ảnh',
-      type: 'image',
+      type: PostType.PHOTO,
     },
     {
       id: 2,
       name: 'Video',
-      type: 'video',
+      type: PostType.VIDEO,
     },
   ]);
   const {
@@ -61,12 +65,11 @@ const Album = (props: Props) => {
     videoSelected,
     onVideoSelected,
     clearVideoSelected,
-  } = usePhotos();
-
+  } = useMediaEditor();
   useFocusEffect(
     useCallback(() => {
       return () => {
-        if (!isOpen && imageSelected.length > 0) {
+        if (!isOpen && imageSelected.length > 0 && !MediaType.POSTS) {
           clearImageSelected();
         }
       };
@@ -108,7 +111,7 @@ const Album = (props: Props) => {
       onImageUnSelected,
     ],
   );
-  const onCategoryPress = useCallback((type: string) => {
+  const onCategoryPress = useCallback((type: PostType) => {
     setCategoryOpened(type);
   }, []);
   const isVideoSelected = useCallback(
@@ -133,6 +136,11 @@ const Album = (props: Props) => {
     },
     [clearVideoSelected, isVideoSelected, onVideoSelected],
   );
+  const handleGoBack = useCallback(() => {
+    goBackNavigation();
+    clearImageSelected();
+    clearVideoSelected();
+  }, [clearImageSelected, clearVideoSelected]);
   const renderImageItem = useCallback(
     ({item}: {item: PhotoIdentifier}) => (
       <AlbumImageCard
@@ -146,6 +154,7 @@ const Album = (props: Props) => {
     ),
     [findIndex, isImageSelected, toggleSelected],
   );
+
   const renderVideoItem = useCallback(
     ({item, index}: {item: PhotoIdentifier; index: number}) => (
       <AlbumVideoCard
@@ -159,59 +168,83 @@ const Album = (props: Props) => {
     ),
     [isVideoSelected, toggleVideoSelected],
   );
-  console.log('Video selected: ', videoSelected);
+  const componentLeft = useMemo(
+    () => (
+      <ButtonComponent onPress={handleGoBack}>
+        <CloseSvg size={32} />
+      </ButtonComponent>
+    ),
+    [handleGoBack],
+  );
+
+  const componentCenter = useMemo(
+    () => (
+      <TextComponent
+        fontSize={18}
+        color={appColors.white}
+        value={mediaType.title}
+      />
+    ),
+    [mediaType.title],
+  );
+  const handleDoneSelected = useCallback(() => {
+    if (mediaType.type === MediaType.STORY) {
+      navigatePush(ROUTES.ImageEditorScreen, {
+        image: imageSelected[0],
+        type: 'CREATE_STORY',
+      });
+    }
+    if (mediaType.type === MediaType.POSTS) {
+      if (categoryOpened === PostType.PHOTO) {
+        navigatePush(ROUTES.PostEditorScreen, {mediaType: PostType.PHOTO});
+      } else {
+        navigatePush(ROUTES.PostEditorScreen, {mediaType: PostType.VIDEO});
+      }
+    }
+    if (mediaType.type === MediaType.REELS) {
+      navigatePush(ROUTES.ReelEditorScreen, {
+        video: videoSelected,
+      });
+    }
+  }, [categoryOpened, imageSelected, mediaType.type, videoSelected]);
+  const componentRight = useMemo(
+    () => (
+      <ButtonComponent onPress={handleDoneSelected}>
+        <TextComponent
+          value={'Tiếp'}
+          fontWeight={'700'}
+          color={appColors.blue500}
+          fontSize={18}
+        />
+      </ButtonComponent>
+    ),
+    [handleDoneSelected],
+  );
   return (
     <Container>
       <Header
         style={globalStyle.headerStyle}
-        componentLeft={
-          <ButtonComponent
-            onPress={() => {
-              goBackNavigation();
-            }}>
-            <CloseSvg size={32} />
-          </ButtonComponent>
-        }
-        componentCenter={
-          <TextComponent
-            fontSize={18}
-            color={appColors.white}
-            value={mediaType.title}
-          />
-        }
-        componentRight={
-          <ButtonComponent
-            onPress={() => {
-              if (mediaType.type === MediaType.STORY) {
-                navigatePush(ROUTES.ImageEditorScreen, {
-                  image: imageSelected[0],
-                  type: 'CREATE_STORY',
-                });
-              }
-            }}>
-            <TextComponent
-              value={'Tiếp'}
-              fontWeight={'700'}
-              color={appColors.blue500}
-              fontSize={18}
-            />
-          </ButtonComponent>
-        }
+        componentLeft={componentLeft}
+        componentCenter={componentCenter}
+        componentRight={componentRight}
       />
-      <Box flexDirection={'row'}>
-        {categories.map(item => {
-          return (
-            <Category
-              key={item.id}
-              categoryOpened={categoryOpened}
-              onCategoryPress={onCategoryPress}
-              item={item}
-            />
-          );
-        })}
-      </Box>
+      {mediaType.type !== MediaType.REELS && (
+        <Box flexDirection={'row'}>
+          {categories.map(item => {
+            return (
+              <Category
+                key={item.id}
+                categoryOpened={categoryOpened}
+                onCategoryPress={onCategoryPress}
+                item={item}
+              />
+            );
+          })}
+        </Box>
+      )}
       <Spacer height={10} />
-      {categoryOpened === 'image' ? (
+      {categoryOpened === PostType.PHOTO &&
+      mediaType.type === MediaType.STORY ? (
         <FlatList
           initialNumToRender={30}
           extraData={images}
@@ -236,7 +269,7 @@ const Album = (props: Props) => {
 interface CategoryProps {
   item: Category;
   categoryOpened: string;
-  onCategoryPress: (type: string) => void;
+  onCategoryPress: (type: PostType) => void;
 }
 export const Category = memo(
   (props: CategoryProps) => {
@@ -244,7 +277,6 @@ export const Category = memo(
     const handleCategoryPress = useCallback(() => {
       onCategoryPress(item.type);
     }, [item.type, onCategoryPress]);
-    console.log('Open: ', categoryOpened);
     return (
       <Box flex={1} key={item.id}>
         <ButtonComponent

@@ -25,7 +25,6 @@ interface ReelCardProps {
 
 export interface ReelCardHandle {
   pauseVideo: () => void;
-  getVideoRef: () => VideoRef | null;
   isPaused: () => boolean;
 }
 
@@ -33,8 +32,15 @@ const ReelCard = forwardRef<ReelCardHandle, ReelCardProps>(
   ({item, index, isFocused}, ref) => {
     const likeRef = useRef<ReelControllerHandle>(null);
     const videoRef = useRef<VideoRef>(null);
+    const reelControllerRef = useRef<ReelControllerHandle>();
     const {visible, setVisible, setComments} = useComment();
-    const [loading, setLoading] = useState(false);
+    const [naturalSizeVideo, setNaturalSize] = useState<{
+      width: number;
+      height: number;
+    }>({
+      width: 0,
+      height: 0,
+    });
     const [paused, setPaused] = useState<boolean>(true);
 
     useImperativeHandle(ref, () => ({
@@ -50,7 +56,7 @@ const ReelCard = forwardRef<ReelCardHandle, ReelCardProps>(
     }));
     useEffect(() => {
       console.log('ReelCard re-render:', {index, paused});
-      console.log('-----------------');
+      console.log('--------');
     }, [index, paused]);
 
     useEffect(() => {
@@ -68,7 +74,6 @@ const ReelCard = forwardRef<ReelCardHandle, ReelCardProps>(
     const bottomBarHeight = useBottomTabBarHeight();
     const handlePause = useCallback(() => {
       setPaused(prevState => !prevState);
-      console.log('On Press pause');
     }, []);
 
     return (
@@ -76,30 +81,21 @@ const ReelCard = forwardRef<ReelCardHandle, ReelCardProps>(
         style={{
           flex: 1,
           height: AppInfor.height - bottomBarHeight,
-          backgroundColor: index % 2 === 0 ? appColors.red : appColors.blue500,
         }}>
         <Video
-          // onLoad={() => setLoading(false)}
+          onLoad={({naturalSize}) => {
+            setNaturalSize({
+              width: naturalSize.width,
+              height: naturalSize.height,
+            });
+          }}
           repeat={true}
           ref={videoRef}
           paused={paused}
           source={{uri: item.videoURL}}
-          resizeMode="contain"
+          resizeMode={naturalSizeVideo.height > 700 ? 'cover' : 'contain'}
           style={{flex: 1, width: AppInfor.width, height: undefined}}
         />
-        {loading && (
-          <Box
-            flex={1}
-            position="absolute"
-            top={0}
-            left={0}
-            alignItems="center"
-            justifyContent="center"
-            right={0}
-            bottom={0}>
-            <ActivityIndicator size="small" color={appColors.white} />
-          </Box>
-        )}
         <ReelController
           index={index}
           onShare={() => {}}

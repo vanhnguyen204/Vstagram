@@ -35,7 +35,7 @@ const BottomTab = () => {
           {
             backgroundColor: appColors.backgroundApp,
             borderTopWidth: 0,
-            display: route.name === ROUTES.NewPost ? 'none' : 'flex',
+            display: route.name === ROUTES.PostEditorScreen ? 'none' : 'flex',
           },
         ],
         tabBarActiveTintColor: appColors.white,

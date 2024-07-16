@@ -1,6 +1,5 @@
 import {PhotoIdentifier} from '@react-native-camera-roll/camera-roll';
 import {create} from 'zustand';
-import photos from '../../screens/Album';
 export interface ImageType {
   id: string;
   uri: string;
@@ -14,64 +13,23 @@ export interface VideoType {
   name: string;
   duration: number;
 }
-interface UsePhotosType {
+interface PhotosType {
   photos: PhotoIdentifier[];
-  imageSelected: ImageType[];
-  videoSelected: VideoType;
   images: PhotoIdentifier[];
   videos: PhotoIdentifier[];
 }
 
-interface UsePhotosActions extends UsePhotosType {
+interface PhotosActions extends PhotosType {
   setPhotos: (photos: PhotoIdentifier[]) => void;
   setImages: (images: PhotoIdentifier[]) => void;
   setVideos: (videos: PhotoIdentifier[]) => void;
-  onImageSelected: (photo: ImageType, multiple: boolean) => void;
-  onImageUnSelected: (photoId: string) => void;
-  clearImageSelected: () => void;
-  onVideoSelected: (video: VideoType) => void;
-  clearVideoSelected: () => void;
 }
 
-export const usePhotos = create<UsePhotosActions>(setState => ({
+export const usePhotos = create<PhotosActions>(setState => ({
   photos: [],
   videos: [],
   images: [],
-  imageSelected: [],
-  videoSelected: {
-    duration: 0,
-    type: '',
-    uri: '',
-    name: '',
-    id: '',
-  },
-  //All photo
   setPhotos: (pts: PhotoIdentifier[]) => setState({photos: pts}),
-  // handle videos
   setVideos: (videos: PhotoIdentifier[]) => setState({videos}),
-  onVideoSelected: (video: VideoType) => setState({videoSelected: video}),
-  clearVideoSelected: () =>
-    setState({
-      videoSelected: {
-        duration: 0,
-        type: '',
-        uri: '',
-        name: '',
-        id: '',
-      },
-    }),
-  // handle images
   setImages: (images: PhotoIdentifier[]) => setState({images}),
-  onImageUnSelected: (photoId: string) =>
-    setState(state => ({
-      imageSelected: state.imageSelected.filter(item => item.id !== photoId),
-    })),
-  clearImageSelected: () =>
-    setState({
-      imageSelected: [],
-    }),
-  onImageSelected: (photo: ImageType,multiple: boolean ) =>
-    setState(state => ({
-      imageSelected: multiple ? state.imageSelected.concat(photo) : [photo],
-    })),
 }));

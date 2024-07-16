@@ -10,6 +10,8 @@ import {getDataAsyncStorage} from './src/utils/AsyncStorage.ts';
 import {ACCESS_USER_ID} from './src/constants/AsyncStorage.ts';
 import {activeUserActivity} from './src/services/apis/socketService.ts';
 import {showNotification} from './src/config/PushNotification.ts';
+import {Provider} from 'react-redux';
+import { store } from "./src/stores/store.ts";
 
 const App = () => {
   const {visibleModalLoading} = useAppStore();
@@ -45,15 +47,17 @@ const App = () => {
   }, [handleAppStateChange, handleConnectSocket]);
 
   return (
-    <View style={{flex: 1}}>
-      <ModalLoading visible={visibleModalLoading} />
-      <NavigationContainer
-        ref={ref => {
-          navigationRef.current = ref;
-        }}>
-        <Navigation />
-      </NavigationContainer>
-    </View>
+    <Provider store={store}>
+      <View style={{flex: 1}}>
+        <ModalLoading visible={visibleModalLoading} />
+        <NavigationContainer
+          ref={ref => {
+            navigationRef.current = ref;
+          }}>
+          <Navigation />
+        </NavigationContainer>
+      </View>
+    </Provider>
   );
 };
 

@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import Container from '../../components/Container.tsx';
 import {ImageType, usePhotos} from '../../hooks/Media/usePhotos.ts';
 import {NavigationProp, RouteProp} from '@react-navigation/native';
@@ -8,23 +8,22 @@ import ButtonComponent from '../../components/ButtonComponent.tsx';
 import {
   goBackNavigation,
   navigateAndReset,
+  navigatePush,
 } from '../../utils/NavigationUtils.ts';
 import CloseSvg from '../../assets/svg/public/CloseSvg.tsx';
 import {appColors} from '../../assets/colors/appColors.ts';
 import {Alert, FlatList, StyleSheet, View} from 'react-native';
 import {globalStyle} from '../../styles/globalStyle.ts';
 import ImageComponent from '../../components/ImageComponent.tsx';
-import {AppInfor} from '../../constants/AppInfor.ts';
 import Box from '../../components/Box.tsx';
-import FastImage from 'react-native-fast-image';
-import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import ModalMusic from '../ImageEditorScreen/components/ModalMusic.tsx';
 import {Music} from '../../models';
 import LinearGradient from 'react-native-linear-gradient';
 import ImageCard from './components/ImageCard.tsx';
 import TextComponent from '../../components/TextComponent.tsx';
-import {Post} from '../../models/Post.ts';
 import {createPost} from '../../services/apis/postServices.ts';
+import {useMediaEditor} from '../../hooks/Media/useMediaEditor.ts';
+import {usePostStore} from '../../hooks/usePostStore.ts';
 
 type NewPostRouteProp = RouteProp<RootStackParams, 'NewPost'>;
 type NewPostNavigationProp = NavigationProp<RootStackParams, 'NewPost'>;
@@ -33,21 +32,40 @@ type Props = {
   navigation: NewPostNavigationProp;
 };
 
-const NewPost = (props: Props) => {
-  const {} = props;
-  const {imageSelected, images, onImageUnSelected} = usePhotos();
-  const [visibleModalMusic, setVisibleModalMusic] = useState<boolean>(false);
-  const toggleModalMusic = useCallback(() => {
-    setVisibleModalMusic(prevState => !prevState);
-  }, []);
-  const [musicSelected, setMusicSelected] = useState<Music>();
+interface MusicSelect {
+  visible: boolean;
+  music: Music;
+}
+const PostEditorScreen = (props: Props) => {
+  const {mediaType} = props.route.params;
+  const {images} = usePhotos();
+  const {imageSelected, onImageUnSelected} = useMediaEditor();
+  const {addNewPost} = usePostStore();
+  const [musicSelected, setMusicSelected] = useState<MusicSelect>({
+    visible: false,
+    music: {
+      _id: '',
+      image: '',
+      artist: '',
+      title: '',
+      urlMedia: '',
+    },
+  });
   const handleMusicSelected = useCallback(
     (music: Music) => {
-      setMusicSelected(music);
-      toggleModalMusic();
+      setMusicSelected({
+        visible: !musicSelected.visible,
+        music,
+      });
     },
-    [toggleModalMusic],
+    [musicSelected.visible],
   );
+  const toggleModalMusic = useCallback(() => {
+    setMusicSelected(prevState => ({
+      ...prevState,
+      visible: !prevState.visible,
+    }));
+  }, []);
   const onRemoveImage = useCallback(
     (id: string) => {
       Alert.alert('Gỡ ảnh ?', '', [
@@ -67,9 +85,9 @@ const NewPost = (props: Props) => {
   );
   const handleCreatePost = useCallback(() => {
     const formData = new FormData();
-    musicSelected && formData.append('music', musicSelected);
+    musicSelected && formData.append('music', musicSelected.music.urlMedia);
     formData.append('description', 'description');
-    formData.append('type', 'POST');
+    formData.append('type', 'PHOTO');
     for (const value of imageSelected) {
       formData.append('file', {
         uri: value.uri,
@@ -81,18 +99,31 @@ const NewPost = (props: Props) => {
       .then(res => {
         console.log(res);
         if (res?.code === 201) {
+          addNewPost(res.data);
           navigateAndReset([{name: ROUTES.BottomTab}]);
         }
       })
       .catch(e => {
         console.log(e);
+        Alert.alert(
+          'Thông báo',
+          'Tạo bài viết thất bại, vui lòng thử lại sau.',
+        );
       });
-  }, [imageSelected, musicSelected]);
+  }, [addNewPost, imageSelected, musicSelected]);
+  const handleImagePress = useCallback((it: ImageType) => {
+    navigatePush(ROUTES.ImageEditorScreen, {image: it, type: 'EDIT_IMAGE'});
+  }, []);
+  useEffect(() => {
+    if (imageSelected.length === 0) {
+      goBackNavigation();
+    }
+  }, [imageSelected.length]);
   return (
     <Container justifyContent={'space-between'}>
       <ModalMusic
         onMusicSelected={handleMusicSelected}
-        visible={visibleModalMusic}
+        visible={musicSelected.visible}
         onClose={toggleModalMusic}
       />
       <Box>
@@ -108,7 +139,7 @@ const NewPost = (props: Props) => {
           }
           componentRight={
             <ButtonComponent onPress={toggleModalMusic}>
-              {musicSelected ? (
+              {musicSelected.music.image ? (
                 <LinearGradient
                   start={{x: 0, y: 0}}
                   end={{x: 1, y: 0}}
@@ -120,7 +151,7 @@ const NewPost = (props: Props) => {
                   }}
                   colors={['#FD1D1D', '#E1306C', '#F77737', '#FCAF45']}>
                   <ImageComponent
-                    src={{uri: musicSelected.image}}
+                    src={{uri: musicSelected.music.image}}
                     height={25}
                     width={25}
                     borderRadius={5}
@@ -144,11 +175,11 @@ const NewPost = (props: Props) => {
             data={imageSelected}
             keyExtractor={item => item.id}
             horizontal
-            renderItem={({item, index}) => {
+            renderItem={({item}) => {
               return (
                 <ImageCard
                   item={item}
-                  onPress={it => {}}
+                  onPress={handleImagePress}
                   onRemove={onRemoveImage}
                 />
               );
@@ -165,9 +196,7 @@ const NewPost = (props: Props) => {
           scaleInValue={0.8}
           activeOpacity={1}
           scaleAnimated={true}
-          onPress={() => {
-            goBackNavigation();
-          }}>
+          onPress={goBackNavigation}>
           <View style={styles.buttonSelectImage}>
             <ImageComponent
               resizeMode={'cover'}
@@ -223,4 +252,4 @@ const styles = StyleSheet.create({
     width: 30,
   },
 });
-export default NewPost;
+export default PostEditorScreen;

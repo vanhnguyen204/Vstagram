@@ -44,9 +44,9 @@ const HomeScreen = () => {
     });
   }, []);
   const [isVisible, setIsVisible] = useState(false);
-  const toggle = () => {
-    setIsVisible(!isVisible);
-  };
+  const toggle = useCallback(() => {
+    setIsVisible(prevState => !prevState);
+  }, []);
 
   const renderPost = useCallback(
     ({item}: {item: Post}) => {
@@ -72,6 +72,7 @@ const HomeScreen = () => {
     [],
   );
   const handleGetPosts = useCallback(() => {
+    console.log('get posts');
     if (posts.nextPage) {
       getPosts(5, posts.nextPage)
         .then(res => {
@@ -86,7 +87,7 @@ const HomeScreen = () => {
   }, [posts.nextPage, setPosts]);
   useEffect(() => {
     handleGetPosts();
-  }, [handleGetPosts]);
+  }, []);
 
   const filterPostHasMusic = useCallback((data: Post[]) => {
     return data.filter(
@@ -97,11 +98,6 @@ const HomeScreen = () => {
     const playMusicForVisiblePosts = async () => {
       const filteredMusicPosts = filterPostHasMusic(viewablePosts);
 
-      if (filteredMusicPosts.length === 0) {
-        await stopTrack();
-        return;
-      }
-
       const firstMusicPost = filteredMusicPosts[0];
       if (viewablePosts.includes(firstMusicPost) && isScreenFocus) {
         try {
@@ -110,6 +106,8 @@ const HomeScreen = () => {
         } catch (e) {
           console.error('Error playing music: ', e);
         }
+      } else {
+        await stopTrack();
       }
     };
     playMusicForVisiblePosts();
@@ -120,6 +118,7 @@ const HomeScreen = () => {
   const navigateToChatStore = useCallback(() => {
     navigatePush(ROUTES.ChatStore);
   }, []);
+
   return (
     <GestureHandlerRootView>
       <Container justifyContent={'flex-start'}>
@@ -145,25 +144,18 @@ const HomeScreen = () => {
         {/*</ModalSwipeAble>*/}
         <FlatList
           ListHeaderComponent={
-            <Box
-              alignSelf="stretch"
-              flexDirection={'row'}
-              justifyContent="flex-start">
-              <MyStory
-                onIconAddPress={navigateToCreatePost}
-                onStoryPress={toggle}
-              />
-            </Box>
+            <ListHeaderComponent
+              navigateToCreatePost={navigateToCreatePost}
+              toggle={toggle}
+            />
           }
-          showsVerticalScrollIndicator={false}
           data={posts.data}
           renderItem={renderPost}
           viewabilityConfig={{
             itemVisiblePercentThreshold: 80,
           }}
-          onEndReachedThreshold={0.5}
+          onEndReachedThreshold={0.4}
           onEndReached={({distanceFromEnd}) => {
-            console.log(distanceFromEnd);
             if (distanceFromEnd <= 0) {
               return;
             }
@@ -175,7 +167,25 @@ const HomeScreen = () => {
     </GestureHandlerRootView>
   );
 };
-
+const ListHeaderComponent = React.memo(
+  ({
+    navigateToCreatePost,
+    toggle,
+  }: {
+    navigateToCreatePost: () => void;
+    toggle: () => void;
+  }) => {
+    console.log('re-render header list');
+    return (
+      <Box
+        alignSelf="stretch"
+        flexDirection={'row'}
+        justifyContent="flex-start">
+        <MyStory onIconAddPress={navigateToCreatePost} onStoryPress={toggle} />
+      </Box>
+    );
+  },
+);
 const styles = StyleSheet.create({
   container: {
     flex: 1,

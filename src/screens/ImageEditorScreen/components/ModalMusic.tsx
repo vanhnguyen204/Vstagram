@@ -51,8 +51,10 @@ const ModalMusic = (props: ModalMusicProps) => {
   }, [clearMusicPlaying]);
 
   const getMusicsAxios = useCallback(() => {
+    console.log('call music');
+    console.log(musics.nextPage);
     if (musics.nextPage) {
-      getMusics(10, musics.nextPage)
+      getMusics(15, musics.nextPage)
         .then(res => {
           setMusics(res);
         })
@@ -60,7 +62,7 @@ const ModalMusic = (props: ModalMusicProps) => {
           console.log(e);
         });
     }
-  }, [musics.nextPage]);
+  }, [musics.nextPage, setMusics]);
   const renderMusicItem = useCallback(
     ({item, index}: {item: Music; index: number}) => {
       return (

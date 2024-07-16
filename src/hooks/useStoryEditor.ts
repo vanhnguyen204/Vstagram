@@ -65,18 +65,21 @@ export const useStoryEditor = create<StoryEditorActions>(set => ({
   setTextColor: (color: string) => set({textColor: color}),
   setFont: (font: string) => set({font: font}),
   setFontSize: (fontSize: number) => set({fontSize}),
-  addNewText: (textElement: TextElement) => set(state => ({
-    texts: state.texts.concat(textElement)
-  })),
-  updateText: textElement => set(state => ({
-    texts: state.texts.map(item => {
-      if (textElement.id === item.id) {
-        return textElement
-      }
-      return item
-    })
-  })),
-  removeText: textId => set(state => ({
-    texts: state.texts.filter(item => item.id !== textId)
-  }))
+  addNewText: (textElement: TextElement) =>
+    set(state => ({
+      texts: state.texts.concat(textElement),
+    })),
+  updateText: textElement =>
+    set(state => ({
+      texts: state.texts.map(item => {
+        if (textElement.id === item.id) {
+          return textElement;
+        }
+        return item;
+      }),
+    })),
+  removeText: textId =>
+    set(state => ({
+      texts: state.texts.filter(item => item.id !== textId),
+    })),
 }));

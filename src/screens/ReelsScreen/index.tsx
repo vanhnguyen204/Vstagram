@@ -1,4 +1,4 @@
-import React, {useCallback, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {FlatList, SafeAreaView, StatusBar, View, ViewToken} from 'react-native';
 import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
 import ReelCard, {ReelCardHandle} from './components/ReelCard.tsx';
@@ -10,13 +10,23 @@ import {navigatePush} from '../../utils/NavigationUtils.ts';
 import {ROUTES} from '../../navigators';
 import {Reel} from '../../models/Reel.ts';
 import {useIsFocused} from '@react-navigation/native';
+import {useDispatch, useSelector} from 'react-redux';
+import {AppDispatch, RootState} from '../../stores/store.ts';
+import {handleGetReels} from '../../stores/reel/reelActions.ts';
 
 const ReelsScreen = () => {
   const bottomTabHeight = useBottomTabBarHeight();
+  const dispatch = useDispatch<AppDispatch>();
+  const reels = useSelector<RootState>(state => state.reels);
   const statusBarHeight = StatusBar.currentHeight ?? 44;
   const [viewableReels, setViewableReels] = useState<Reel | null>(null);
   const reelsRefs = useRef<(ReelCardHandle | null)[]>([]);
   const isScreenFocus = useIsFocused();
+
+  useEffect(() => {
+    dispatch(handleGetReels());
+  }, [dispatch]);
+
   const renderItemReels = useCallback(
     ({item, index}: {item: Reel; index: number}) => {
       return (
@@ -43,7 +53,7 @@ const ReelsScreen = () => {
     },
     [viewableReels?._id],
   );
-
+  console.log('Next page: ');
   return (
     <View style={{backgroundColor: appColors.backgroundApp}}>
       <SafeAreaView
@@ -61,17 +71,26 @@ const ReelsScreen = () => {
         />
       </SafeAreaView>
       <FlatList
-        data={mockReels}
+        data={reels.data}
         renderItem={renderItemReels}
         viewabilityConfig={{
           itemVisiblePercentThreshold: 70,
         }}
+        onEndReachedThreshold={0.5}
         decelerationRate={'fast'}
+        onEndReached={({distanceFromEnd}) => {
+          if (distanceFromEnd <= 0) {
+            return;
+          }
+          if (reels.nextPage) {
+            dispatch(handleGetReels(5, reels.nextPage));
+          }
+        }}
         snapToInterval={AppInfor.height - bottomTabHeight}
         snapToAlignment={'center'}
         onViewableItemsChanged={onViewableItemsChanged}
-        keyExtractor={item => item._id.toString()}
-        showsVerticalScrollIndicator={false}
+        keyExtractor={item => item._id}
+        showsVerticalScrollIndicator={true}
       />
     </View>
   );

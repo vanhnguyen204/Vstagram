@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react';
+import React, { memo, useCallback } from "react";
 import {ImageType} from '../../../hooks/Media/usePhotos.ts';
 import ButtonComponent from '../../../components/ButtonComponent.tsx';
 import ImageComponent from '../../../components/ImageComponent.tsx';
@@ -29,9 +29,9 @@ const ImageCard = (props: ImageCardProps) => {
       marginHorizontal={10}>
       <ImageComponent
         style={{
-          aspectRatio: 0.8,
-          height: AppInfor.width,
           borderRadius: 10,
+          height: 400,
+          width: 300,
         }}
         src={{uri: item.uri}}
         resizeMode={FastImage.resizeMode.cover}
@@ -49,4 +49,4 @@ const ImageCard = (props: ImageCardProps) => {
   );
 };
 
-export default ImageCard;
+export default memo(ImageCard);

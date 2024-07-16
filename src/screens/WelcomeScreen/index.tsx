@@ -73,7 +73,7 @@ const WelcomeScreen = () => {
   }, [setListStory]);
   const getMusicsAxios = useCallback(async () => {
     try {
-      const musics = await getMusics(10, 1);
+      const musics = await getMusics(15, 1);
       setMusics(musics);
     } catch (e) {
       console.log(e);
@@ -101,7 +101,7 @@ const WelcomeScreen = () => {
       .catch(e => {
         console.log(e);
       });
-  }, [getMusicsAxios, getMyStories, getUserInfor]);
+  }, [getMusicsAxios, getMyStories, getUserInfor, getUsers]);
 
   const requestPermissions = async (): Promise<boolean> => {
     if (Platform.OS === 'android') {

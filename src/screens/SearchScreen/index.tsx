@@ -31,6 +31,7 @@ import TextEditorLayer from '../ImageEditorScreen/components/TextEditorLayer.tsx
 import Container from '../../components/Container.tsx';
 
 const SearchScreen = () => {
+  console.log('Re-render Search screen');
   return (
     <Container>
       <TextComponent value={'hello'} />

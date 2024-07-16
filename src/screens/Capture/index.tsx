@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
-import {StyleSheet, Text, View, Animated, Easing} from 'react-native';
+import {Animated, Easing, StyleSheet, Text, View} from 'react-native';
 import Container from '../../components/Container.tsx';
 import {Circle, NumberProp, Svg} from 'react-native-svg';
 import {
@@ -15,11 +15,11 @@ import Box from '../../components/Box.tsx';
 import TextComponent from '../../components/TextComponent.tsx';
 import ImageComponent from '../../components/ImageComponent.tsx';
 import {goBackNavigation, navigatePush} from '../../utils/NavigationUtils.ts';
-import ShuffleSvg from '../../assets/svg/capture/ShuffleSvg.tsx';
 import CloseSvg from '../../assets/svg/public/CloseSvg.tsx';
 import SquareSvg from '../../assets/svg/public/SquareSvg.tsx';
 import SwapSvg from '../../assets/svg/capture/SwapSvg.tsx';
 import {ROUTES} from '../../navigators';
+import {MediaType} from '../../models/Enum.ts';
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 const circleStroke = 2 * Math.PI * 50;
@@ -50,12 +50,13 @@ const Capture = () => {
     useCallback(() => {
       // stop recording when screen unmount! vanh 25/6/2024
       return () => {
-        cameraRef.current &&
+        if (cameraRef.current && record.isRecording) {
           cameraRef.current.stopRecording().catch(e => {
             console.log(e);
           });
+        }
       };
-    }, []),
+    }, [record.isRecording]),
   );
   useEffect(() => {
     const requestPermissions = async () => {
@@ -68,7 +69,7 @@ const Capture = () => {
     };
     requestPermissions();
   }, []);
-
+  console.log('re-render');
   if (!device) {
     return <Text>Loading...</Text>;
   }
@@ -149,6 +150,16 @@ const Capture = () => {
     }
   };
 
+  const animateCircle = () => {
+    const remainingTime = (MAX_RECORD_DURATION - record.duration) * 1000;
+
+    Animated.timing(strokeDashoffset, {
+      toValue: 0,
+      duration: remainingTime,
+      easing: Easing.linear,
+      useNativeDriver: true,
+    }).start();
+  };
   const resumeRecording = async () => {
     if (cameraRef.current) {
       try {
@@ -189,17 +200,6 @@ const Capture = () => {
     } else {
       startRecording();
     }
-  };
-
-  const animateCircle = () => {
-    const remainingTime = (MAX_RECORD_DURATION - record.duration) * 1000;
-
-    Animated.timing(strokeDashoffset, {
-      toValue: 0,
-      duration: remainingTime,
-      easing: Easing.linear,
-      useNativeDriver: true,
-    }).start();
   };
 
   if (!permission.hasCameraPermission) {
@@ -308,7 +308,16 @@ const Capture = () => {
         </Box>
       </Box>
       <Box flexDirection={'row'} justifyContent={'space-between'} padding={15}>
-        <ButtonComponent onPress={() => {}}>
+        <ButtonComponent
+          onPress={() => {
+            navigatePush(ROUTES.Album, {
+              mediaType: {
+                type: MediaType.REELS,
+                multipleImage: false,
+                title: 'Thước phim mới',
+              },
+            });
+          }}>
           <ImageComponent
             tintColor={appColors.white}
             alignSelf={'center'}

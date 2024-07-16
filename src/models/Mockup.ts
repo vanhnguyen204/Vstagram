@@ -84,8 +84,154 @@ export const mockStories: SetStory[] = [
     ],
   },
 ];
-
 export const mockReels: Reel[] = [
+  {
+    _id: '280820',
+    userId: '1',
+    isFollowed: true,
+    music: '',
+    avatar:
+      'https://img.freepik.com/premium-photo/animal-icon-hd-8k-wallpaper-stock-photographic-image_915071-38615.jpg',
+    description:
+      'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters,',
+    videoURL:
+      'https://nodejs-vstagram-aws-s3.s3.ap-southeast-2.amazonaws.com/reels/that_girl_reels.MP4',
+    comment: [
+      {
+        _id: '1',
+        userId: '1999',
+        comment: 'omg',
+        like: 22,
+        name: 'username',
+        timeCreated: '2024-06-18 14:56:45',
+        userAvatar:
+          'https://img.freepik.com/premium-photo/animal-icon-hd-8k-wallpaper-stock-photographic-image_915071-38615.jpg',
+      },
+      {
+        _id: '2',
+        userId: '1999',
+        comment: 'omg',
+        like: 22,
+        name: 'username',
+        timeCreated: '2024-06-18 14:56:45',
+        userAvatar:
+          'https://img.freepik.com/premium-photo/animal-icon-hd-8k-wallpaper-stock-photographic-image_915071-38615.jpg',
+      },
+      {
+        _id: '3',
+        userId: '1999',
+        comment: 'omg',
+        like: 22,
+        name: 'username',
+        timeCreated: '2024-06-18 14:56:45',
+        userAvatar:
+          'https://img.freepik.com/premium-photo/animal-icon-hd-8k-wallpaper-stock-photographic-image_915071-38615.jpg',
+      },
+      {
+        _id: '4',
+        userId: '1999',
+        comment: 'omg',
+        like: 22,
+        name: 'username',
+        timeCreated: '2024-06-18 14:56:45',
+        userAvatar:
+          'https://img.freepik.com/premium-photo/animal-icon-hd-8k-wallpaper-stock-photographic-image_915071-38615.jpg',
+      },
+      {
+        _id: '5',
+        userId: '1999',
+        comment: 'omg',
+        like: 22,
+        name: 'username',
+        timeCreated: '2024-06-18 14:56:45',
+        userAvatar:
+          'https://img.freepik.com/premium-photo/animal-icon-hd-8k-wallpaper-stock-photographic-image_915071-38615.jpg',
+      },
+      {
+        _id: '6',
+        userId: '1999',
+        comment: 'omg',
+        like: 22,
+        name: 'username',
+        timeCreated: '2024-06-18 14:56:45',
+        userAvatar:
+          'https://img.freepik.com/premium-photo/animal-icon-hd-8k-wallpaper-stock-photographic-image_915071-38615.jpg',
+      },
+      {
+        _id: '7',
+        userId: '1999',
+        comment: 'omg',
+        like: 22,
+        name: 'username',
+        timeCreated: '2024-06-18 14:56:45',
+        userAvatar:
+          'https://img.freepik.com/premium-photo/animal-icon-hd-8k-wallpaper-stock-photographic-image_915071-38615.jpg',
+      },
+      {
+        _id: '8',
+        userId: '1999',
+        comment: 'omg',
+        like: 22,
+        name: 'username',
+        timeCreated: '2024-06-18 14:56:45',
+        userAvatar:
+          'https://img.freepik.com/premium-photo/animal-icon-hd-8k-wallpaper-stock-photographic-image_915071-38615.jpg',
+      },
+      {
+        _id: '9',
+        userId: '1999',
+        comment: 'omg',
+        like: 22,
+        name: 'username',
+        timeCreated: '2024-06-18 14:56:45',
+        userAvatar:
+          'https://img.freepik.com/premium-photo/animal-icon-hd-8k-wallpaper-stock-photographic-image_915071-38615.jpg',
+      },
+      {
+        _id: '10',
+        userId: '1999',
+        comment: 'omg',
+        like: 22,
+        name: 'username',
+        timeCreated: '2024-06-18 14:56:45',
+        userAvatar:
+          'https://img.freepik.com/premium-photo/animal-icon-hd-8k-wallpaper-stock-photographic-image_915071-38615.jpg',
+      },
+      {
+        _id: '11',
+        userId: '1999',
+        comment: 'omg',
+        like: 22,
+        name: 'username',
+        timeCreated: '2024-06-18 14:56:45',
+        userAvatar:
+          'https://img.freepik.com/premium-photo/animal-icon-hd-8k-wallpaper-stock-photographic-image_915071-38615.jpg',
+      },
+      {
+        _id: '12',
+        userId: '1999',
+        comment: 'omg',
+        like: 22,
+        name: 'username',
+        timeCreated: '2024-06-18 14:56:45',
+        userAvatar:
+          'https://img.freepik.com/premium-photo/animal-icon-hd-8k-wallpaper-stock-photographic-image_915071-38615.jpg',
+      },
+      {
+        _id: '13',
+        userId: '1999',
+        comment: 'omg',
+        like: 22,
+        name: 'username',
+        timeCreated: '2024-06-18 14:56:45',
+        userAvatar:
+          'https://img.freepik.com/premium-photo/animal-icon-hd-8k-wallpaper-stock-photographic-image_915071-38615.jpg',
+      },
+    ],
+    like: 99999,
+    name: 'vanh204.nguyen',
+    isLike: true,
+  },
   {
     _id: '1',
     userId: '1',

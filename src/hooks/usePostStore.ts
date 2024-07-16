@@ -14,7 +14,7 @@ interface PostStoreActions extends PostStoreType {
 
 export const usePostStore = create<PostStoreActions>(setState => ({
   posts: {
-    data: mockPost,
+    data: [],
     limit: 0,
     page: 0,
     prevPage: 0,
@@ -34,7 +34,7 @@ export const usePostStore = create<PostStoreActions>(setState => ({
     setState(state => ({
       posts: {
         ...state.posts,
-        data: state.posts.data.concat(post),
+        data: [post, ...state.posts.data],
       },
     })),
   removePost: (postId: string) =>

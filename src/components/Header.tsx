@@ -19,4 +19,6 @@ const Header = (props: HeaderProps) => {
   );
 };
 
-export default memo(Header);
+export default memo(Header, (prevProps, nextProps) => {
+  return prevProps === nextProps;
+});

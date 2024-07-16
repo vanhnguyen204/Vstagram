@@ -28,6 +28,8 @@ interface ReelControllerProps {
 }
 export interface ReelControllerHandle {
   isLike: boolean;
+  enablePressPause: boolean;
+  disablePressPause: () => void;
   toggleLike: () => void;
 }
 const ReelController = forwardRef<ReelControllerHandle, ReelControllerProps>(
@@ -36,8 +38,13 @@ const ReelController = forwardRef<ReelControllerHandle, ReelControllerProps>(
       props;
     const [isLike, setIsLike] = useState<boolean>(item.isLike);
     const [hiddenDescription, setHiddenDescription] = useState(false);
+    const [enablePressPause, setEnablePressPause] = useState(true);
     useImperativeHandle(ref, () => ({
       isLike,
+      enablePressPause,
+      disablePressPause: () => {
+        setEnablePressPause(prevState => !prevState);
+      },
       toggleLike: () => {
         setIsLike(prevState => !prevState);
       },
@@ -57,7 +64,7 @@ const ReelController = forwardRef<ReelControllerHandle, ReelControllerProps>(
             style={{width: AppInfor.width}}
             justifyContent={'center'}
             activeOpacity={1}
-            onLongPress={onPause}>
+            onPress={onPause}>
             {paused && (
               <ImageComponent
                 alignSelf={'center'}
@@ -67,95 +74,86 @@ const ReelController = forwardRef<ReelControllerHandle, ReelControllerProps>(
               />
             )}
           </ButtonComponent>
-        </Box>
+          <Box
+            zIndex={99}
+            flexDirection={'row-reverse'}
+            position={'absolute'}
+            right={0}
+            left={0}
+            bottom={0}>
+            {/* Comment, like, share*/}
+            <Box alignItems={'center'} padding={15}>
+              {/*----Like----*/}
+              <ButtonComponent
+                scaleInValue={0.7}
+                scaleAnimated={true}
+                activeOpacity={1}
+                onPress={onLikePress}>
+                <ImageComponent
+                  tintColor={isLike ? appColors.red : appColors.white}
+                  style={styles.iconStyle}
+                  src={require('../../../assets/icons/heart_button.png')}
+                />
+                {/*<TextComponent value={likesFormat(item?.like)} />*/}
+              </ButtonComponent>
+              <Spacer height={15} />
+              {/*----Comment----*/}
+              <ButtonComponent
+                activeOpacity={1}
+                alignItems={'center'}
+                scaleInValue={0.7}
+                scaleAnimated={true}
+                onPress={onCommentPress}>
+                <ImageComponent
+                  tintColor={appColors.white}
+                  src={require('../../../assets/icons/chat-2.png')}
+                  style={styles.iconStyle}
+                />
+                {/*<TextComponent value={likesFormat(item.comment.length)} />*/}
+              </ButtonComponent>
 
-        <Box
-          zIndex={99}
-          flexDirection={'row'}
-          flex={1}
-          position={'absolute'}
-          top={0}
-          right={0}
-          bottom={0}
-          justifyContent={'flex-end'}>
-          {/* Comment, like, share*/}
-          <Box alignItems={'center'} justifyContent={'flex-end'} padding={15}>
-            {/*----Like----*/}
-            <ButtonComponent
-              scaleInValue={0.7}
-              scaleAnimated={true}
-              activeOpacity={1}
-              onPress={() => {
-                onLikePress();
-              }}>
-              <ImageComponent
-                tintColor={isLike ? appColors.red : appColors.white}
-                style={styles.iconStyle}
-                src={require('../../../assets/icons/heart_button.png')}
-              />
-              <TextComponent value={likesFormat(item.like)} />
-            </ButtonComponent>
-            <Spacer height={15} />
-            {/*----Comment----*/}
-            <ButtonComponent
-              activeOpacity={1}
-              alignItems={'center'}
-              scaleInValue={0.7}
-              scaleAnimated={true}
-              onPress={onCommentPress}>
-              <ImageComponent
-                tintColor={appColors.white}
-                src={require('../../../assets/icons/chat-2.png')}
-                style={styles.iconStyle}
-              />
-              <TextComponent value={likesFormat(item.comment.length)} />
-            </ButtonComponent>
-
-            <Spacer height={15} />
-            {/*----Share----*/}
-            <ButtonComponent onPress={onShare}>
-              <ImageComponent
-                tintColor={appColors.white}
-                src={require('../../../assets/icons/share.png')}
-                style={styles.iconStyle}
-              />
-            </ButtonComponent>
-          </Box>
-        </Box>
-        {/*User infor, description*/}
-        <Box
-          padding={10}
-          zIndex={1}
-          flexDirection={'row'}
-          position={'absolute'}
-          bottom={0}
-          left={0}>
-          <ButtonComponent
-            name={'See more about account'}
-            activeOpacity={1}
-            scaleAnimated={true}
-            scaleInValue={0.7}
-            onPress={() => {}}>
-            <ImageComponent
-              src={{uri: item.avatar}}
-              height={40}
-              width={40}
-              resizeMode={'cover'}
-              borderRadius={99}
-            />
-          </ButtonComponent>
-          <Box paddingHorizontal={15}>
-            <TextComponent value={item.name} alignSelf={'flex-start'} />
-            <Spacer height={5} />
-            <ButtonComponent
-              activeOpacity={1}
-              onPress={() => setHiddenDescription(prevState => !prevState)}>
-              <Text
-                numberOfLines={hiddenDescription ? undefined : 2}
-                style={{color: appColors.white, marginRight: 20}}>
-                {item.description}
-              </Text>
-            </ButtonComponent>
+              <Spacer height={15} />
+              {/*----Share----*/}
+              <ButtonComponent onPress={onShare}>
+                <ImageComponent
+                  tintColor={appColors.white}
+                  src={require('../../../assets/icons/share.png')}
+                  style={styles.iconStyle}
+                />
+              </ButtonComponent>
+            </Box>
+            {/*User infor, description*/}
+            <Box padding={10} flexDirection={'row'} flex={1} alignSelf={'flex-end'}>
+              <ButtonComponent
+                name={'See more about account'}
+                activeOpacity={1}
+                scaleAnimated={true}
+                scaleInValue={0.7}
+                onPress={() => {}}>
+                <ImageComponent
+                  src={{uri: item.avatar}}
+                  height={40}
+                  width={40}
+                  resizeMode={'cover'}
+                  borderRadius={99}
+                />
+              </ButtonComponent>
+              <Box paddingHorizontal={15}>
+                <TextComponent value={item.name} alignSelf={'flex-start'} />
+                <Spacer height={5} />
+                <ButtonComponent
+                  activeOpacity={1}
+                  onPress={() => setHiddenDescription(prevState => !prevState)}>
+                  <Text
+                    allowFontScaling={true}
+                    lineBreakMode={'middle'}
+                    numberOfLines={hiddenDescription ? undefined : 2}
+                    style={{color: appColors.white, marginRight: 20}}>
+                    {item.description}
+                  </Text>
+                </ButtonComponent>
+              </Box>
+            </Box>
           </Box>
         </Box>
       </SafeAreaView>

@@ -10,7 +10,7 @@ export default () => {
     confirmRegisterAccount: `${baseURL}/api/auth/create-account`,
     login: `${baseURL}/api/auth/login`,
     getUserInformation: `${baseURL}/api/auth/information`,
-    getAllUser:`${baseURL}/api/auth/user/all`,
+    getAllUser: `${baseURL}/api/auth/user/all`,
     //music
     getListMusic: `${baseURL}/api/music`,
     //story
@@ -27,5 +27,8 @@ export default () => {
     //conversation - chat
     getConversations: `${baseURL}/api/chat/`,
     getConversationDetails: `${baseURL}/api/chat/details`,
+
+    //reel
+    getReels: `${baseURL}/api/media/reel`,
   };
 };

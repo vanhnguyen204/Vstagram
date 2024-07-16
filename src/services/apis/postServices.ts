@@ -5,10 +5,11 @@ import {hiddenModalLoading, showModalLoading} from '../../hooks';
 import {Post} from '../../models/Post.ts';
 import {PostResponse} from '../../models/PostResponse.ts';
 
+
 export const createPost = async (formData: FormData) => {
   try {
     showModalLoading();
-    const res = await request<MessageResponse>(
+    const res = await request<MessageResponse<Post>>(
       endPoint().createPost,
       Method.POST,
       {},

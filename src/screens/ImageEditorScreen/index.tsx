@@ -143,7 +143,7 @@ const ImageEditorScreen = (props: Props) => {
     } else {
       console.error('Capture function is not available');
     }
-  }, [image.uri]);
+  }, [image?.uri]);
 
   //Cancel edit story
   const onCloseStoryEditor = useCallback(() => {
@@ -260,7 +260,7 @@ const ImageEditorScreen = (props: Props) => {
           <ViewShot ref={viewShotRef} style={[styles.containerImageAndSticker]}>
             <ImageBackground
               style={[styles.imageBackgroundContainer]}
-              blurRadius={20}
+              blurRadius={60}
               source={{uri: image.uri}}
               resizeMode={'cover'}>
               {/*Show input */}

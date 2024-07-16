@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import Container from '../../components/Container.tsx';
 import {
   FlatList,
@@ -26,13 +26,11 @@ import InputComponentV2 from '../../components/InputComponentV2.tsx';
 import {AppInfor} from '../../constants/AppInfor.ts';
 import {Chat} from '../../models/Chat.ts';
 import ConversationItem from './components/ConversationItem.tsx';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import {ACCESS_USER_ID} from '../../constants/AsyncStorage.ts';
-import {ConversationType, useChatStore} from '../../hooks/useChatStore.ts';
+import {useChatStore} from '../../hooks/useChatStore.ts';
 import {getDataAsyncStorage} from '../../utils/AsyncStorage.ts';
-import Console from '../../utils/Console.ts';
 import {getConversationDetails} from '../../services/apis/chatServices.ts';
-import { useUserInformation } from "../../hooks";
+import {useUserInformation} from '../../hooks';
 
 type ConversationDetailsProps = RouteProp<
   RootStackParams,
@@ -49,7 +47,7 @@ type Props = {
 };
 const ConversationDetails = (props: Props) => {
   const {userInfor} = props.route.params;
-  const {information} = useUserInformation()
+  const {information} = useUserInformation();
   const {conversationDetails, addNewConversation, setConversationDetails} =
     useChatStore();
   const {sendMessage, socket} = useChatStore();
@@ -64,7 +62,7 @@ const ConversationDetails = (props: Props) => {
     } catch (e) {
       console.log('HandleGetInitialChat error: ', e);
     }
-  }, []);
+  }, [setConversationDetails, userInfor._id]);
   const handleSendMessage = () => {
     if (message.trim().length > 0) {
       const newMessage = {
@@ -74,9 +72,9 @@ const ConversationDetails = (props: Props) => {
         timeChat: '',
         _id: '',
       };
-      sendMessage(newMessage,information.fullName, socket);
+      sendMessage(newMessage, information.fullName, socket);
       setMessage('');
-    }else {
+    } else {
       const newMessage = {
         userIdReceived: userInfor._id,
         message: '🍋',
@@ -84,8 +82,7 @@ const ConversationDetails = (props: Props) => {
         timeChat: '',
         _id: '',
       };
-      sendMessage(newMessage,information.fullName, socket);
-
+      sendMessage(newMessage, information.fullName, socket);
     }
   };
 
@@ -125,7 +122,7 @@ const ConversationDetails = (props: Props) => {
         </Box>
       );
     },
-    [],
+    [userInfor._id, userInfor.avatar],
   );
 
   return (
@@ -182,8 +179,7 @@ const ConversationDetails = (props: Props) => {
             <Box
               paddingHorizontal={10}
               flexDirection={'row'}
-              alignItems={'center'}
-              >
+              alignItems={'center'}>
               <InputComponentV2
                 value={message}
                 multiline={true}

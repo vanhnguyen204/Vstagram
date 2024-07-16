@@ -53,7 +53,7 @@ const ReelsScreen = () => {
     },
     [viewableReels?._id],
   );
-  console.log('Next page: ');
+  console.log('render-reel');
   return (
     <View style={{backgroundColor: appColors.backgroundApp}}>
       <SafeAreaView

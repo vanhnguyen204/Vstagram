@@ -15,7 +15,7 @@ import Capture from '../screens/Capture';
 import PreviewReel from '../screens/PreviewReel';
 import Album from '../screens/Album';
 import PostEditorScreen from '../screens/PostEditorScreen';
-import ChatStore from '../screens/ChatStore';
+import ChatStore from '../screens/ChatStoreScreen';
 import ConversationDetails from '../screens/ConversationDetails';
 import ImageEditorScreen from '../screens/ImageEditorScreen';
 import ReelEditorScreen from '../screens/ReelEditorScreen';

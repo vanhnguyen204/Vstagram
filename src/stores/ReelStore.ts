@@ -3,7 +3,6 @@ import {getReels} from '../services/apis/reelServices.ts';
 import {Reel} from '../models/Reel.ts';
 
 class ReelStore {
-  reels: Reel[] = [];
   reelPage: number;
 
   constructor() {

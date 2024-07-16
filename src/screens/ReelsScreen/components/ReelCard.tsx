@@ -64,6 +64,9 @@ const ReelCard = forwardRef<ReelCardHandle, ReelCardProps>(
         setPaused(false);
       } else {
         setPaused(true);
+        if (videoRef.current) {
+          videoRef.current.seek(0);
+        }
       }
     }, [isFocused]);
 

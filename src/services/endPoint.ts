@@ -26,6 +26,7 @@ export default () => {
 
     //conversation - chat
     getConversations: `${baseURL}/api/chat/`,
+    getListConversations: `${baseURL}/api/chat/v2/`,
     getConversationDetails: `${baseURL}/api/chat/details`,
 
     //reel

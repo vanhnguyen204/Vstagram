@@ -5,3 +5,11 @@ export interface Chat {
   message: string | string[];
   timeChat: string;
 }
+
+export interface Conversation {
+  userId: string;
+  userAvatar: string;
+  messageLatest: string;
+  timeMessage: string;
+  fullName: string;
+}

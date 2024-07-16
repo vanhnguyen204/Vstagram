@@ -1,22 +1,10 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {StyleSheet, View} from 'react-native';
 import {appColors} from '../../assets/colors/appColors.ts';
 import TextComponent from '../../components/TextComponent.tsx';
-import reelStore from '../../stores/ReelStore.ts';
-import {observer, useLocalObservable} from 'mobx-react-lite';
-import {useDispatch, useSelector} from 'react-redux';
-import {handleGetReels} from '../../stores/reel/reelActions.ts';
-import {AppDispatch, RootState} from '../../stores/store.ts';
+import {observer} from 'mobx-react-lite';
 
 const SettingScreen = observer(() => {
-  // const state = useLocalObservable(() => ({}));
-  const dispatch = useDispatch<AppDispatch>();
-  const reels = useSelector<RootState>(state => state.reels);
-  console.log('reels: ', reels);
-  useEffect(() => {
-    dispatch(handleGetReels());
-  }, [dispatch]);
-  console.log('setting');
   return (
     <View style={styles.container}>
       <TextComponent value={'Setting'} />
